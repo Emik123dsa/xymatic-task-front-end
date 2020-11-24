@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:react/recommended"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  },
+  "plugins": ["babel", "jest", "react"],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "linebreak-style": 0,
+    "no-console": 0,
+    "no-unused-vars": 1,
+    "babel/semi": 1
+  },
+  "parser": "babel-eslint"
+}
