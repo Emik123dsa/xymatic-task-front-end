@@ -15,9 +15,15 @@
   },
   "rules": {
     "linebreak-style": 0,
+    "class-methods-use-this": 0,
     "no-console": 0,
     "no-unused-vars": 1,
     "babel/semi": 1
   },
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "settings": {
+    "react": {
+      "version": "17.0.1"
+    }
+  }
 }

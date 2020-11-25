@@ -5,27 +5,27 @@ const StylelintPlugin = require('stylelint-webpack-plugin');
 const { merge } = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
-const isHMR = process.env.NODE_HMR === 'hmr';
+const isHMR = process.env.NODE_HMR === 'true';
 
 const compilerModule = () => {
   return {
     module: {
       rules: [
         {
-          test: /\.(js|mjs|jsx?)$/i,
-          exclude: [
-            /node_modules[\\\/]core-js/,
-            /node_modules[\\\/]webpack[\\\/]buildin/,
-          ],
+          test: /\.(js|jsx)$/i,
+          exclude: /(node_modules|bower_components)/,
           use: [
             {
               loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+                plugins: ['react-hot-loader/babel'],
+              },
             },
             {
               loader: 'eslint-loader',
@@ -35,7 +35,7 @@ const compilerModule = () => {
         {
           test: /\.(c|sc|sa)ss$/i,
           use: [
-            'isomorphic-style-loader',
+            'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -58,7 +58,14 @@ const compilerModule = () => {
             },
             {
               loader: 'sass-loader',
-              options: { sourceMap: true },
+              options: {
+                sassOptions: {
+                  data:
+                    '@import "./src/assets/styles/_vars.scss"; @import "./src/assets/styles/_colors.scss"',
+                  includePaths: [__dirname, 'src'],
+                },
+                sourceMap: true,
+              },
             },
           ],
         },
@@ -75,6 +82,10 @@ const compilerModule = () => {
             },
           },
         },
+        {
+          test: /\.(html|html)$/i,
+          use: 'html-loader',
+        },
       ],
     },
   };
@@ -85,6 +96,7 @@ const compilerResolve = () => {
     resolve: {
       alias: {
         '@': path.resolve('src'),
+        'react-dom': '@hot-loader/react-dom',
       },
       modules: ['node_modules'],
       extensions: ['.js', '.jsx', '.react.js'],
@@ -97,8 +109,14 @@ const compilerOptions = () => {
   return {
     mode: 'development',
     entry: {
-      main: './src/main.js',
-      polyfills: './src/polyfills.js',
+      main: [
+        './src/main.js',
+        './src/polyfills.js',
+        './src/assets/styles/main.scss',
+        'react-hot-loader',
+        'react-hot-loader/patch',
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+      ],
     },
     output: {
       filename: isDev ? '[name].dev.js' : '[hash:64].js',
@@ -123,24 +141,18 @@ const compilerPlugins = () => {
           new StylelintPlugin({
             configFile: path.join(process.cwd(), '.stylelintrc.json'),
           }),
-          //   new ESLintPlugin({
-          //     eslintPath: path.join(process.cwd(), '.eslintrc.json'),
-          //   }),
           new CopyWebpackPlugin({
             patterns: [
               { from: 'src/assets/img', to: 'img' },
               { from: 'static/**', to: '.' },
             ],
           }),
-          new webpack.NoEmitOnErrorsPlugin(),
-          new webpack.SourceMapDevToolPlugin({
-            filename: '[name].js.map',
-          }),
           new HtmlWebpackPlugin({
             template: 'static/index.html',
-            filename: 'main.html',
+            filename: 'index.html',
+            inject: true,
           }),
-          new CleanWebpackPlugin(),
+
           new CircularDependencyPlugin({
             exclude: /node_modules/,
             failOnError: false,
@@ -153,6 +165,9 @@ const compilerPlugins = () => {
               NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             },
           }),
+          new CleanWebpackPlugin(),
+          new webpack.NoEmitOnErrorsPlugin(),
+          new webpack.HotModuleReplacementPlugin(),
         ],
       };
     case false:
@@ -161,14 +176,6 @@ const compilerPlugins = () => {
       throw new Error(`Unhandled Error Rejection`);
   }
 };
-
-// node: {
-//     child_process: 'empty',
-//     fs: 'empty',
-//     module: 'empty',
-//     net: 'empty',
-//     tls: 'empty',
-// },
 
 module.exports = function (env, argv) {
   switch (process.env.NODE_ENV) {
@@ -179,10 +186,9 @@ module.exports = function (env, argv) {
         compilerPlugins(),
         compilerResolve(),
       );
-
     case 'production':
       break;
     default:
-      throw new Error(`Unhandler Error Exception`);
+      throw new Error(`Unhandled Error Exception`);
   }
 };

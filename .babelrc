@@ -1,5 +1,5 @@
 {
-  "presets": [["@babel/preset-env"], "@babel/preset-react"],
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     [
       "@babel/plugin-proposal-decorators",
@@ -15,7 +15,6 @@
     "@babel/plugin-proposal-object-rest-spread",
     "@babel/plugin-proposal-export-default-from",
     "@babel/plugin-transform-modules-commonjs",
-    "@babel/plugin-syntax-dynamic-import",
-    "react-hot-loader/babel"
+    "@babel/plugin-syntax-dynamic-import"
   ]
 }
