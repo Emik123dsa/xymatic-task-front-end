@@ -1,15 +1,41 @@
+/* eslint-disable indent */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import App from './app/App.jsx';
+import { render } from 'react-dom';
+import { AppContainer as HotContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
+import { createBrowserHistory, createMemoryHistory } from 'history';
+import { ConnectedRouter } from 'connected-react-router/immutable';
+import { ReduxAsyncConnect } from 'redux-connect';
+import { ContainerRoutes } from '@/routes';
+import { configureStore } from '@/store';
 
-ReactDOM.render(
-  <AppContainer>
-    <App />
-  </AppContainer>,
-  document.getElementById('root'),
-);
+const initialState = process.env.NODE_SERVER ? window.__INITIAL_DATA__ : {};
 
-if (module.hot) {
-  module.hot.accept();
+const history = process.env.NODE_SERVER
+  ? createMemoryHistory({ initialEntries: ['/'] })
+  : createBrowserHistory();
+
+const store = configureStore(initialState, history);
+
+if (!process.env.NODE_SERVER) {
+  window.store = store;
 }
+
+export const clientRender = () => {
+  render(
+    <HotContainer>
+      <Provider key="provider" store={store}>
+        <ConnectedRouter history={history}>
+          <ReduxAsyncConnect helpers={{}} routes={ContainerRoutes} />
+        </ConnectedRouter>
+      </Provider>
+    </HotContainer>,
+    document.getElementById('root'),
+  );
+
+  if (module.hot) {
+    module.hot.accept();
+  }
+};
+
+clientRender();

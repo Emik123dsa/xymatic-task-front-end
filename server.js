@@ -27,12 +27,9 @@ function createWebpackDevMiddleware() {
 function addWebpackHotMiddleWare(app, middleware) {
   app.use(webpackHotMiddleware(compiler));
   const filename = path.join(compiler.outputPath, 'index.html');
-
   app.get('*', (req, res) => {
-    console.log(filename);
     middleware.fileSystem.readFile(filename, (err, file) => {
       if (err) {
-        console.log(err);
         res.sendStatus(404);
       } else {
         res.send(file.toString());
@@ -52,7 +49,8 @@ app.use(webpackHotMiddleware(compiler));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 addMiddleware(app);
 
-app.listen(PORT, () => {});
+app.listen(PORT, () => {
+  console.log(`App has been started on the PORT: ${PORT}`);
+});
