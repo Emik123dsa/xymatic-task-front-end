@@ -5,11 +5,11 @@ import { fromJS } from 'immutable';
 import thunk from 'redux-thunk';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router/immutable';
-
-import { createRootReducer } from '../reducers';
+import sagaMonitor from '@redux-saga/simple-saga-monitor';
+import { createRootReducer } from '@/reducers';
 
 export const configureStore = (initialState = {}, history) => {
-  const sagaMiddleWare = createSagaMiddleware();
+  const sagaMiddleWare = createSagaMiddleware({ sagaMonitor });
 
   const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare];
 
@@ -19,7 +19,7 @@ export const configureStore = (initialState = {}, history) => {
     process.env.NODE_ENV !== 'production' &&
     typeof window === 'object' &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-      ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ shouldHotReload: false })
+      ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({ shouldHotReload: true })
       : compose;
 
   const store = createStore(

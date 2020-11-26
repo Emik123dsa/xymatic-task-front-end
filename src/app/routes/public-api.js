@@ -1,2 +1,1 @@
-export * from './app.routes';
-export * from './container.routes';
+export * from './routes';

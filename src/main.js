@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 import { ConnectedRouter } from 'connected-react-router/immutable';
 import { ReduxAsyncConnect } from 'redux-connect';
-import { ContainerRoutes } from '@/routes';
+import { dynamicRoutes } from '@/routes';
 import { configureStore } from '@/store';
 
 const initialState = process.env.NODE_SERVER ? window.__INITIAL_DATA__ : {};
@@ -26,7 +26,7 @@ export const clientRender = () => {
     <HotContainer>
       <Provider key="provider" store={store}>
         <ConnectedRouter history={history}>
-          <ReduxAsyncConnect helpers={{}} routes={ContainerRoutes} />
+          <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
         </ConnectedRouter>
       </Provider>
     </HotContainer>,
