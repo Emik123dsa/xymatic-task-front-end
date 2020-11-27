@@ -114,7 +114,7 @@ const _compilerBrowserOptions = (isDev) => {
       ],
     },
     output: {
-      filename: isDev ? '[hash:64:5].dev.js' : '[hash:64].js',
+      filename: isDev ? '[hash:64].dev.js' : '[hash:64].js',
       chunkFilename: '[id].[chunkhash].js',
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
@@ -147,7 +147,6 @@ const _compilerBrowserPlugins = (isDev) => {
             filename: 'index.html',
             inject: true,
           }),
-
           new CircularDependencyPlugin({
             exclude: /node_modules/,
             failOnError: false,

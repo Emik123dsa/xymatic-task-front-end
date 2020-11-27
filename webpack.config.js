@@ -21,6 +21,8 @@ const _compilerBrowserResolve = () => {
       alias: {
         '@': path.join(process.cwd(), './src/app'),
         '~': path.join(process.cwd(), './src'),
+        '@styles': path.join(process.cwd(), './src/assets/styles'),
+        '@img': path.join(process.cwd(), './src/assets/img'),
         xymatic: path.join(process.cwd(), 'src/app'),
         'react-dom': '@hot-loader/react-dom',
       },

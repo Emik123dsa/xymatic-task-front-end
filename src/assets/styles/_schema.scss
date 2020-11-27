@@ -1,0 +1,138 @@
+/* stylelint-disable at-rule-no-unknown */
+
+.container {
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  flex: 1 1 auto;
+  margin: 0 24px;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.align {
+  &-center {
+    align-items: center !important;
+  }
+
+  &-left {
+    align-items: center !important;
+  }
+
+  &-right {
+    align-items: center !important;
+  }
+}
+
+.justify {
+  &-content {
+    &-between {
+      justify-content: space-between !important;
+    }
+
+    &-center {
+      justify-content: center !important;
+    }
+
+    &-around {
+      justify-content: space-around !important;
+    }
+  }
+}
+
+.flex {
+  &-wrap {
+    flex-wrap: wrap !important;
+  }
+
+  &-nowwrap {
+    flex-wrap: nowrap !important;
+  }
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    width: calc((100% * #{$i}) / 12) !important;
+    position: relative;
+  }
+}
+
+@for $i from 1 through 5 {
+  .ml-#{$i} {
+    margin-left: $i * 1rem;
+  }
+}
+
+@for $i from 1 through 5 {
+  .mr-#{$i} {
+    margin-right: $i * 1rem !important;
+  }
+}
+
+@for $i from 1 through 5 {
+  .mx-#{$i} {
+    margin: 0 $i * 1rem !important;
+  }
+}
+
+.mx {
+  &-auto {
+    margin: 0 auto !important;
+  }
+}
+
+@for $i from 1 through 5 {
+  .pr-#{$i} {
+    padding-right: $i * 1rem !important;
+  }
+}
+
+@for $i from 1 through 5 {
+  .pl-#{$i} {
+    padding-left: $i * 1rem !important;
+  }
+}
+
+@for $i from 1 through 5 {
+  .px-#{$i} {
+    padding: 0 $i * 1rem !important;
+  }
+}
+
+.px {
+  &-auto {
+    padding: 0 auto !important;
+  }
+}
+
+.text {
+  &-center {
+    text-align: center !important;
+  }
+
+  &-left {
+    text-align: left !important;
+  }
+
+  &-right {
+    text-align: right !important;
+  }
+}

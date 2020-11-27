@@ -34,7 +34,9 @@
       "alias": {
         "map": [
           ["~", "./src"],
-          ["@", "./src/app"]
+          ["@", "./src/app"],
+          ["@styles", "./src/assets/styles"],
+          ["@img", "./src/assets/img"]
         ],
         "extensions": [".ts", ".js", ".jsx", ".json"]
       }

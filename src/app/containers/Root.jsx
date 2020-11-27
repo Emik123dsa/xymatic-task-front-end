@@ -20,7 +20,7 @@ class Root extends Component {
     route: PropTypes.shape().isRequired,
   };
 
-  _title = 'Xymatic | Front End';
+  _title = 'Xymatic';
 
   _renderSiteMeta() {
     const canonical = this.props.location.toJS().pathname.toLowerCase();
@@ -41,9 +41,9 @@ class Root extends Component {
   render() {
     const { route } = this.props;
     return (
-      <div>
+      <div className="root">
         {this._renderSiteMeta()}
-        <main>{renderRoutes(route.routes)}</main>
+        <div className="main">{renderRoutes(route.routes)}</div>
       </div>
     );
   }

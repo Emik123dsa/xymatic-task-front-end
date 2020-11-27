@@ -8,6 +8,7 @@ import {
   setToMutableStateFunc,
 } from 'redux-connect';
 import { userReducer } from './user.reducer';
+import { sidebarReducer } from './sidebar.reducer';
 
 setToImmutableStateFunc((mutableState) => fromJS(mutableState));
 setToMutableStateFunc((immutableState) => immutableState.toJS());
@@ -16,5 +17,6 @@ export const createRootReducer = (history) =>
   combineReducers({
     router: connectRouter(history),
     user: userReducer,
+    sidebar: sidebarReducer,
     reduxAsyncConnect,
   });

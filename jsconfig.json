@@ -6,7 +6,9 @@
     "experimentalDecorators": true,
     "paths": {
       "~/*": ["./src/*"],
-      "@/*": ["./src/app/*"]
+      "@/*": ["./src/app/*"],
+      "@styles/*": ["./src/assets/styles/*"],
+      "@img/*": ["./src/assets/img/*"]
     }
   },
   "include": ["src/**/*"],
