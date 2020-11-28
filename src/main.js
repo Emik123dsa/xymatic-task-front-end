@@ -21,21 +21,30 @@ if (!process.env.NODE_SERVER) {
   window.store = store;
 }
 
-export const clientRender = () => {
-  render(
-    <HotContainer>
-      <Provider key="provider" store={store}>
-        <ConnectedRouter history={history}>
-          <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
-        </ConnectedRouter>
-      </Provider>
-    </HotContainer>,
-    document.getElementById('root'),
-  );
+const ROOT = document.getElementById('root');
 
-  if (module.hot) {
-    module.hot.accept();
-  }
+export const clientProvider = () => (
+  <Provider key="provider" store={store}>
+    <ConnectedRouter history={history}>
+      <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
+    </ConnectedRouter>
+  </Provider>
+);
+
+export const hotClientProvider = () => {
+  <HotContainer>
+    <Provider key="provider" store={store}>
+      <ConnectedRouter history={history}>
+        <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
+      </ConnectedRouter>
+    </Provider>
+  </HotContainer>;
 };
 
-clientRender();
+if (module.hot) {
+  module.hot.accept(clientProvider, () => {
+    render(hotClientProvider(), ROOT);
+  });
+}
+
+render(clientProvider(), ROOT);

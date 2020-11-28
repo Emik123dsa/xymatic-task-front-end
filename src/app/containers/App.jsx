@@ -37,12 +37,7 @@ class App extends Component {
 
   render() {
     const { route } = this.props;
-    return (
-      <div>
-        {this._renderSiteMeta()}
-        <main>App</main>
-      </div>
-    );
+    return <div>{this._renderSiteMeta()}</div>;
   }
 }
 

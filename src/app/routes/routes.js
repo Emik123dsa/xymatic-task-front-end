@@ -5,11 +5,10 @@ import LazyLoading from '@/components/LazyLoading/LazyLoading.jsx';
 export const dynamicRoutes = [
   {
     key: 'Root',
-    path: '/',
     component: loadable(() => import(`@/containers/Root`), {
       fallback: <LazyLoading />,
     }),
-    routes: [
+    childRoutes: [
       {
         key: 'App',
         path: '/',
@@ -44,6 +43,7 @@ export const dynamicRoutes = [
       },
       {
         key: 'Error',
+        path: '*',
         component: loadable(() => import(`@/containers/Error`), {
           fallback: <LazyLoading />,
         }),

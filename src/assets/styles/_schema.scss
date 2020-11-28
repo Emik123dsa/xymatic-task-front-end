@@ -2,14 +2,40 @@
 
 .container {
   width: 100%;
-  max-width: 1170px;
+  max-width: 1140px;
+  padding-right: 15px;
+  padding-left: 15px;
   margin: 0 auto;
+}
+
+@media (max-width: $bp-lg) {
+  .container {
+    max-width: $lg;
+  }
+}
+
+@media (max-width: $bp-md) {
+  .container {
+    max-width: $md;
+  }
+}
+
+@media (max-width: $bp-sm) {
+  .container {
+    max-width: $sm;
+  }
+}
+
+@media (max-width: $bp-xs) {
+  .container {
+    max-width: $xs;
+  }
 }
 
 .row {
   display: flex;
   flex: 1 1 auto;
-  margin: 0 24px;
+  margin: 0 -15px;
 }
 
 .d-flex {
@@ -72,6 +98,7 @@
   .col-#{$i} {
     width: calc((100% * #{$i}) / 12) !important;
     position: relative;
+    padding: 0 15px;
   }
 }
 

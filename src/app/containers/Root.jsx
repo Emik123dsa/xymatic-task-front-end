@@ -4,6 +4,7 @@ import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { getRouterLocation } from '@/selectors';
+import { dynamicRoutes } from '../routes';
 
 /**
  * Decorators instead of mapStateToProps | mapDispatchToProps
@@ -43,7 +44,7 @@ class Root extends Component {
     return (
       <div className="root">
         {this._renderSiteMeta()}
-        <div className="main">{renderRoutes(route.routes)}</div>
+        <div className="main">{renderRoutes(route.childRoutes)}</div>
       </div>
     );
   }

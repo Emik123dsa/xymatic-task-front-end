@@ -2,10 +2,13 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+
 const isHMR = process.env.NODE_HMR === 'true';
 const PORT = process.env.NODE_PORT || 3000;
-const webpack = require('webpack');
+const HOST = process.env.NODE_HOST || '0.0.0.0';
 
+const webpack = require('webpack');
+const { monitor } = require('./monitor');
 const webpackConfig = require('./webpack.config')();
 
 const compiler = webpack(webpackConfig);
@@ -45,12 +48,13 @@ function addMiddleware(app) {
 }
 
 const app = express();
+
 app.use(webpackHotMiddleware(compiler));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 addMiddleware(app);
 
-app.listen(PORT, () => {
-  console.log(`App has been started on the PORT: ${PORT}`);
+app.listen(PORT, HOST, () => {
+  monitor(webpackConfig, HOST, PORT);
 });

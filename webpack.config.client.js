@@ -20,10 +20,7 @@ const _compilerBrowserModule = (isDev) => {
               loader: 'babel-loader',
               options: {
                 cacheDirectory: true,
-                plugins: [
-                  'react-hot-loader/babel',
-                  '@loadable/babel-plugin',
-                ],
+                plugins: ['react-hot-loader/babel', '@loadable/babel-plugin'],
               },
             },
             {
@@ -114,7 +111,7 @@ const _compilerBrowserOptions = (isDev) => {
       ],
     },
     output: {
-      filename: isDev ? '[hash:64].dev.js' : '[hash:64].js',
+      filename: isDev ? '[fullhash].dev.js' : '[contenthash].js',
       chunkFilename: '[id].[chunkhash].js',
       path: path.resolve(process.cwd(), 'build'),
       publicPath: '/',
