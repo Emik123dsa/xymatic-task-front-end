@@ -42,7 +42,7 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className={schema['dashboard']}>
+      <div className={schema.dashboard}>
         <div className={schema.container}>
           {this._renderSiteMeta()}
           <div className={schema.row}>
@@ -50,13 +50,18 @@ class Dashboard extends Component {
               <AsyncComponent name="Sidebar" />
             </div>
             <div className={schema['col-7']}>
-              <header className={schema['header']}></header>
-              <main className={schema['dashboard-main']}>
-                <section className={schema.dashboard}>
+              <header className={schema.header}></header>
+              <main className={schema.dashboard}>
+                <section className={schema.dashboard_wrapper}>
                   <AsyncComponent name="Dashboard" />
                 </section>
               </main>
               <footer></footer>
+            </div>
+            <div className={schema['col-3']}>
+              <div className={schema['dashboard_profile-wrapper']}>
+                <AsyncComponent name="Profile" />
+              </div>
             </div>
           </div>
         </div>

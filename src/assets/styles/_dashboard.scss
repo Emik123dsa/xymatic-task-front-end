@@ -1,5 +1,21 @@
 .dashboard {
-  &-section {
-    color: black;
+  position: relative;
+
+  &_wrapper {
+    top: 0;
+    height: calc(100vh - 2rem);
+    margin-top: 1rem;
+    background: linear-gradient(to bottom, $dashboard-top, $dashboard-bottom);
+  }
+
+  &_profile {
+    &-wrapper {
+      top: 0;
+      height: calc(100vh - 2rem);
+      margin-top: 1rem;
+      border-top-right-radius: 24px;
+      border-bottom-right-radius: 24px;
+      background: linear-gradient(to bottom, $profile-top, $profile-bottom);
+    }
   }
 }

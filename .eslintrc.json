@@ -9,7 +9,7 @@
       "legacyDecorators": true
     }
   },
-  "plugins": ["babel", "jest", "react"],
+  "plugins": ["@babel", "jest", "react"],
   "env": {
     "browser": true
   },
@@ -17,15 +17,15 @@
     "linebreak-style": 0,
     "class-methods-use-this": 0,
     "no-console": 0,
-    "no-unused-vars": 1,
-    "babel/semi": 1,
+    "no-unused-vars": 0,
+    "babel/semi": 0,
     "no-underscore-dangle": 0,
     "operator-linebreak": 0,
     "implicit-arrow-linebreak": 0,
     "import/prefer-default-export": 0,
     "function-paren-newline": 0
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "settings": {
     "react": {
       "version": "17.0.1"

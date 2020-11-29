@@ -1,12 +1,76 @@
-/* stylelint-disable at-rule-no-unknown, declaration-empty-line-before, at-rule-empty-line-before */
+/* stylelint-disable declaration-colon-newline-after, at-rule-no-unknown, declaration-empty-line-before, at-rule-empty-line-before, no-descending-specificity */
+
+@mixin sidebar-active-hover-links {
+  .sidebar {
+    &_navbar {
+      &-link {
+        &_dashboard {
+          transition: 0.25s ease all;
+          background: url('@img/dashboard-active.svg') no-repeat center center;
+        }
+
+        &_orders {
+          transition: 0.25s ease all;
+          background: url('@img/orders-active.svg') no-repeat center center;
+        }
+
+        &_tracking {
+          transition: 0.25s ease all;
+          background: url('@img/tracking-active.svg') no-repeat center center;
+        }
+
+        &_revenue {
+          transition: 0.25s ease all;
+          background: url('@img/revenue-active.svg') no-repeat center center;
+        }
+
+        &_analytics {
+          transition: 0.25s ease all;
+          background: url('@img/analytics-active.svg') no-repeat center center;
+        }
+
+        &-bg {
+          opacity: 1;
+          width: 100%;
+          border-radius: 16px;
+        }
+      }
+    }
+  }
+}
+
+@mixin sidebar-active-actions-links {
+  .sidebar {
+    &_navbar {
+      &-link {
+        &_settings {
+          transition: 0.25s ease all;
+          background: url('@img/settings-active.svg') no-repeat center center;
+        }
+
+        &_logout {
+          transition: 0.25s ease all;
+          background: url('@img/logout-active.svg') no-repeat center center;
+        }
+
+        &-bg {
+          width: 100%;
+          opacity: 1;
+          border-radius: 16px;
+        }
+      }
+    }
+  }
+}
 
 .sidebar {
   position: sticky;
   top: 0;
-  height: calc(100vh - 40px);
-  margin-top: 20px;
+  height: calc(100vh - 2rem);
+  margin-top: 1rem;
 
   &_wrapper {
+    position: relative;
     overflow: hidden;
     height: inherit;
     border-top-left-radius: 24px;
@@ -14,8 +78,29 @@
     background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
 
     &-aside {
-      height: inherit;
-      margin-top: 56px;
+      height: calc(100% - 4rem);
+      margin-top: 4rem;
+    }
+
+    &-app {
+      margin-top: 2rem;
+      text-align: center;
+
+      &-link {
+        width: inherit;
+        user-select: none;
+        color: $light;
+        font-family: $medium;
+
+        h4 {
+          font-size: 1rem;
+        }
+
+        span {
+          color: $dark;
+          font-size: 1rem;
+        }
+      }
     }
 
     &-navbar {
@@ -25,51 +110,86 @@
       justify-content: space-between;
       height: inherit;
     }
-
-    &-logo {
-      margin-top: 26px;
-
-      &_link {
-        width: 100% !important;
-
-        span {
-          position: relative;
-          display: block;
-          width: 100%;
-          height: 22px;
-          background: url('@img/Logotype.svg') no-repeat center center;
-          background-size: contain;
-        }
-      }
-    }
   }
 
   &_navbar {
     &-active {
       color: $light !important;
-      border-radius: 15px;
-      background: $active-bg-link;
+      @include sidebar-active-hover-links;
+    }
+
+    &-link {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      transform: translate(1.2rem, -50%);
+
+      &_dashboard {
+        background: url('@img/dashboard.svg') no-repeat center center;
+      }
+
+      &_orders {
+        background: url('@img/orders.svg') no-repeat center center;
+      }
+
+      &_tracking {
+        background: url('@img/tracking.svg') no-repeat center center;
+      }
+
+      &_revenue {
+        background: url('@img/revenue.svg') no-repeat center center;
+      }
+
+      &_analytics {
+        background: url('@img/analytics.svg') no-repeat center center;
+      }
+
+      &_settings {
+        background: url('@img/settings.svg') no-repeat center center;
+      }
+
+      &_logout {
+        background: url('@img/logout.svg') no-repeat center center;
+      }
+
+      &-bg {
+        opacity: 0;
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        transition: 0.25s ease all;
+        background: $active-bg-link;
+      }
     }
 
     &-list {
       &-features {
+        position: relative;
         letter-spacing: 0.4px;
+        z-index: 999;
         font-weight: 600;
-
         @include flex;
 
         a {
+          position: relative;
+          z-index: 999;
           width: 100% !important;
           height: 100%;
-          padding: 16px 36px;
+          padding: 18px 3.8rem;
           transition: 0.25s ease all;
           color: $dark;
+          font-size: 11px;
 
           &:hover {
             transition: 0.25s ease all;
             color: $light !important;
-            border-radius: 15px;
-            background: $active-bg-link;
+
+            @include sidebar-active-hover-links;
           }
         }
 
@@ -81,8 +201,28 @@
       &-actions {
         color: $dark;
         font-weight: 600;
-
         @include flex;
+
+        li {
+          margin-bottom: 12px;
+        }
+
+        button {
+          position: relative;
+          display: inline-block;
+          width: 100% !important;
+          height: 100%;
+          padding: 18px 3.8rem;
+          transition: 0.25s ease all;
+          color: $dark;
+          font-size: 11px;
+
+          &:hover {
+            transition: 0.25s ease all;
+            color: $light !important;
+            @include sidebar-active-actions-links;
+          }
+        }
       }
     }
   }

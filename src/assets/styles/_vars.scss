@@ -18,6 +18,6 @@ $bold: 'Montserrat Black';
 @mixin flex {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
   flex: 0 0 auto;
 }

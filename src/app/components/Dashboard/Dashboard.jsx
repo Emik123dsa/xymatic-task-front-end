@@ -1,18 +1,26 @@
-/* eslint-disable object-curly-newline */
 import React, { Component } from 'react';
-// import { AreaChart, XAxis, YAxis, Area, Tooltip } from 'recharts';
-// import schema from '@styles/main.scss';
+import { gql } from '@apollo/client';
+
+const repoQuery = gql`
+  query($name: String!) {
+    search(query: $name, last: 10, type: REPOSITORY) {
+      edges {
+        node {
+          ... on Repository {
+            id
+            name
+            description
+            url
+          }
+        }
+      }
+    }
+  }
+`;
 
 class Dashboard extends Component {
   render() {
-    return (
-      // <div className={schema.container}>
-      //   <div className={schema.row}>
-      //     <div className={schema['col-4']}>Dashboard</div>
-      //   </div>
-      // </div>
-      <div></div>
-    );
+    return <div>123</div>;
   }
 }
 

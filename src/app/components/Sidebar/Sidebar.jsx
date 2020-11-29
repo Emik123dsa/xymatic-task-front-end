@@ -3,7 +3,6 @@ import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import schema from '@styles/main.scss';
-import Logotype from '@img/Logotype.svg';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
 
@@ -27,7 +26,18 @@ class Sidebar extends Component {
 
     const sideBarActions = actions.map((item) => (
       <li key={item.toString()}>
-        <button type="button">{item}</button>
+        <button type="button">
+          {item}
+          <span className={_['sidebar_navbar-link-bg']}></span>
+          <span
+            className={[
+              _[`sidebar_navbar-link_${item.toLowerCase()}`],
+              _['sidebar_navbar-link'],
+            ]
+              .filter((e) => !!e)
+              .join(' ')}
+          ></span>
+        </button>
       </li>
     ));
 
@@ -38,6 +48,15 @@ class Sidebar extends Component {
           to={`/${item.toLowerCase()}`}
         >
           {item}
+          <span className={_['sidebar_navbar-link-bg']}></span>
+          <span
+            className={[
+              _[`sidebar_navbar-link_${item.toLowerCase()}`],
+              _['sidebar_navbar-link'],
+            ]
+              .filter((e) => !!e)
+              .join(' ')}
+          ></span>
         </NavLink>
       </li>
     ));
@@ -45,9 +64,12 @@ class Sidebar extends Component {
     return (
       <div className={_.sidebar}>
         <div className={_.sidebar_wrapper}>
-          <div className={_['sidebar_wrapper-logo']}>
-            <Link className={_['sidebar_wrapper-logo_link']} to="/dashboard">
-              <span className={_['sidebar_wrapper-logo_img']} />
+          <div className={_['sidebar_wrapper-app']}>
+            <Link className={_['sidebar_wrapper-app-link']} to="/dashboard">
+              <h4>
+                Task&nbsp;
+                <span>App</span>
+              </h4>
             </Link>
           </div>
           <aside className={_['sidebar_wrapper-aside']}>

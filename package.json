@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf ./build",
-    "fix": "eslint --fix --config=./.eslintrc.json **/*.jsx",
+    "fix": "eslint --fix --config=./.eslintrc.json **/*/*.jsx",
     "dev": "yarn run clean && cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 webpack -w --config webpack.config.js",
     "hmr": "cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 NODE_HOST=127.0.0.1 node ./server.js"
   },
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Emik123dsa/xymatic-task-front-end#readme",
   "devDependencies": {
     "@babel/core": "^7.12.8",
+    "@babel/eslint-parser": "^7.12.1",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-decorators": "^7.12.1",
     "@babel/plugin-proposal-export-default-from": "^7.12.1",
@@ -37,7 +38,6 @@
     "@babel/preset-react": "^7.12.7",
     "@loadable/babel-plugin": "^5.13.2",
     "autoprefixer": "^10.0.2",
-    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.1",
     "base64-inline-loader": "^1.1.1",
     "bluebird": "^3.7.2",
@@ -92,11 +92,14 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
+    "@apollo/client": "^3.2.9",
+    "@babel/eslint-plugin": "^7.12.1",
     "@hot-loader/react-dom": "^17.0.0",
     "@loadable/component": "^5.14.1",
     "@redux-saga/simple-saga-monitor": "^1.1.2",
     "chalk": "^4.1.0",
     "connected-react-router": "^6.8.0",
+    "graphql": "^15.4.0",
     "history": "4.7.0",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^3.0.0",

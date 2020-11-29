@@ -1,11 +1,11 @@
 import React from 'react';
 import loadable from '@loadable/component';
-import LazyLoading from '@/components/LazyLoading/LazyLoading.jsx';
+import LazyLoading from '@/components/LazyLoading/LazyLoading';
 
 export const dynamicRoutes = [
   {
     key: 'Root',
-    component: loadable(() => import(`@/containers/Root`), {
+    component: loadable(() => import('@/containers/Root'), {
       fallback: <LazyLoading />,
     }),
     childRoutes: [
@@ -13,7 +13,7 @@ export const dynamicRoutes = [
         key: 'App',
         path: '/',
         exact: true,
-        component: loadable(() => import(`@/containers/App`), {
+        component: loadable(() => import('@/containers/App'), {
           fallback: <LazyLoading />,
         }),
       },
@@ -21,7 +21,7 @@ export const dynamicRoutes = [
         key: 'Dashboard',
         path: '/dashboard',
         exact: true,
-        component: loadable(() => import(`@/containers/Dashboard`), {
+        component: loadable(() => import('@/containers/Dashboard'), {
           fallback: <LazyLoading />,
         }),
       },
@@ -29,7 +29,7 @@ export const dynamicRoutes = [
         key: 'SignUp',
         path: '/signup',
         exact: true,
-        component: loadable(() => import(`@/containers/SignUp`), {
+        component: loadable(() => import('@/containers/SignUp'), {
           fallback: <LazyLoading />,
         }),
       },
@@ -37,14 +37,14 @@ export const dynamicRoutes = [
         key: 'Auth',
         path: '/auth',
         exact: true,
-        component: loadable(() => import(`@/containers/Auth`), {
+        component: loadable(() => import('@/containers/Auth'), {
           fallback: <LazyLoading />,
         }),
       },
       {
         key: 'Error',
         path: '*',
-        component: loadable(() => import(`@/containers/Error`), {
+        component: loadable(() => import('@/containers/Error'), {
           fallback: <LazyLoading />,
         }),
       },

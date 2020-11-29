@@ -6,12 +6,17 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router/immutable';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
-import { createRootReducer } from '@/reducers';
+import { createRootReducer } from '@/reducers/reducers';
+import { createLogger } from 'redux-logger';
 
 export const configureStore = (initialState = {}, history) => {
   const sagaMiddleWare = createSagaMiddleware({ sagaMonitor });
 
   const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare];
+
+  if (process.env.NODE_ENV !== 'production') {
+    // middlewares.push(createLogger());
+  }
 
   const enhancers = [applyMiddleware(...middlewares)];
 
