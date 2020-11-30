@@ -9,6 +9,7 @@ import {
 } from 'redux-connect';
 import { userReducer, sidebarReducer, resizeReducer } from '.';
 import { errorReducer } from './error.reducer';
+import { chartsEntityReducer } from './charts.reducer';
 
 setToImmutableStateFunc((mutableState) => fromJS(mutableState));
 setToMutableStateFunc((immutableState) => immutableState.toJS());
@@ -19,6 +20,7 @@ export const createRootReducer = (history) =>
     user: userReducer,
     sidebar: sidebarReducer,
     resize: resizeReducer,
+    chartsEntity: chartsEntityReducer,
     error: errorReducer,
     reduxAsyncConnect,
   });

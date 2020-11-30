@@ -1,26 +1,37 @@
 import React, { Component } from 'react';
-import { gql } from '@apollo/client';
+import PropTypes from 'prop-types';
+import { connect as Connect } from 'react-redux';
+import { getChartImpression } from '@/selectors';
+import { loadChartsImpressionsEntity } from '@/actions';
 
-const repoQuery = gql`
-  query($name: String!) {
-    search(query: $name, last: 10, type: REPOSITORY) {
-      edges {
-        node {
-          ... on Repository {
-            id
-            name
-            description
-            url
-          }
-        }
-      }
-    }
-  }
-`;
-
+@Connect(
+  (state) => ({
+    impressions: getChartImpression(state),
+  }),
+  {
+    loadChartsImpressionsEntity,
+  },
+)
 class Dashboard extends Component {
+  static propTypes = {
+    impressions: PropTypes.shape(),
+    loadChartsImpressionsEntity: PropTypes.func,
+  };
+
+  componentDidMount() {}
+
+  sendSchema = async () => {};
+
   render() {
-    return <div>123</div>;
+    return (
+      <div
+        onClick={() => {
+          this.props.loadChartsImpressionsEntity('impressions');
+        }}
+      >
+        123
+      </div>
+    );
   }
 }
 

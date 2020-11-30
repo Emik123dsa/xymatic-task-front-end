@@ -3,9 +3,10 @@
 
   &_wrapper {
     top: 0;
-    height: calc(100vh - 2rem);
+    height: inherit;
     margin-top: 1rem;
-    background: linear-gradient(to bottom, $dashboard-top, $dashboard-bottom);
+    background: linear-gradient(to top, $dashboard-bottom, $dashboard-top);
+    margin-bottom: 2rem;
   }
 
   &_profile {
@@ -15,7 +16,7 @@
       margin-top: 1rem;
       border-top-right-radius: 24px;
       border-bottom-right-radius: 24px;
-      background: linear-gradient(to bottom, $profile-top, $profile-bottom);
+      background: linear-gradient(to top, $profile-bottom, $profile-top);
     }
   }
 }

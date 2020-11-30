@@ -9,8 +9,6 @@ import { ReduxAsyncConnect } from 'redux-connect';
 import { dynamicRoutes } from '@/routes';
 import { configureStore } from '@/store';
 import { rootSaga } from '@/sagas';
-import { Config } from './config';
-import { ApolloSchemaProvider } from './apollo-client';
 
 const initialState = process.env.NODE_SERVER ? window.__INITIAL_STATE__ : {};
 
@@ -36,17 +34,14 @@ export const clientProvider = () => (
   </Provider>
 );
 
-export const ApolloClientProvider = () =>
-  ApolloSchemaProvider(clientProvider());
-
 export const HotClientProvider = () => {
-  <HotContainer>{ApolloClientProvider()}</HotContainer>;
+  <HotContainer>{clientProvider()}</HotContainer>;
 };
 
 if (module.hot) {
   module.hot.accept(clientProvider, () => {
-    render(ApolloClientProvider(), ROOT);
+    render(clientProvider(), ROOT);
   });
 }
 
-render(ApolloClientProvider(), ROOT);
+render(clientProvider(), ROOT);
