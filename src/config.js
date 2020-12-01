@@ -5,6 +5,8 @@ export class Config {
 
   static GRAPHQL_HEADERS = { 'Content-Type': 'application/json' };
 
+  static GRAPHQL_WS = environment.GRAPHQL_WS;
+
   static production = environment.production;
 
   static hmr = environment.hmr;

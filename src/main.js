@@ -9,6 +9,8 @@ import { ReduxAsyncConnect } from 'redux-connect';
 import { dynamicRoutes } from '@/routes';
 import { configureStore } from '@/store';
 import { rootSaga } from '@/sagas';
+import { ApolloProvider } from 'react-apollo';
+import { apolloClient } from './apolloConfig';
 
 const initialState = process.env.NODE_SERVER ? window.__INITIAL_STATE__ : {};
 
@@ -27,11 +29,13 @@ if (!process.env.NODE_SERVER) {
 const ROOT = document.getElementById('root');
 
 export const clientProvider = () => (
-  <Provider key="provider" store={store}>
-    <ConnectedRouter history={history}>
-      <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
-    </ConnectedRouter>
-  </Provider>
+  <ApolloProvider client={apolloClient}>
+    <Provider key="provider" store={store}>
+      <ConnectedRouter history={history}>
+        <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
+      </ConnectedRouter>
+    </Provider>
+  </ApolloProvider>
 );
 
 export const HotClientProvider = () => {

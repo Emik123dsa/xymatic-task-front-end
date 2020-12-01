@@ -2,7 +2,6 @@ import fetch from 'isomorphic-fetch';
 import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import { merge } from 'lodash';
-
 import { Config } from '~/config';
 
 const GRAPHQL_API_ROOT =
