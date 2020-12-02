@@ -10,7 +10,6 @@ import {
 import { userReducer, sidebarReducer, resizeReducer } from '.';
 import { errorReducer } from './error.reducer';
 import { chartsEntityReducer } from './charts.reducer';
-import { apolloClient } from '~/apolloConfig';
 
 setToImmutableStateFunc((mutableState) => fromJS(mutableState));
 setToMutableStateFunc((immutableState) => immutableState.toJS());

@@ -15,9 +15,12 @@ $light: 'Montserrat Light';
 $medium: 'Montserrat Medium';
 $bold: 'Montserrat Black';
 
+$bg-dark: #464a5f;
+$bg-border: #141923;
+
 @mixin flex {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
 }

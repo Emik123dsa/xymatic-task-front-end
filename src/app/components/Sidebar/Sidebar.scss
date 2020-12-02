@@ -30,8 +30,8 @@
         }
 
         &-bg {
-          opacity: 1;
           width: 100%;
+          opacity: 1;
           border-radius: 16px;
         }
       }
@@ -66,20 +66,23 @@
 .sidebar {
   position: sticky;
   top: 0;
-  height: calc(100vh - 2rem);
-  margin-top: 1rem;
+  height: calc(100vh - 10rem);
+  padding-top: 5rem;
 
   &_wrapper {
     position: relative;
     overflow: hidden;
     height: inherit;
+    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
     border-top-left-radius: 24px;
     border-bottom-left-radius: 24px;
-    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
+    border-left: 1em solid $bg-border;
+    border-top: 1em solid $bg-border;
+    border-bottom: 1em solid $bg-border;
 
     &-aside {
-      height: calc(100% - 4rem);
-      margin-top: 4rem;
+      height: calc(100% - 5rem);
+      margin-top: 5rem;
     }
 
     &-app {
@@ -115,6 +118,7 @@
   &_navbar {
     &-active {
       color: $light !important;
+
       @include sidebar-active-hover-links;
     }
 
@@ -155,7 +159,6 @@
       }
 
       &-bg {
-        opacity: 0;
         position: absolute;
         z-index: -1;
         top: 0;
@@ -163,6 +166,7 @@
         width: 0;
         height: 100%;
         transition: 0.25s ease all;
+        opacity: 0;
         background: $active-bg-link;
       }
     }
@@ -170,9 +174,10 @@
     &-list {
       &-features {
         position: relative;
-        letter-spacing: 0.4px;
         z-index: 999;
+        letter-spacing: 0.4px;
         font-weight: 600;
+
         @include flex;
 
         a {
@@ -201,6 +206,7 @@
       &-actions {
         color: $dark;
         font-weight: 600;
+
         @include flex;
 
         li {
@@ -220,10 +226,25 @@
           &:hover {
             transition: 0.25s ease all;
             color: $light !important;
+
             @include sidebar-active-actions-links;
           }
         }
       }
+    }
+  }
+}
+
+@media screen and (max-width: $bp-md) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 10rem);
+    padding-top: 5rem;
+
+    &_wrapper {
+      border-radius: 24px;
+      border: 1em solid $bg-border;
     }
   }
 }

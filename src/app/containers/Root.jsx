@@ -1,11 +1,14 @@
+/* eslint-disable object-curly-newline */
 import React, { Component } from 'react';
 import { renderRoutes } from 'react-router-config';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { getRouterLocation } from '@/selectors';
-import { fromEvent, Subscription } from 'rxjs';
-import { setIsMobile } from '../actions';
+import { fromEvent, Subscription, iif, EMPTY, of } from 'rxjs';
+import { switchMap, distinctUntilChanged } from 'rxjs/operators';
+import schema from '@styles/_schema.scss';
+import { setIsMobile } from '@/actions';
 
 const DEFAULT_MOBILE_WIDTH = 992;
 
@@ -35,11 +38,19 @@ class Root extends Component {
     setTimeout(() => {
       this._windowResize.add(
         fromEvent(window, 'resize')
-          .pipe()
-          .subscribe(({ target }) => {
-            this.props.setIsMobile({
-              payload: target.innerWidth < DEFAULT_MOBILE_WIDTH,
-            });
+          .pipe(
+            switchMap(({ target }) =>
+              iif(
+                () => target.innerWidth < DEFAULT_MOBILE_WIDTH,
+                of(target.innerWidth < DEFAULT_MOBILE_WIDTH),
+                EMPTY,
+              ),
+            ),
+            distinctUntilChanged(),
+          )
+          .subscribe((payload) => {
+            console.log(payload);
+            this.props.setIsMobile({ payload });
           }),
       );
     }, 0);
@@ -72,6 +83,7 @@ class Root extends Component {
     return (
       <div className="root">
         {this._renderSiteMeta()}
+        <div className={schema['bg-dark']}> </div>
         <div className="main">{renderRoutes(route.childRoutes)}</div>
       </div>
     );

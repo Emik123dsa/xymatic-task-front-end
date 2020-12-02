@@ -1,24 +1,19 @@
-/* eslint-disable no-dupe-keys */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import { Subscription, Query } from 'react-apollo';
 import { createClient } from 'graphql-ws';
-import gql from 'graphql-tag';
-import { isEmpty } from 'lodash';
+import { Seq, List } from 'immutable';
 import { getChartImpression } from '@/selectors';
-
+import schema from '@styles/_schema.scss';
 import { loadChartsImpressionsEntity } from '@/actions';
 
-import { Config } from '~/config';
+import _ from './Dashboard.scss';
 
-const subscribe = `
-  subscription {
-    usersSubscribe {
-      id
-    }
-  }
-`;
+const AsyncComponent = loadable((props) =>
+  import(`@/components/${props.name}/${props.name}`),
+);
 
 @Connect(
   (state) => ({
@@ -34,26 +29,44 @@ class Dashboard extends Component {
     loadChartsImpressionsEntity: PropTypes.func,
   };
 
+  /**
+   ** Subscribe to the
+   ** WebSocket via Redux Saga,
+   ** all of the changes are going into
+   ** over Redux Store and mutating here as well
+   */
+
   componentDidMount() {
     this.props.loadChartsImpressionsEntity();
   }
 
-  sendSchema = async () => {};
-
   render() {
     const { impressions } = this.props;
 
-    if (!impressions.has('usersSubscribe')) {
-      return <div>Loading ...</div>;
-    }
+    const _subscriber = !impressions.has('usersSubscribe') ? (
+      <div>Loading ...</div>
+    ) : (
+      List(impressions.get('usersSubscribe')).map((item) => (
+        <li key={item.get('id')}>{item.get('id')}</li>
+      ))
+    );
 
-    const _impressions = impressions.toJS();
-
-    const items = _impressions.usersSubscribe.map((item) => (
-      <li key={item.id}>{item.id}</li>
-    ));
-
-    return <div>{items}</div>;
+    return (
+      <section className={_['dashboard-section_charts']}>
+        <div className={schema['dashboard-wrapper']}>
+          <span className={_['dashboard-section_restrictor-top']}></span>
+          <div className={_['dashboard-section_charts-observer']}>
+            <div className={_['dashboard-section_restrictor-top-stripe']}></div>
+            <div className={_['dashboard-section_charts-wrapper']}></div>
+            <div className={_['dashboard-section_restrictor-bottom-stripe']}>
+              <AsyncComponent name="Header" />
+              <AsyncComponent name="Footer" />
+            </div>
+          </div>
+          <span className={_['dashboard-section_restrictor-bottom']}></span>
+        </div>
+      </section>
+    );
   }
 }
 

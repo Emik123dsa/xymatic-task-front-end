@@ -1,3 +1,87 @@
+/* stylelint-disable at-rule-no-unknown, declaration-colon-newline-after */
+@mixin restrictor {
+  position: fixed;
+  content: '';
+  left: 0;
+  right: 0;
+  background: $bg-dark;
+}
+
 .dashboard {
-  color: black;
+  &-section {
+    &_restrictor {
+      &-top {
+        @include restrictor;
+
+        top: 0;
+        height: 5rem;
+        z-index: 2;
+
+        &-stripe {
+          position: sticky;
+          top: 5rem;
+          background: $bg-border;
+          height: 1rem;
+          z-index: 2;
+        }
+      }
+
+      &-bottom {
+        @include restrictor;
+
+        bottom: 0;
+        height: 5rem;
+        z-index: auto;
+
+        &-stripe {
+          position: sticky;
+          bottom: 5rem;
+          width: inherit;
+          background: $bg-border;
+          height: 1rem;
+          z-index: 2;
+        }
+      }
+    }
+
+    &_charts {
+      padding: 5rem 0;
+      position: relative;
+      width: inherit;
+      height: inherit;
+
+      &-wrapper {
+        position: relative;
+        background: linear-gradient(to top, $dashboard-bottom, $dashboard-top)
+          no-repeat;
+        z-index: -1;
+        background-position: 100% 150%;
+        background-attachment: fixed;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $bp-md) {
+  .dashboard {
+    &-section {
+      &_restrictor {
+        &-top {
+          display: none;
+
+          &-stripe {
+            display: none;
+          }
+        }
+
+        &-bottom {
+          display: none;
+
+          &-stripe {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }

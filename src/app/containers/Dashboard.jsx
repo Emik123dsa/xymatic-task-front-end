@@ -45,22 +45,30 @@ class Dashboard extends Component {
       <div className={schema.dashboard}>
         <div className={schema.container}>
           {this._renderSiteMeta()}
-          <div className={schema.row}>
-            <div className={schema['col-2']}>
-              <AsyncComponent name="Sidebar" />
-            </div>
-            <div className={schema['col-7']}>
-              <header className={schema.header}></header>
-              <main className={schema.dashboard}>
-                <section className={schema.dashboard_wrapper}>
+          <div className={schema['dashboard-wrapper']}>
+            <div
+              className={`${schema.row} ${schema['justify-content-center']}`}
+            >
+              <div
+                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']} `}
+              >
+                <AsyncComponent name="Sidebar" />
+              </div>
+              <div
+                className={`${schema['col-7']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
+              >
+                <header className={schema.header}></header>
+                <main className={schema['dashboard_main-wrapper']}>
                   <AsyncComponent name="Dashboard" />
-                </section>
-              </main>
-              <footer></footer>
-            </div>
-            <div className={schema['col-3']}>
-              <div className={schema['dashboard_profile-wrapper']}>
-                <AsyncComponent name="Profile" />
+                </main>
+                <footer></footer>
+              </div>
+              <div
+                className={`${schema['col-3']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
+              >
+                <div className={schema['dashboard_profile-wrapper']}>
+                  <AsyncComponent name="Profile" />
+                </div>
               </div>
             </div>
           </div>
