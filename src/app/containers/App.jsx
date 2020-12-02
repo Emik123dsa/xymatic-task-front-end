@@ -3,11 +3,13 @@ import { renderRoutes } from 'react-router-config';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { getRouterLocation } from '@/selectors';
+import { getChartUsers } from '@/selectors';
+import { Redirect } from 'react-router';
 
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
+    // user: 
   }),
   null,
 )
@@ -17,7 +19,7 @@ class App extends Component {
     route: PropTypes.shape().isRequired,
   };
 
-  _title = 'Xymatic | Welcome';
+  _title = 'Xymatic | Init';
 
   _renderSiteMeta() {
     const canonical = this.props.location.toJS().pathname.toLowerCase();
@@ -37,7 +39,7 @@ class App extends Component {
 
   render() {
     const { route } = this.props;
-    return <div>{this._renderSiteMeta()}</div>;
+    return <Redirect to="/dashboard"></Redirect>;
   }
 }
 
