@@ -12,9 +12,10 @@ export const chartsEntityReducer = (
   state = initialChartsEntityReducer,
   action,
 ) => {
-  if (action?.response) {
-    console.log(action.response);
+  switch (action.type) {
+    case 'CHART_IMPRESSIONS_SUCCESS':
+      return state.set('impressions', fromJS(action?.response));
+    default:
+      return state;
   }
-
-  return state;
 };

@@ -3,16 +3,9 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 
-import {
-  SubscriptionClient,
-  addGraphQLSubscriptions,
-} from 'subscriptions-transport-ws';
-
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
-import gql from 'graphql-tag';
 import { onError } from 'apollo-link-error';
-
 import { Config } from './config';
 
 const errorLink = onError(({ graphQlErrors, networkError }) => {
@@ -37,7 +30,6 @@ const httpLink = new HttpLink({
 });
 
 const link = split(
-  //   errorLink,
   ({ query }) => {
     const { kind, operation } = getMainDefinition(query);
     return kind === 'OperationDefinition' && operation === 'subscription';
@@ -46,7 +38,14 @@ const link = split(
   httpLink,
 );
 
-export const apolloClient = new ApolloClient({
+export const client = new ApolloClient({
   link,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
+  defaultOptions: {
+    query: {
+      fetchPolicy: 'no-cache',
+    },
+  },
 });
