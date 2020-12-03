@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 
 export const initialUserReducer = fromJS({
   isAuthenticated: false,
-  currentUserSchema: {},
+  userCredentials: {},
 });
 
 export const userReducer = (state = initialUserReducer, action) => state;

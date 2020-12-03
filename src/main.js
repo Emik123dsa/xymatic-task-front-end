@@ -29,7 +29,7 @@ if (!process.env.NODE_SERVER) {
 const ROOT = document.getElementById('root');
 
 export const clientProvider = () => (
-  <ApolloProvider client={client}>
+  <ApolloProvider client={client()}>
     <Provider key="provider" store={store}>
       <ConnectedRouter history={history}>
         <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />

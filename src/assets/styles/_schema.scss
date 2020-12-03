@@ -3,16 +3,21 @@
 .container {
   width: 100%;
   max-width: 1140px;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 1rem;
+  padding-left: 1rem;
   margin: 0 auto;
 }
 
 .row {
   display: flex;
   flex: 1 1 auto;
-  // margin: 0 -15px;
   flex-wrap: wrap;
+}
+
+.row-b {
+  @extend .row;
+
+  margin: 0 -1rem;
 }
 
 .d-flex {
@@ -76,9 +81,14 @@
     max-width: calc((100% * #{$i}) / 12) !important;
     position: relative;
     flex-wrap: wrap;
-    // padding: 0 15px;
     width: 100%;
     flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+  }
+
+  .col-b-#{$i} {
+    @extend .col-#{$i};
+
+    padding: 0 1rem;
   }
 }
 
@@ -171,6 +181,12 @@
       width: 100%;
       flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
+
+    .col-b-lg-#{$i} {
+      @extend .col-lg-#{$i};
+
+      padding: 0 1rem;
+    }
   }
 }
 
@@ -187,6 +203,12 @@
       padding: 0 15px;
       width: 100%;
       flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+    }
+
+    .col-b-md-#{$i} {
+      @extend .col-md-#{$i};
+
+      padding: 0 1rem;
     }
   }
 }
@@ -205,6 +227,12 @@
       width: 100%;
       flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
+
+    .col-b-sm-#{$i} {
+      @extend .col-b-sm-#{$i};
+
+      padding: 0 1rem;
+    }
   }
 }
 
@@ -221,6 +249,12 @@
       padding: 0 15px;
       width: 100%;
       flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+    }
+
+    .col-b-xs-#{$i} {
+      @extend .col-xs-#{$i};
+
+      padding: 0 1rem;
     }
   }
 }

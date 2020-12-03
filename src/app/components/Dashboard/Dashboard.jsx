@@ -25,8 +25,8 @@ const AsyncComponent = loadable((props) =>
 )
 class Dashboard extends Component {
   static propTypes = {
-    impressions: PropTypes.shape(),
-    loadChartsImpressionsEntity: PropTypes.func,
+    // impressions: PropTypes.shape(),
+    // loadChartsImpressionsEntity: PropTypes.func,
   };
 
   /**
@@ -37,19 +37,19 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    this.props.loadChartsImpressionsEntity();
+    // this.props.loadChartsImpressionsEntity();
   }
 
   render() {
-    const { impressions } = this.props;
+    // const { impressions } = this.props;
 
-    const _subscriber = !impressions.has('usersSubscribe') ? (
-      <div>Loading ...</div>
-    ) : (
-      List(impressions.get('usersSubscribe')).map((item) => (
-        <li key={item.get('id')}>{item.get('id')}</li>
-      ))
-    );
+    // const _subscriber = !impressions.has('usersSubscribe') ? (
+    //   <div>Loading ...</div>
+    // ) : (
+    //   List(impressions.get('usersSubscribe')).map((item) => (
+    //     <li key={item.get('id')}>{item.get('id')}</li>
+    //   ))
+    // );
 
     return (
       <section className={_['dashboard-section_charts']}>
@@ -57,11 +57,24 @@ class Dashboard extends Component {
           <span className={_['dashboard-section_restrictor-top']}></span>
           <div className={_['dashboard-section_charts-observer']}>
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
-            <div className={_['dashboard-section_charts-wrapper']}></div>
-            <div className={_['dashboard-section_restrictor-bottom-stripe']}>
+            <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncComponent name="Header" />
+              <div className={schema['row-b']}>
+                <div className={schema['col-b-6']}>Plays</div>
+                <div className={schema['col-b-6']}>Impressions</div>
+              </div>
+              <div className={schema['row-b']}>
+                <div className={schema['col-b-8']}>Plays</div>
+                <div className={schema['col-b-4']}>Impressions</div>
+              </div>
+              <div className={schema['row-b']}>
+                <div className={schema['col-b-12']}>Actions</div>
+              </div>
               <AsyncComponent name="Footer" />
             </div>
+            <div
+              className={_['dashboard-section_restrictor-bottom-stripe']}
+            ></div>
           </div>
           <span className={_['dashboard-section_restrictor-bottom']}></span>
         </div>

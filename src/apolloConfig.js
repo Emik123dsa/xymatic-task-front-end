@@ -1,20 +1,33 @@
-import ApolloClient from 'apollo-client';
+/* eslint-disable new-cap */
+import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
-
+import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { Config } from './config';
 
-const errorLink = onError(({ graphQlErrors, networkError }) => {
-  if (graphQlErrors) {
-    graphQlErrors.forEach(({ message, locations, path }) => {
-      console.log(message);
-    });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    );
   }
-  if (networkError) console.log(networkError);
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`);
+  }
+});
+
+const authLink = setContext((_, schema) => {
+  const token = 'schema';
+
+  return {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 });
 
 const wsLink = new WebSocketLink({
@@ -35,17 +48,19 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription';
   },
   wsLink,
-  httpLink,
+  errorLink,
+  authLink.concat(httpLink),
 );
 
-export const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache({
-    addTypename: false,
-  }),
-  defaultOptions: {
-    query: {
-      fetchPolicy: 'no-cache',
+export const client = () =>
+  new ApolloClient({
+    link,
+    cache: new InMemoryCache({
+      addTypename: false,
+    }),
+    defaultOptions: {
+      query: {
+        fetchPolicy: 'no-cache',
+      },
     },
-  },
-});
+  });

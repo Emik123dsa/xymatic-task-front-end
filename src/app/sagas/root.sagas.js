@@ -5,6 +5,6 @@ import { watchLoadChartImpressions } from './charts-entity.sagas';
 import { watchResize } from './resize.sagas';
 
 export function* rootSaga() {
-  yield setContext({ client });
+  yield setContext({ client: client() });
   yield all([fork(watchResize), fork(watchLoadChartImpressions)]);
 }

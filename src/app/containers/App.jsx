@@ -3,13 +3,13 @@ import { renderRoutes } from 'react-router-config';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { getChartUsers } from '@/selectors';
+import { getRouterLocation, getUser } from '@/selectors';
 import { Redirect } from 'react-router';
 
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
-    // user: 
+    user: getUser(state),
   }),
   null,
 )
@@ -17,6 +17,7 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.shape().isRequired,
     route: PropTypes.shape().isRequired,
+    user: PropTypes.shape().isRequired,
   };
 
   _title = 'Xymatic | Init';
@@ -39,6 +40,7 @@ class App extends Component {
 
   render() {
     const { route } = this.props;
+
     return <Redirect to="/dashboard"></Redirect>;
   }
 }
