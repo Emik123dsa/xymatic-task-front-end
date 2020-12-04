@@ -57,11 +57,9 @@ class Dashboard extends Component {
               <div
                 className={`${schema['col-7']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
               >
-                <header className={schema.header}></header>
                 <main className={schema['dashboard_main-wrapper']}>
                   <AsyncComponent name="Dashboard" />
                 </main>
-                <footer></footer>
               </div>
               <div
                 className={`${schema['col-3']} ${schema['col-md-6']} ${schema['col-xs-12']}`}

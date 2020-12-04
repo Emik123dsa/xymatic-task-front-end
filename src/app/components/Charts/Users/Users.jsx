@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-class UsersChart extends Component {
-  render() {
-    return <div>123</div>;
-  }
-}
+const UsersChart = (props) => {
+  console.log(props);
+
+  return <div>Us123er</div>;
+};
 
 export default UsersChart;

@@ -11,8 +11,12 @@ import { loadChartsImpressionsEntity } from '@/actions';
 
 import _ from './Dashboard.scss';
 
-const AsyncComponent = loadable((props) =>
+const AsyncLayout = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
+);
+
+const AsyncChart = loadable((props) =>
+  import(`@/components/Charts/${props.name}/${props.name}`),
 );
 
 @Connect(
@@ -58,19 +62,29 @@ class Dashboard extends Component {
           <div className={_['dashboard-section_charts-observer']}>
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
-              <AsyncComponent name="Header" />
+              <AsyncLayout name="Header" />
               <div className={schema['row-b']}>
-                <div className={schema['col-b-6']}>Plays</div>
-                <div className={schema['col-b-6']}>Impressions</div>
+                <div className={schema['col-b-6']}>
+                  <AsyncChart name="Impressions" />
+                </div>
+                <div className={schema['col-b-6']}>
+                  <AsyncChart name="Plays" />
+                </div>
               </div>
               <div className={schema['row-b']}>
-                <div className={schema['col-b-8']}>Plays</div>
-                <div className={schema['col-b-4']}>Impressions</div>
+                <div className={schema['col-b-8']}>
+                  <AsyncChart name="Posts" />
+                </div>
+                <div className={schema['col-b-4']}>
+                  <div>
+                    <AsyncChart name="Users" />
+                  </div>
+                </div>
               </div>
               <div className={schema['row-b']}>
                 <div className={schema['col-b-12']}>Actions</div>
               </div>
-              <AsyncComponent name="Footer" />
+              <AsyncLayout name="Footer" />
             </div>
             <div
               className={_['dashboard-section_restrictor-bottom-stripe']}

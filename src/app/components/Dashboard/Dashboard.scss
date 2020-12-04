@@ -51,11 +51,10 @@
       height: inherit;
 
       &-wrapper {
-        position: relative;
         background: linear-gradient(to top, $dashboard-bottom, $dashboard-top)
           no-repeat;
         z-index: -1;
-        background-position: 100% 150%;
+        background-position: 100% 100%;
         background-attachment: fixed;
         padding: 0 2rem;
       }
