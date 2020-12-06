@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  front-kernel:
+    container_name: 'xymatic-front-end'
+    build:
+      dockerfile: Dockerfile
+      context: .
+    tty: true
+    volumes:
+      - '.:/var/www/build'
+      - '/var/www/build/node_modules'
+    ports:
+      - '8080:8080'
+    expose:
+      - '8080'
+    network_mode: xymatic-bridge
+
+networks:
+  xymatic-bridge:
+    driver: bridge

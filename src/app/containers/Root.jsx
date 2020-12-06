@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { renderRoutes } from 'react-router-config';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -81,11 +81,11 @@ class Root extends Component {
   render() {
     const { route } = this.props;
     return (
-      <div className="root">
+      <Fragment>
         {this._renderSiteMeta()}
         <div className={schema['bg-dark']}> </div>
         <div className="main">{renderRoutes(route.childRoutes)}</div>
-      </div>
+      </Fragment>
     );
   }
 }

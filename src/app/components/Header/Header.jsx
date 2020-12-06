@@ -8,13 +8,17 @@ class Header extends Component {
     return (
       <header className={_.header}>
         <div className={_['header-wrapper']}>
-          <div className={schema.row}>
-            <div className={schema['col-6']}>
+          <div
+            className={[schema['row-b'], schema['pb-3']]
+              .filter((e) => !!e)
+              .join(' ')}
+          >
+            <div className={schema['col-b-6']}>
               <h2 className={_['header-wrapper_analytics-title']}>
                 Analytics overview
               </h2>
             </div>
-            <div className={schema['col-6']}>
+            <div className={schema['col-b-6']}>
               <input type="text" />
             </div>
           </div>

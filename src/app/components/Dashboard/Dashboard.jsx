@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
-import { Subscription, Query } from 'react-apollo';
-import { createClient } from 'graphql-ws';
+import pMinDelay from 'p-min-delay';
 import { Seq, List } from 'immutable';
 import { getChartImpression } from '@/selectors';
 import schema from '@styles/_schema.scss';
 import { loadChartsImpressionsEntity } from '@/actions';
-
+import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
 
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
 );
 
-const AsyncChart = loadable((props) =>
-  import(`@/components/Charts/${props.name}/${props.name}`),
+const AsyncChart = loadable(
+  (props) => import(`@/components/Charts/${props.name}/${props.name}`),
+  {
+    fallback: <SkeletonLoading height={100} />,
+  },
 );
 
 @Connect(
@@ -63,21 +65,41 @@ class Dashboard extends Component {
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncLayout name="Header" />
-              <div className={schema['row-b']}>
-                <div className={schema['col-b-6']}>
-                  <AsyncChart name="Impressions" />
+              <div
+                className={[schema['row-b'], schema['mb-3']]
+                  .filter((e) => !!e)
+                  .join(' ')}
+              >
+                <div style={{ height: '100px' }} className={schema['col-b-6']}>
+                  <AsyncChart
+                    name="CustomTinyChart"
+                    type="plays"
+                    color="#3f4af1"
+                  />
                 </div>
-                <div className={schema['col-b-6']}>
-                  <AsyncChart name="Plays" />
+                <div style={{ height: '100px' }} className={schema['col-b-6']}>
+                  <AsyncChart
+                    name="CustomTinyChart"
+                    type="impressions"
+                    color="#ef263d"
+                  />
                 </div>
               </div>
               <div className={schema['row-b']}>
                 <div className={schema['col-b-8']}>
-                  <AsyncChart name="Posts" />
+                  {/* <AsyncChart
+                    name="CustomEssentialChart"
+                    type="impressions"
+                    color="#ef263d"
+                  /> */}
                 </div>
                 <div className={schema['col-b-4']}>
                   <div>
-                    <AsyncChart name="Users" />
+                    {/* <AsyncChart
+                      name="CustomEssentialChart"
+                      type="impressions"
+                      color="#ef263d"
+                    /> */}
                   </div>
                 </div>
               </div>

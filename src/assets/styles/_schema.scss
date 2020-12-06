@@ -82,7 +82,7 @@
     position: relative;
     flex-wrap: wrap;
     width: 100%;
-    flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+    // flex: 0 0 calc(100% * (1 - (1 / #{$i})));
   }
 
   .col-b-#{$i} {
@@ -93,20 +93,20 @@
 }
 
 @for $i from 1 through 5 {
-  .ml-#{$i} {
-    margin-left: $i * 1rem;
+  .mx-#{$i} {
+    margin: 0 $i * 1rem !important;
   }
-}
-
-@for $i from 1 through 5 {
   .mr-#{$i} {
     margin-right: $i * 1rem !important;
   }
-}
-
-@for $i from 1 through 5 {
-  .mx-#{$i} {
-    margin: 0 $i * 1rem !important;
+  .ml-#{$i} {
+    margin-left: $i * 1rem;
+  }
+  .mb-#{$i} {
+    margin-bottom: $i * 1rem;
+  }
+  .mt-#{$i} {
+    margin-top: $i * 1rem;
   }
 }
 
@@ -120,17 +120,17 @@
   .pr-#{$i} {
     padding-right: $i * 1rem !important;
   }
-}
-
-@for $i from 1 through 5 {
   .pl-#{$i} {
     padding-left: $i * 1rem !important;
   }
-}
-
-@for $i from 1 through 5 {
   .px-#{$i} {
     padding: 0 $i * 1rem !important;
+  }
+  .pb-#{$i} {
+    padding-bottom: $i * 1rem;
+  }
+  .pt-#{$i} {
+    padding-bottom: $i * 1rem;
   }
 }
 
@@ -179,7 +179,7 @@
       flex-wrap: wrap;
       padding: 0 15px;
       width: 100%;
-      flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+      // flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
 
     .col-b-lg-#{$i} {
@@ -202,7 +202,7 @@
       flex-wrap: wrap;
       padding: 0 15px;
       width: 100%;
-      flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+      // flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
 
     .col-b-md-#{$i} {
@@ -225,7 +225,7 @@
       flex-wrap: wrap;
       padding: 0 15px;
       width: 100%;
-      flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+      // flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
 
     .col-b-sm-#{$i} {
@@ -248,7 +248,7 @@
       flex-wrap: wrap;
       padding: 0 15px;
       width: 100%;
-      flex: 0 0 calc(100% * (1 - (1 / #{$i})));
+      // flex: 0 0 calc(100% * (1 - (1 / #{$i})));
     }
 
     .col-b-xs-#{$i} {

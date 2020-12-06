@@ -1,0 +1,32 @@
+.custom {
+  &-tiny {
+    &-chart {
+      height: inherit;
+
+      &-wrapper {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        width: 100%;
+        height: inherit;
+        cursor: pointer;
+        transition: 0.35s ease all;
+        border-radius: 12px;
+        background: $chart-schema;
+        box-shadow: 0 0 1rem $chart-schema;
+
+        &_block {
+          display: block;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background: $chart-blue;
+        }
+
+        &_graph {
+          height: 100%;
+        }
+      }
+    }
+  }
+}

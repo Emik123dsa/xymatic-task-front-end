@@ -1,0 +1,16 @@
+/* stylelint-disable length-zero-no-unit */
+.custom {
+  &-active {
+    &-dot {
+      &_circle {
+        stroke-width: 3px;
+        fill: #fff;
+      }
+
+      &_hover {
+        fill: #fff;
+        opacity: 0.05;
+      }
+    }
+  }
+}
