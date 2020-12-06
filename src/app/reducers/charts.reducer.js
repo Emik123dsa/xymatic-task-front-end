@@ -1,8 +1,9 @@
-import { fromJS } from 'immutable';
+// import { mergeDeep } from 'apollo-utilities';
+import { fromJS, mergeDeep, merge } from 'immutable';
 import { SET_ERROR_MESSAGE } from '../actions';
 
 export const initialChartsEntityReducer = fromJS({
-  impressions: {},
+  impressions: [],
   users: {},
   plays: {},
   posts: {},
@@ -14,7 +15,9 @@ export const chartsEntityReducer = (
 ) => {
   switch (action.type) {
     case 'CHART_IMPRESSIONS_SUCCESS':
-      return state.set('impressions', fromJS(action?.response));
+      return state.updateIn(['impressions'], (schema) =>
+        schema.concat(action?.response?.stockPrice),
+      );
     default:
       return state;
   }

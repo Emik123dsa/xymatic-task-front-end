@@ -1,7 +1,30 @@
 .custom {
   &-pie {
     &-chart {
-      color: black;
+      height: inherit;
+
+      &-wrapper {
+        position: relative;
+        display: block;
+        overflow: hidden;
+        width: 100%;
+        height: inherit;
+        cursor: pointer;
+        transition: 0.35s ease all;
+        border-radius: 12px;
+        background: $chart-schema;
+        box-shadow: 0 0 1rem $chart-schema;
+
+        &_graph {
+          height: 100%;
+        }
+
+        &_label {
+          font-size: 1.4rem;
+          fill: $light;
+          font-weight: 500;
+        }
+      }
     }
   }
 }

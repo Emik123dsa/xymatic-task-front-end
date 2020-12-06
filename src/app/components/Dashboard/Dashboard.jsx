@@ -31,8 +31,8 @@ const AsyncChart = loadable(
 )
 class Dashboard extends Component {
   static propTypes = {
-    // impressions: PropTypes.shape(),
-    // loadChartsImpressionsEntity: PropTypes.func,
+    impressions: PropTypes.shape(),
+    loadChartsImpressionsEntity: PropTypes.func,
   };
 
   /**
@@ -43,7 +43,7 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    // this.props.loadChartsImpressionsEntity();
+    this.props.loadChartsImpressionsEntity();
   }
 
   render() {
@@ -56,6 +56,7 @@ class Dashboard extends Component {
     //     <li key={item.get('id')}>{item.get('id')}</li>
     //   ))
     // );
+    const { impressions } = this.props;
 
     return (
       <section className={_['dashboard-section_charts']}>
@@ -65,19 +66,22 @@ class Dashboard extends Component {
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncLayout name="Header" />
-              <div
-                className={[schema['row-b'], schema['mb-3']]
-                  .filter((e) => !!e)
-                  .join(' ')}
-              >
-                <div style={{ height: '100px' }} className={schema['col-b-6']}>
+              <div className={schema['row-b']}>
+                <div
+                  style={{ height: '100px' }}
+                  className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                >
                   <AsyncChart
                     name="CustomTinyChart"
                     type="plays"
+                    data={impressions}
                     color="#3f4af1"
                   />
                 </div>
-                <div style={{ height: '100px' }} className={schema['col-b-6']}>
+                <div
+                  style={{ height: '100px' }}
+                  className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                >
                   <AsyncChart
                     name="CustomTinyChart"
                     type="impressions"
@@ -86,39 +90,36 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className={schema['row-b']}>
-                <div className={schema['col-b-8']}>
+                <div
+                  style={{ height: '400px' }}
+                  className={`${schema['col-b-8']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                >
                   <AsyncChart
                     name="CustomEssentialChart"
                     type="impressions"
-                    color="#ef263d"
+                    title="Users & Posts"
+                    color={['#ef263d', '#3f4af1']}
                   />
                 </div>
-                <div className={schema['col-b-4']}>
-                  <div>
-                    <AsyncChart
-                      name="CustomEssentialChart"
-                      type="impressions"
-                      color="#ef263d"
-                    />
-                  </div>
+                <div
+                  style={{ height: '400px' }}
+                  className={`${schema['col-b-4']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']}`}
+                >
+                  <AsyncChart
+                    name="CustomPieChart"
+                    type="multiple"
+                    color={['#fff', 'black']}
+                  />
                 </div>
+                <div className={schema['col-b-4']}></div>
                 <div className={schema['col-b-4']}>
-                  <div>
+                  {/* <div>
                     <AsyncChart
                       name="CustomEssentialChart"
                       type="impressions"
                       color="#ef263d"
                     />
-                  </div>
-                </div>
-                <div className={schema['col-b-4']}>
-                  <div>
-                    <AsyncChart
-                      name="CustomEssentialChart"
-                      type="impressions"
-                      color="#ef263d"
-                    />
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className={schema['row-b']}>

@@ -1,0 +1,40 @@
+.custom {
+  &-chart {
+    &_legend {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 40px;
+
+      &-title {
+        color: $light;
+        font-family: $medium;
+        font-size: 1rem;
+      }
+
+      &-wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        &-item {
+          position: relative;
+          margin-right: 2rem;
+          user-select: none;
+          font-family: $medium;
+          font-size: 0.8rem;
+
+          span {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -14px;
+            width: 7px;
+            height: 7px;
+            transform: translateY(-50%);
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+}

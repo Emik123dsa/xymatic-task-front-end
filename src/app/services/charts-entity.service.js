@@ -26,8 +26,9 @@ export const fetchChartsUsersEntity = (payload) =>
 
 export const fetchChartsImpressionsEntity = gql`
   subscription {
-    usersSubscribe {
-      id
+    stockPrice {
+      symbol
+      ldt
     }
   }
 `;

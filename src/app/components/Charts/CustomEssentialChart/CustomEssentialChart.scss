@@ -1,7 +1,29 @@
 .custom {
   &-essential {
     &-chart {
-      background: black;
+      position: relative;
+      display: block;
+      overflow: hidden;
+      width: 100%;
+      height: inherit;
+      cursor: pointer;
+      transition: 0.35s ease all;
+      border-radius: 12px;
+      background: $chart-schema;
+      box-shadow: 0 0 1rem $chart-schema;
+
+      &-wrapper {
+        &_label {
+          fill: $light;
+          font-family: $medium;
+          font-weight: 500;
+          font-size: 1rem;
+        }
+      }
+    }
+
+    &_legend {
+      position: absolute;
     }
   }
 }
