@@ -87,19 +87,37 @@ class Dashboard extends Component {
               </div>
               <div className={schema['row-b']}>
                 <div className={schema['col-b-8']}>
-                  {/* <AsyncChart
+                  <AsyncChart
                     name="CustomEssentialChart"
                     type="impressions"
                     color="#ef263d"
-                  /> */}
+                  />
                 </div>
                 <div className={schema['col-b-4']}>
                   <div>
-                    {/* <AsyncChart
+                    <AsyncChart
                       name="CustomEssentialChart"
                       type="impressions"
                       color="#ef263d"
-                    /> */}
+                    />
+                  </div>
+                </div>
+                <div className={schema['col-b-4']}>
+                  <div>
+                    <AsyncChart
+                      name="CustomEssentialChart"
+                      type="impressions"
+                      color="#ef263d"
+                    />
+                  </div>
+                </div>
+                <div className={schema['col-b-4']}>
+                  <div>
+                    <AsyncChart
+                      name="CustomEssentialChart"
+                      type="impressions"
+                      color="#ef263d"
+                    />
                   </div>
                 </div>
               </div>

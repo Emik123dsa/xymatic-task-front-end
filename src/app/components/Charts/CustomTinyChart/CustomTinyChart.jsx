@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from 'recharts';
-
+import { toNumber } from 'lodash';
 import schema from '@styles/_schema.scss';
 
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
@@ -58,12 +58,14 @@ const data = [
 const CUSTOM_TINY_CHART_FACTORY = () => ({
   color: '#fff',
   type: 'uv',
+  height: 100,
 });
 
 export default class CustomTinyChart extends PureComponent {
   static propTypes = {
     color: PropTypes.string,
     type: PropTypes.string,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   };
 
   static defaultProps = CUSTOM_TINY_CHART_FACTORY();
@@ -84,7 +86,7 @@ export default class CustomTinyChart extends PureComponent {
               <ResponsiveContainer
                 className={_['custom-tiny-chart-wrapper_graph']}
                 width="100%"
-                height={100}
+                height={this.heightTinyChart}
               >
                 <AreaChart
                   cursor="pointer"
@@ -135,5 +137,11 @@ export default class CustomTinyChart extends PureComponent {
         </div>
       </div>
     );
+  }
+
+  get heightTinyChart() {
+    return typeof this.props.height === 'string'
+      ? toNumber(this.props.height)
+      : this.props.height;
   }
 }
