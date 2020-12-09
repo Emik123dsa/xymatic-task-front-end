@@ -10,7 +10,7 @@ import {
   Legend,
   XAxis,
   YAxis,
-  Text,
+  Brush,
 } from 'recharts';
 import moment from 'moment';
 import schema from '@styles/_schema.scss';
@@ -20,31 +20,23 @@ import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
 
-const coerceToDaysBetween = (startDate, endDate) => {
+const coerceToDaysBetween = (startDate, endDate, separator) => {
   const date = [];
-  const currentDate = moment(startDate).startOf('month');
-  const lastDate = moment(endDate).startOf('month');
+  const currentDate = moment(startDate).startOf(separator);
+  const lastDate = moment(endDate).startOf(separator);
 
-  while (currentDate.add(1, 'months').diff(lastDate) < 0) {
+  while (currentDate.add(1, `${separator}s`).diff(lastDate) <= 0) {
     date.push(currentDate.clone().toDate());
   }
   return date;
 };
 
-const data = [
-  {
-    name: 'Jan',
-    uv: 2000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Feb',
-    uv: 1000,
-    pv: 2400,
-    amt: 2400,
-  },
-];
+let coercedDays = coerceToDaysBetween('2019-12-15', '2020-01-15', 'day');
+
+coercedDays = coercedDays.map((item) => ({
+  name: moment(item).format('DD MMM'),
+  uv: Math.random(),
+}));
 
 const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
   color: ['#fff', '#0c0c0c0'],
@@ -71,13 +63,7 @@ export class CustomEssentialChart extends PureComponent {
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
 
-  componentDidMount() {
-    const coercedDays = coerceToDaysBetween('2019-01-15', '2019-12-22');
-
-    coercedDays.forEach((item) => {
-      console.log(moment(item).format('MMMM'));
-    });
-  }
+  componentDidMount() {}
 
   _definePropertyDescription() {
     const { type } = this.props;
@@ -99,9 +85,16 @@ export class CustomEssentialChart extends PureComponent {
               >
                 <AreaChart
                   cursor="pointer"
-                  data={data}
+                  data={coercedDays}
                   margin={{ top: 30, right: 30, left: 0, bottom: 20 }}
                 >
+                  <Brush
+                    startIndex={26}
+                    endIndex={30}
+                    dataKey="name"
+                    height={30}
+                    stroke="#8884d8"
+                  />
                   <Legend
                     verticalAlign="top"
                     align="right"
@@ -188,7 +181,7 @@ export class CustomEssentialChart extends PureComponent {
                       stroke: '#4E5B6F',
                       fontSize: '0.6rem',
                       fontWeight: '400',
-                      fontFamily: 'Montserrat Regular',
+                      fontFamily: 'Montserrat Light',
                     }}
                     type="string"
                     tickMargin={16}
