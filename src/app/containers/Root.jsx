@@ -49,7 +49,6 @@ class Root extends Component {
             distinctUntilChanged(),
           )
           .subscribe((payload) => {
-            console.log(payload);
             this.props.setIsMobile({ payload });
           }),
       );

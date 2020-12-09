@@ -12,13 +12,24 @@ import {
   YAxis,
   Text,
 } from 'recharts';
-
+import moment from 'moment';
 import schema from '@styles/_schema.scss';
 import _ from './CustomEssentialChart.scss';
 
 import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
+
+const coerceToDaysBetween = (startDate, endDate) => {
+  const date = [];
+  const currentDate = moment(startDate).startOf('month');
+  const lastDate = moment(endDate).startOf('month');
+
+  while (currentDate.add(1, 'months').diff(lastDate) < 0) {
+    date.push(currentDate.clone().toDate());
+  }
+  return date;
+};
 
 const data = [
   {
@@ -32,42 +43,6 @@ const data = [
     uv: 1000,
     pv: 2400,
     amt: 2400,
-  },
-  {
-    name: 'March',
-    uv: 2000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Apr',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'May',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'June',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'July',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Aug',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
   },
 ];
 
@@ -95,6 +70,14 @@ export class CustomEssentialChart extends PureComponent {
   };
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
+
+  componentDidMount() {
+    const coercedDays = coerceToDaysBetween('2019-01-15', '2019-12-22');
+
+    coercedDays.forEach((item) => {
+      console.log(moment(item).format('MMMM'));
+    });
+  }
 
   _definePropertyDescription() {
     const { type } = this.props;

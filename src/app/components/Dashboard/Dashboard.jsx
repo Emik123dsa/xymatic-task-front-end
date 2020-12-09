@@ -47,15 +47,6 @@ class Dashboard extends Component {
   }
 
   render() {
-    // const { impressions } = this.props;
-
-    // const _subscriber = !impressions.has('usersSubscribe') ? (
-    //   <div>Loading ...</div>
-    // ) : (
-    //   List(impressions.get('usersSubscribe')).map((item) => (
-    //     <li key={item.get('id')}>{item.get('id')}</li>
-    //   ))
-    // );
     const { impressions } = this.props;
 
     return (
@@ -97,7 +88,7 @@ class Dashboard extends Component {
                   <AsyncChart
                     name="CustomEssentialChart"
                     type="impressions"
-                    title="Users & Posts"
+                    title="Users"
                     color={['#ef263d', '#3f4af1']}
                   />
                 </div>

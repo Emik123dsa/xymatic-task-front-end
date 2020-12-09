@@ -1,8 +1,48 @@
+/* stylelint-disable declaration-colon-newline-after */
 .custom {
-  &-alert {
+  &-alter {
     &-period {
       &-date {
-        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.4rem 0.8rem;
+        transition: 0.25s ease all;
+        color: $btn-border-active;
+        border: 0.1rem solid $btn-border;
+        border-radius: 1rem;
+        outline: none;
+        font-size: 0.8rem;
+
+        &_dropdown {
+          position: relative;
+          display: block;
+          width: 12px;
+          height: 12px;
+          margin-left: 0.6rem;
+          transition: 0.25s ease all;
+          background: url('@img/down-arrow.svg') no-repeat center center;
+          background-size: contain;
+        }
+
+        &:hover {
+          transition: 0.25s ease all;
+          border: 0.1rem solid $btn-border-active !important;
+
+          .custom {
+            &-alter {
+              &-period {
+                &-date {
+                  &_dropdown {
+                    transition: 0.25s ease all;
+                    background: url('@img/down-arrow-active.svg') no-repeat
+                      center center;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
