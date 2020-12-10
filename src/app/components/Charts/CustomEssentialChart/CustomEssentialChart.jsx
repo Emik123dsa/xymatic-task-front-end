@@ -31,48 +31,80 @@ const coerceToDaysBetween = (startDate, endDate, separator) => {
   return date;
 };
 
-let coercedDays = coerceToDaysBetween('2019-02-15', '2020-01-15', 'day');
+let coercedDays = coerceToDaysBetween('2019-02-15', '2020-01-15', 'month');
 
 coercedDays = coercedDays.map((item) => ({
-  name: moment(item).format('MMM'),
-  uv: Math.random(),
+  timestamp: moment(item).format('MMM'),
+  uv: Math.random().toFixed(2),
+  pv: Math.random().toFixed(2),
 }));
 
 const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
-  color: ['#fff', '#0c0c0c0'],
-  type: 'uv',
+  content: [
+    {
+      type: 'uv',
+      color: '#fff',
+    },
+    {
+      type: 'pv',
+      color: '#0c0c0c',
+    },
+  ],
   height: 400,
-  title: 'Users',
+  title: 'Default',
 });
 
 export class CustomEssentialChart extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this._definePropertyDescription = this._definePropertyDescription.bind(
-      this,
-    );
-  }
-
   static propTypes = {
-    color: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-    type: PropTypes.string,
+    content: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string,
+        color: PropTypes.string,
+      }),
+    ),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
   };
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
 
-  componentDidMount() {}
+  _renderLinearGradient() {
+    const { content } = this.props;
 
-  _definePropertyDescription() {
-    const { type } = this.props;
-    return `color${type.charAt(0).toUpperCase()}${type.slice(1)}`;
+    return (
+      content &&
+      content.map((item, index) => (
+        <linearGradient key={index} id={item.type} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor={item.color} stopOpacity={0.2} />
+          <stop offset="95%" stopColor={item.color} stopOpacity={0} />
+        </linearGradient>
+      ))
+    );
+  }
+
+  _renderAreaChart() {
+    const { content } = this.props;
+
+    return (
+      content &&
+      content.map((item, index) => (
+        <Area
+          key={index}
+          activeDot={<CustomActiveDot fill={item.color} />}
+          textAnchor="top"
+          type="monotone"
+          dataKey={item.type}
+          stroke={item.color}
+          fillOpacity={1}
+          strokeWidth="2"
+          fill={`url(#${item.type})`}
+        ></Area>
+      ))
+    );
   }
 
   render() {
-    const { color, type, height, title } = this.props;
-
+    const { height, title, content } = this.props;
     return (
       <div className={_['custom-essential-chart']}>
         <div className={_['custom-essential-chart-wrapper']}>
@@ -81,7 +113,7 @@ export class CustomEssentialChart extends PureComponent {
               <ResponsiveContainer
                 className={_['custom-essential-chart-wrapper_graph']}
                 width="100%"
-                height={400}
+                height={+height}
               >
                 <AreaChart
                   cursor="pointer"
@@ -102,55 +134,13 @@ export class CustomEssentialChart extends PureComponent {
                     content={<CustomLegend title={title} />}
                   />
 
-                  <defs>
-                    <linearGradient
-                      id={`custom${this._definePropertyDescription()}SecondChart`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor={this._colorsDetailsFeatured(0)}
-                        stopOpacity={0.2}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor={this._colorsDetailsFeatured(0)}
-                        stopOpacity={0}
-                      />
-                    </linearGradient>
-                    <linearGradient
-                      id={`custom${this._definePropertyDescription()}FirstChart`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor={this._colorsDetailsFeatured(1)}
-                        stopOpacity={0.2}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor={this._colorsDetailsFeatured(1)}
-                        stopOpacity={0}
-                      />
-                    </linearGradient>
-                  </defs>
+                  <defs>{this._renderLinearGradient()}</defs>
 
                   <Tooltip
                     cursor={false}
                     offset={-26}
                     content={
-                      <CustomToolTip
-                        fill={[
-                          this._colorsDetailsFeatured(1),
-                          this._colorsDetailsFeatured(0),
-                        ]}
-                      />
+                      <CustomToolTip fill={content.map((item) => item.color)} />
                     }
                   />
 
@@ -184,36 +174,13 @@ export class CustomEssentialChart extends PureComponent {
                     }}
                     type="string"
                     tickMargin={16}
-                    interval={12}
+                    interval={0}
                     scale="point"
                     axisLine={false}
-                    dataKey="name"
+                    dataKey="timestamp"
                     tickLine={false}
                   />
-                  <Area
-                    activeDot={
-                      <CustomActiveDot fill={this._colorsDetailsFeatured(1)} />
-                    }
-                    textAnchor="top"
-                    type="monotone"
-                    dataKey="pv"
-                    stroke={this._colorsDetailsFeatured(1)}
-                    fillOpacity={1}
-                    strokeWidth="2"
-                    fill={`url(#custom${this._definePropertyDescription()}FirstChart)`}
-                  ></Area>
-
-                  <Area
-                    activeDot={
-                      <CustomActiveDot fill={this._colorsDetailsFeatured(0)} />
-                    }
-                    type="monotone"
-                    dataKey="uv"
-                    stroke={this._colorsDetailsFeatured(0)}
-                    strokeWidth="2"
-                    fillOpacity={1}
-                    fill={`url(#custom${this._definePropertyDescription()}SecondChart)`}
-                  />
+                  {this._renderAreaChart()}
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -221,23 +188,6 @@ export class CustomEssentialChart extends PureComponent {
         </div>
       </div>
     );
-  }
-
-  get _colorsDetailsFeatured() {
-    const { color } = this.props;
-    return (index) => {
-      if (Array.isArray(color) && color.length > 0) {
-        if (!color[index]) {
-          throw new RangeError(
-            `[Color] : ${index} on the color is not defined`,
-          );
-        } else {
-          return color[index];
-        }
-      } else {
-        return color;
-      }
-    };
   }
 }
 

@@ -1,12 +1,10 @@
-// import { mergeDeep } from 'apollo-utilities';
-import { fromJS, mergeDeep, merge } from 'immutable';
-import { SET_ERROR_MESSAGE } from '../actions';
+import { fromJS } from 'immutable';
 
 export const initialChartsEntityReducer = fromJS({
   impressions: [],
-  users: {},
-  plays: {},
-  posts: {},
+  users: [],
+  plays: [],
+  posts: [],
 });
 
 export const chartsEntityReducer = (

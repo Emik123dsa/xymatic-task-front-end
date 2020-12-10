@@ -4,9 +4,9 @@ import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import pMinDelay from 'p-min-delay';
 import { Seq, List } from 'immutable';
-import { getChartImpression } from '@/selectors';
+import { getChartImpression, getChartUsers } from '@/selectors';
 import schema from '@styles/_schema.scss';
-import { loadChartsImpressionsEntity } from '@/actions';
+import { loadChartsImpressionsEntity, loadChartsUsersEntity } from '@/actions';
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
 
@@ -41,15 +41,19 @@ const AsyncPieChart = loadable(
 
 @Connect(
   (state) => ({
+    users: getChartUsers(state),
     impressions: getChartImpression(state),
   }),
   {
+    loadChartsUsersEntity,
     loadChartsImpressionsEntity,
   },
 )
 class Dashboard extends Component {
   static propTypes = {
     impressions: PropTypes.shape(),
+    users: PropTypes.shape(),
+    loadChartsUsersEntity: PropTypes.func,
     loadChartsImpressionsEntity: PropTypes.func,
   };
 
@@ -61,7 +65,7 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    this.props.loadChartsImpressionsEntity();
+    this.props.loadChartsUsersEntity();
   }
 
   render() {
@@ -101,7 +105,17 @@ class Dashboard extends Component {
                   <AsyncEssentialChart
                     type="activity"
                     title="Activity"
-                    color={['#ef263d', '#3f4af1']}
+                    height={400}
+                    content={[
+                      {
+                        type: 'uv',
+                        color: '#ef263d',
+                      },
+                      {
+                        type: 'pv',
+                        color: '#3f4af1',
+                      },
+                    ]}
                   />
                 </div>
                 <div
@@ -109,16 +123,6 @@ class Dashboard extends Component {
                   className={`${schema['col-b-4']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']}`}
                 >
                   <AsyncPieChart type="multiple" color={['#fff', 'black']} />
-                </div>
-                <div className={schema['col-b-4']}></div>
-                <div className={schema['col-b-4']}>
-                  {/* <div>
-                    <AsyncChart
-                      name="CustomEssentialChart"
-                      type="impressions"
-                      color="#ef263d"
-                    />
-                  </div> */}
                 </div>
               </div>
               <div className={schema['row-b']}>

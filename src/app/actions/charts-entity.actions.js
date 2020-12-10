@@ -18,11 +18,11 @@ const chartUsersEntitySchema = createRequestSchema('CHART_USERS');
 
 export const LOAD_CHART_IMPRESSIONS = 'LOAD_CHART_IMPRESSIONS';
 
-export const LOAD_CHART_POSTS = 'LOAD_CHART_IMPRESSIONS';
+export const LOAD_CHART_POSTS = 'LOAD_CHART_POSTS';
 
-export const LOAD_CHART_PLAYS = 'LOAD_CHART_IMPRESSIONS';
+export const LOAD_CHART_PLAYS = 'LOAD_CHART_PLAYS';
 
-export const LOAD_CHART_USERS = 'LOAD_CHART_IMPRESSIONS';
+export const LOAD_CHART_USERS = 'LOAD_CHART_USERS';
 
 export const chartsImmersionsEntity = {
   request: (payload) =>

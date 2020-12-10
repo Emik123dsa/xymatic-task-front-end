@@ -4,6 +4,7 @@ import { SET_MODAL_IS_OPENED } from '../actions';
 export const initialModalReducer = fromJS({
   isModalOpened: false,
   modalDateSchema: [
+    ['Real Time'],
     ['Today'],
     ['Yesterday'],
     ['Day'],

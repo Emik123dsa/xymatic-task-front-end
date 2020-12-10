@@ -48,8 +48,8 @@ const link = split(
     return kind === 'OperationDefinition' && operation === 'subscription';
   },
   wsLink,
-  errorLink,
   authLink.concat(httpLink),
+  errorLink,
 );
 
 export const client = () =>

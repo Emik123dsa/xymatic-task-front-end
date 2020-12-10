@@ -7,8 +7,10 @@ import {
   fork,
   getContext,
   takeEvery,
+  cancel,
+  delay,
 } from 'redux-saga/effects';
-import { eventChannel } from 'redux-saga';
+import { eventChannel, END } from 'redux-saga';
 
 import {
   chartsImmersionsEntity,
@@ -20,16 +22,12 @@ import {
   loadChartsPostsEntity,
   loadChartsImpressionsEntity,
   LOAD_CHART_IMPRESSIONS,
+  LOAD_CHART_USERS,
 } from '@/actions';
 
 import { getChartImpression } from '@/selectors';
 
-import {
-  fetchChartsImpressionsEntity,
-  fetchChartsPlaysEntity,
-  fetchChartsPostsEntity,
-  fetchChartsUsersEntity,
-} from '@/services';
+import { fetchChartsUsersEntity, watchChartsUsersEntity } from '@/services';
 
 const createEventChannel = (client, query, params = {}) =>
   eventChannel((emitter) => {
@@ -45,7 +43,7 @@ const createEventChannel = (client, query, params = {}) =>
         },
         complete() {},
         error(err) {
-          emitter(err);
+          emitter(END);
         },
       });
 
@@ -64,28 +62,24 @@ export function* handleEvent(entity, payload, schema) {
   }
 }
 
-function* loadChartImpressions(payload = {}) {
+function* loadChartUsers(payload = {}) {
   const client = yield getContext('client');
 
   const channel = yield call(
     createEventChannel,
     client,
-    fetchChartsImpressionsEntity,
+    watchChartsUsersEntity,
     payload,
   );
 
-  const handleChartImpressions = handleEvent.bind(
-    null,
-    chartsImmersionsEntity,
-    payload,
-  );
+  const handleChartUsers = handleEvent.bind(null, chartsUsersEntity, payload);
 
-  yield takeEvery(channel, handleChartImpressions);
+  yield takeEvery(channel, handleChartUsers);
 }
 
-export function* watchLoadChartImpressions() {
+export function* watchLoadChartUsers() {
   while (true) {
-    const { payload } = yield take(LOAD_CHART_IMPRESSIONS);
-    yield fork(loadChartImpressions, payload);
+    const { payload } = yield take(LOAD_CHART_USERS);
+    yield fork(loadChartUsers, payload);
   }
 }

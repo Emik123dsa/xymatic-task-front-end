@@ -2,51 +2,39 @@
 import gql from 'graphql-tag';
 import { callGraphQLApi } from './graphql';
 
-// const currencySchema = new schema.Entity('currency');
-
-// const ratesSchema = new schema.Entity('rates', {
-//   currency: currencySchema,
-// });
-
-// const impressionsSchemaArray = new schema.Array(
-//   {
-//     data: ratesSchema,
-//   },
-//   (entity) => entity.rates,
-// );
-
-export const fetchChartsUsersEntity = (payload) =>
-  callGraphQLApi('/', {
-    query: `query GetRates {
-    rates(currency: "USD") {
-      currency
-    }
-  }`,
-  });
-
-export const fetchChartsImpressionsEntity = gql`
-  subscription {
-    stockPrice {
-      symbol
-      ldt
+export const watchChartsUsersEntity = gql`
+  subscription usersSubscribe {
+    userSubscribe {
+      count
+      timestamp
     }
   }
 `;
 
-export const fetchChartsPlaysEntity = (payload) =>
-  callGraphQLApi('/', {
-    query: `query GetRates {
-    rates(currency: "USD") {
-      currency
+export const fetchChartsUsersEntity = gql`
+  query userChart($period: Period) {
+    findUserByChart(period: $period) {
+      delta
+      deltaTotal
+      timestamp
     }
-  }`,
-  });
+  }
+`;
 
-export const fetchChartsPostsEntity = (payload) =>
-  callGraphQLApi('/', {
-    query: `query GetRates {
-    rates(currency: "USD") {
-      currency
-    }
-  }`,
-  });
+// export const fetchChartsPlaysEntity = (payload) =>
+//   callGraphQLApi('/', {
+//     query: `query GetRates {
+//     rates(currency: "USD") {
+//       currency
+//     }
+//   }`,
+//   });
+
+// export const fetchChartsPostsEntity = (payload) =>
+//   callGraphQLApi('/', {
+//     query: `query GetRates {
+//     rates(currency: "USD") {
+//       currency
+//     }
+//   }`,
+//   });
