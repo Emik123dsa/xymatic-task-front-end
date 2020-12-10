@@ -15,22 +15,25 @@
       &-wrapper {
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
         &-item {
           position: relative;
+          display: flex;
           margin-right: 2rem;
           user-select: none;
           font-family: $medium;
           font-size: 0.8rem;
+          justify-content: space-between;
+          align-items: center;
+          flex-direction: row-reverse;
 
           span {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -14px;
+            display: block;
+            position: relative;
+            margin-right: 0.4rem;
             width: 7px;
             height: 7px;
-            transform: translateY(-50%);
             border-radius: 50%;
           }
         }

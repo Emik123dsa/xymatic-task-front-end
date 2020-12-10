@@ -1,4 +1,5 @@
-import React, { Component, createContext } from 'react';
+/* eslint-disable no-return-assign */
+import React, { Component, Fragment } from 'react';
 import { fromEvent, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import PropTypes from 'prop-types';
@@ -16,7 +17,8 @@ export class ClickOutside extends Component {
 
   static propTypes = {
     emitOnClick: PropTypes.func,
-    children: PropTypes.object,
+    children: PropTypes.array,
+    currentState: PropTypes.bool,
   };
 
   componentDidMount() {
@@ -41,13 +43,15 @@ export class ClickOutside extends Component {
           }),
       );
 
-      this.clickOutside.add(
-        fromEvent(this.elementRef.current, 'click')
-          .pipe(distinctUntilChanged())
-          .subscribe((e) => {
-            this.props.emitOnClick(true);
-          }),
-      );
+      if (this.buttonRef instanceof HTMLButtonElement) {
+        this.clickOutside.add(
+          fromEvent(this.buttonRef, 'click')
+            .pipe(distinctUntilChanged())
+            .subscribe((e) => {
+              this.props.emitOnClick(!this.props.currentState);
+            }),
+        );
+      }
     }, 0);
   }
 
@@ -64,12 +68,19 @@ export class ClickOutside extends Component {
 
   render() {
     return (
-      <div ref={this.elementRef}>
-        {React.Children.map(
-          this.props.children,
-          (mutableChildren) => mutableChildren,
-        )}
-      </div>
+      <Fragment>
+        <div ref={this.elementRef}>
+          {React.Children.map(this.props.children, (mutableChild) => {
+            if (mutableChild) {
+              return React.cloneElement(mutableChild, {
+                ref: (node) => (this.buttonRef = node),
+              });
+            }
+
+            return null;
+          })}
+        </div>
+      </Fragment>
     );
   }
 }

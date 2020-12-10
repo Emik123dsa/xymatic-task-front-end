@@ -6,10 +6,10 @@ export const initialModalReducer = fromJS({
   modalDateSchema: [
     ['Today'],
     ['Yesterday'],
-    ['1D'],
-    ['1M'],
-    ['1Y'],
-    ['ALL TIME'],
+    ['Day'],
+    ['Month'],
+    ['Year'],
+    ['All time'],
   ],
 });
 

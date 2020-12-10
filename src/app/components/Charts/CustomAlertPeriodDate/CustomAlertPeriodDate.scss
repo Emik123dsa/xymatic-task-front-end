@@ -2,24 +2,90 @@
 .custom {
   &-alter {
     &-period {
+      position: relative;
+      display: block;
+      width: max-content;
+
       &-date {
         display: flex;
-        justify-content: center;
         align-items: center;
+        min-width: 7rem;
+        max-width: 7rem;
         padding: 0.4rem 0.8rem;
         transition: 0.25s ease all;
         color: $btn-border-active;
         border: 0.1rem solid $btn-border;
-        border-radius: 1rem;
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
         outline: none;
         font-size: 0.8rem;
+
+        &_credentials {
+          position: absolute;
+          z-index: 100;
+          width: 100%;
+          text-align: center;
+          border: 0.1rem solid $btn-border;
+          border-top: none;
+          border-bottom-right-radius: 1rem;
+          border-bottom-left-radius: 1rem;
+          background: $chart-schema;
+          overflow: hidden;
+
+          &_wrapper {
+            width: 100%;
+            height: inherit;
+          }
+
+          &_list {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+            li {
+              position: relative;
+              display: block;
+              width: 100%;
+              padding: 0.4rem;
+              cursor: pointer;
+
+              span {
+                width: 100%;
+                font-size: 0.8rem;
+              }
+
+              &::after {
+                transition: 0.25s ease all;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 100%;
+                background: $btn-border;
+              }
+
+              &:hover {
+                &::after {
+                  width: 100%;
+                  // opacity: 0.15;
+                  z-index: -1;
+                }
+              }
+            }
+          }
+        }
 
         &_dropdown {
           position: relative;
           display: block;
-          width: 12px;
-          height: 12px;
-          margin-left: 0.6rem;
+          width: 1.2rem;
+          height: 0.6rem;
+          margin-left: auto;
           transition: 0.25s ease all;
           background: url('@img/down-arrow.svg') no-repeat center center;
           background-size: contain;

@@ -31,10 +31,10 @@ const coerceToDaysBetween = (startDate, endDate, separator) => {
   return date;
 };
 
-let coercedDays = coerceToDaysBetween('2019-12-15', '2020-01-15', 'day');
+let coercedDays = coerceToDaysBetween('2019-02-15', '2020-01-15', 'day');
 
 coercedDays = coercedDays.map((item) => ({
-  name: moment(item).format('DD MMM'),
+  name: moment(item).format('MMM'),
   uv: Math.random(),
 }));
 
@@ -88,13 +88,13 @@ export class CustomEssentialChart extends PureComponent {
                   data={coercedDays}
                   margin={{ top: 30, right: 30, left: 0, bottom: 20 }}
                 >
-                  <Brush
-                    startIndex={26}
-                    endIndex={30}
+                  {/* <Brush
+                    // startIndex={26}
+                    // endIndex={30}
                     dataKey="name"
                     height={30}
                     stroke="#8884d8"
-                  />
+                  /> */}
                   <Legend
                     verticalAlign="top"
                     align="right"
@@ -180,12 +180,11 @@ export class CustomEssentialChart extends PureComponent {
                     tick={{
                       stroke: '#4E5B6F',
                       fontSize: '0.6rem',
-                      fontWeight: '400',
                       fontFamily: 'Montserrat Light',
                     }}
                     type="string"
                     tickMargin={16}
-                    interval={0}
+                    interval={12}
                     scale="point"
                     axisLine={false}
                     dataKey="name"

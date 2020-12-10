@@ -10,14 +10,32 @@ import { loadChartsImpressionsEntity } from '@/actions';
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
 
+const HEIGHT_TINY_CHART_DEFAULT = 100;
+
+const HEIGHT_ESSENTIAL_CHART_DEFAULT = 400;
+
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
 );
 
-const AsyncChart = loadable(
-  (props) => import(`@/components/Charts/${props.name}/${props.name}`),
+const AsyncTinyChart = loadable(
+  () => import('@/components/Charts/CustomTinyChart/CustomTinyChart'),
   {
-    fallback: <SkeletonLoading height={100} />,
+    fallback: <SkeletonLoading height={HEIGHT_TINY_CHART_DEFAULT} />,
+  },
+);
+
+const AsyncEssentialChart = loadable(
+  () => import('@/components/Charts/CustomEssentialChart/CustomEssentialChart'),
+  {
+    fallback: <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />,
+  },
+);
+
+const AsyncPieChart = loadable(
+  () => import('@/components/Charts/CustomPieChart/CustomPieChart'),
+  {
+    fallback: <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />,
   },
 );
 
@@ -62,8 +80,7 @@ class Dashboard extends Component {
                   style={{ height: '100px' }}
                   className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
                 >
-                  <AsyncChart
-                    name="CustomTinyChart"
+                  <AsyncTinyChart
                     type="plays"
                     data={impressions}
                     color="#3f4af1"
@@ -73,11 +90,7 @@ class Dashboard extends Component {
                   style={{ height: '100px' }}
                   className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
                 >
-                  <AsyncChart
-                    name="CustomTinyChart"
-                    type="impressions"
-                    color="#ef263d"
-                  />
+                  <AsyncTinyChart type="impressions" color="#ef263d" />
                 </div>
               </div>
               <div className={schema['row-b']}>
@@ -85,10 +98,9 @@ class Dashboard extends Component {
                   style={{ height: '400px' }}
                   className={`${schema['col-b-8']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
                 >
-                  <AsyncChart
-                    name="CustomEssentialChart"
-                    type="impressions"
-                    title="Users"
+                  <AsyncEssentialChart
+                    type="activity"
+                    title="Activity"
                     color={['#ef263d', '#3f4af1']}
                   />
                 </div>
@@ -96,11 +108,7 @@ class Dashboard extends Component {
                   style={{ height: '400px' }}
                   className={`${schema['col-b-4']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']}`}
                 >
-                  <AsyncChart
-                    name="CustomPieChart"
-                    type="multiple"
-                    color={['#fff', 'black']}
-                  />
+                  <AsyncPieChart type="multiple" color={['#fff', 'black']} />
                 </div>
                 <div className={schema['col-b-4']}></div>
                 <div className={schema['col-b-4']}>
