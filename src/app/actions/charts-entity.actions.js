@@ -1,5 +1,3 @@
-import { callGraphQLApi } from '@/services';
-
 import {
   action,
   createRequestSchema,
@@ -24,7 +22,15 @@ export const LOAD_CHART_PLAYS = 'LOAD_CHART_PLAYS';
 
 export const LOAD_CHART_USERS = 'LOAD_CHART_USERS';
 
-export const chartsImmersionsEntity = {
+export const CANCEL_CHART_IMPRESSIONS = 'CANCEL_CHART_IMPRESSIONS';
+
+export const CANCEL_CHART_POSTS = 'CANCEL_CHART_POSTS';
+
+export const CANCEL_CHART_PLAYS = 'CANCEL_CHART_PLAYS';
+
+export const CANCEL_CHART_USERS = 'CANCEL_CHART_USERS';
+
+export const chartsImpressionsEntity = {
   request: (payload) =>
     action(chartImpressionsEntitySchema[REQUEST], { payload }),
   success: (payload, response) =>
@@ -71,6 +77,9 @@ export const chartsUsersEntity = {
 
 export const loadChartsUsersEntity = (payload) =>
   action(LOAD_CHART_USERS, { payload });
+
+export const cancelChartsUsersEntity = (payload) =>
+  action(CANCEL_CHART_USERS, { payload });
 
 export const loadChartsImpressionsEntity = (payload) =>
   action(LOAD_CHART_IMPRESSIONS, { payload });

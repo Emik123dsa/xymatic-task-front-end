@@ -3,8 +3,16 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
 import { List } from 'immutable';
-import { setModalIsOpened } from '~/app/actions';
-import { getModalDateSchema, getModalOpenedState } from '~/app/selectors';
+import {
+  setModalCurrentDateSchema,
+  setModalIsOpened,
+  cancelChartsUsersEntity,
+} from '~/app/actions';
+import {
+  getModalCurrentDateSchema,
+  getModalDateSchema,
+  getModalOpenedState,
+} from '~/app/selectors';
 import { ClickOutside } from '~/app/shared/ClickOutside/ClickOutside';
 
 import _ from './CustomAlertPeriodDate.scss';
@@ -25,25 +33,26 @@ const customAlertButtonRadius = [
   (state) => ({
     isOpenedState: getModalOpenedState(state),
     dateSchema: getModalDateSchema(state),
+    currentDateSchema: getModalCurrentDateSchema(state),
   }),
   {
+    cancelChartsUsersEntity,
+    setModalCurrentDateSchema,
     setModalIsOpened,
   },
 )
 export class CustomAlertPeriodDate extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentDateSchema: this.props.dateSchema.getIn(['0', '0']),
-    };
-
     this._handleClick = this._handleClick.bind(this);
     this._setCurrentDateSchema = this._setCurrentDateSchema.bind(this);
   }
 
   static propTypes = {
     setModalIsOpened: PropTypes.func,
+    setModalCurrentDateSchema: PropTypes.func,
+    cancelChartsUsersEntity: PropTypes.func,
+    currentDateSchema: PropTypes.object,
     isOpenedState: PropTypes.bool,
     dateSchema: PropTypes.object,
   };
@@ -52,11 +61,9 @@ export class CustomAlertPeriodDate extends PureComponent {
     this.props.setModalIsOpened({ payload });
   }
 
-  _setCurrentDateSchema({ index, currentSchema }) {
-    this.setState((currentState) => ({
-      currentDateSchema: currentSchema,
-    }));
+  _setCurrentDateSchema({ currentSchema }) {
     this.props.setModalIsOpened({ payload: false });
+    this.props.setModalCurrentDateSchema({ payload: currentSchema });
   }
 
   _renderModalDateSchema() {
@@ -70,8 +77,7 @@ export class CustomAlertPeriodDate extends PureComponent {
                   <li
                     onClick={() =>
                       this._setCurrentDateSchema({
-                        index,
-                        currentSchema: item.get('0'),
+                        currentSchema: item.get(0),
                       })
                     }
                     key={index}
@@ -105,7 +111,7 @@ export class CustomAlertPeriodDate extends PureComponent {
             className={_['custom-alter-period-date']}
             type="submit"
           >
-            {this.state.currentDateSchema}
+            {this.props.currentDateSchema.get(0)}
             <span
               style={{
                 transform: `rotate(${this.props.isOpenedState ? 180 : 0}deg)`,

@@ -4,7 +4,7 @@ import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import pMinDelay from 'p-min-delay';
 import { Seq, List } from 'immutable';
-import { getChartImpression, getChartUsers } from '@/selectors';
+import { getChartImpression, getChartUsers, Period } from '@/selectors';
 import schema from '@styles/_schema.scss';
 import { loadChartsImpressionsEntity, loadChartsUsersEntity } from '@/actions';
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
@@ -65,7 +65,7 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    this.props.loadChartsUsersEntity();
+    this.props.loadChartsUsersEntity({ payload: Period.RealTime });
   }
 
   render() {
