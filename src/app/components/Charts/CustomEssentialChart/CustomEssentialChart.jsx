@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-confusing-arrow */
+/* eslint-disable object-curly-newline, no-confusing-arrow, indent */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -12,32 +12,16 @@ import {
   YAxis,
   Brush,
 } from 'recharts';
-import moment from 'moment';
+import { isImmutable, List } from 'immutable';
+import { connect as Connect } from 'react-redux';
+import { coercedMoment, coercedSeparatedMoment } from '@/shared/coercedMoment';
 import schema from '@styles/_schema.scss';
 import _ from './CustomEssentialChart.scss';
 
 import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
-
-const coerceToDaysBetween = (startDate, endDate, separator) => {
-  const date = [];
-  const currentDate = moment(startDate).startOf(separator);
-  const lastDate = moment(endDate).startOf(separator);
-
-  while (currentDate.add(1, `${separator}s`).diff(lastDate) <= 0) {
-    date.push(currentDate.clone().toDate());
-  }
-  return date;
-};
-
-let coercedDays = coerceToDaysBetween('2019-02-15', '2020-01-15', 'month');
-
-coercedDays = coercedDays.map((item) => ({
-  timestamp: moment(item).format('MMM'),
-  uv: Math.random().toFixed(2),
-  pv: Math.random().toFixed(2),
-}));
+import { getModalCurrentDateSchema } from '~/app/selectors';
 
 const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
   content: [
@@ -54,16 +38,24 @@ const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
   title: 'Default',
 });
 
+@Connect(
+  (state) => ({
+    currentDateSchema: getModalCurrentDateSchema(state),
+  }),
+  null,
+)
 export class CustomEssentialChart extends PureComponent {
   static propTypes = {
     content: PropTypes.arrayOf(
       PropTypes.shape({
         type: PropTypes.string,
+        data: PropTypes.object,
         color: PropTypes.string,
       }),
     ),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
+    currentDateSchema: PropTypes.object,
   };
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
@@ -93,7 +85,8 @@ export class CustomEssentialChart extends PureComponent {
           activeDot={<CustomActiveDot fill={item.color} />}
           textAnchor="top"
           type="monotone"
-          dataKey={item.type}
+          data={this.state.dataList[index]}
+          dataKey="delta"
           stroke={item.color}
           fillOpacity={1}
           strokeWidth="2"
@@ -103,8 +96,44 @@ export class CustomEssentialChart extends PureComponent {
     );
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataList: null,
+    };
+  }
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    const { content, currentDateSchema } = prevProps;
+
+    return {
+      dataList: content.map(({ data, type }) =>
+        List(data).reduce((acc, item, index) => {
+          acc[index] = !isImmutable(item)
+            ? {
+                delta: item.delta,
+                timestamp: coercedMoment(
+                  currentDateSchema.get(0),
+                  item.timestamp,
+                ),
+              }
+            : {
+                delta: item.get('delta'),
+                deltaTotal: item.get('deltaTotal'),
+                timestamp: coercedMoment(
+                  currentDateSchema.get(0),
+                  item.get('timestamp'),
+                ),
+              };
+          return acc;
+        }, []),
+      ),
+    };
+  }
+
   render() {
     const { height, title, content } = this.props;
+
     return (
       <div className={_['custom-essential-chart']}>
         <div className={_['custom-essential-chart-wrapper']}>
@@ -117,25 +146,27 @@ export class CustomEssentialChart extends PureComponent {
               >
                 <AreaChart
                   cursor="pointer"
-                  data={coercedDays}
                   margin={{ top: 30, right: 30, left: 0, bottom: 20 }}
                 >
-                  {/* <Brush
+                  <Brush
                     // startIndex={26}
                     // endIndex={30}
                     dataKey="name"
                     height={30}
                     stroke="#8884d8"
-                  /> */}
+                  />
                   <Legend
                     verticalAlign="top"
                     align="right"
                     height="3rem"
-                    content={<CustomLegend title={title} />}
+                    content={
+                      <CustomLegend
+                        types={content.map(({ type }) => type)}
+                        title={title}
+                      />
+                    }
                   />
-
                   <defs>{this._renderLinearGradient()}</defs>
-
                   <Tooltip
                     cursor={false}
                     offset={-26}
@@ -143,7 +174,6 @@ export class CustomEssentialChart extends PureComponent {
                       <CustomToolTip fill={content.map((item) => item.color)} />
                     }
                   />
-
                   <CartesianGrid
                     stroke="#4E5B6F"
                     strokeOpacity="0.3"
@@ -151,7 +181,6 @@ export class CustomEssentialChart extends PureComponent {
                     strokeDasharray="2 6"
                     vertical={false}
                   />
-
                   <YAxis
                     width={40}
                     orientation="left"

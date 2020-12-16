@@ -5,8 +5,9 @@ import { callGraphQLApi } from './graphql';
 export const watchChartsUsersEntity = gql`
   subscription usersSubscribe {
     userSubscribe {
-      count
+      delta
       timestamp
+      __typename
     }
   }
 `;
@@ -17,6 +18,7 @@ export const fetchChartsUsersEntity = gql`
       delta
       deltaTotal
       timestamp
+      __typename
     }
   }
 `;

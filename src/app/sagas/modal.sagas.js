@@ -1,7 +1,9 @@
-import { take, delay, getContext, fork } from 'redux-saga/effects';
+import { take, fork, put } from 'redux-saga/effects';
 
 import * as actions from '@/actions';
-import { fetchChartUsers } from './charts-entity.sagas';
+
+import { watchChartUsers, fetchChartUsers } from './charts-entity.sagas';
+import { isWSChart } from '../selectors';
 
 export function* watchModal() {
   while (true) {
@@ -13,6 +15,10 @@ export function* watchCurrentDateSchema() {
   while (true) {
     const { payload } = yield take(actions.SET_MODAL_CURRENT_DATE_SCHEMA);
 
-    yield fork(fetchChartUsers, { payload });
+    if (!isWSChart(payload)) {
+      yield fork(fetchChartUsers, { payload });
+    } else {
+      yield fork(watchChartUsers, { payload });
+    }
   }
 }

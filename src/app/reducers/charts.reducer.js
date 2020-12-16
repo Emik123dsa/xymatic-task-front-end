@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { CHART_LENGTH_RESTRICTION } from '../selectors';
 
 export const initialChartsEntityReducer = fromJS({
   impressions: [],
@@ -11,12 +12,27 @@ export const chartsEntityReducer = (
   state = initialChartsEntityReducer,
   action,
 ) => {
-  switch (action.type) {
-    case 'CHART_IMPRESSIONS_SUCCESS':
-      return state.updateIn(['impressions'], (schema) =>
-        schema.concat(action?.response?.stockPrice),
-      );
-    default:
-      return state;
+  if (action && action?.clean) {
+    return state.setIn([action.clean], fromJS([]));
   }
+
+  if (action && action?.success) {
+    const type = Reflect.ownKeys(action?.success);
+
+    if (type && type[0].match(/(S|s+)ubscribe$/gim)) {
+      if (state.getIn([action.payload]).size > CHART_LENGTH_RESTRICTION - 6) {
+        return state.setIn([action.payload], state.get(action.payload).shift());
+      }
+
+      return state.updateIn([action.payload], (schema) =>
+        fromJS(schema.concat(action?.success[type])),
+      );
+    }
+
+    return state.updateIn([action.payload], (schema) =>
+      fromJS(action?.success[type]),
+    );
+  }
+
+  return state;
 };

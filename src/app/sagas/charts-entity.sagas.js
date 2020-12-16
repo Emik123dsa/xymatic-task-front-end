@@ -6,12 +6,11 @@ import {
   take,
   fork,
   getContext,
-  takeLatest,
   takeEvery,
   cancel,
-  delay,
   cancelled,
-  setContext,
+  spawn,
+  all,
 } from 'redux-saga/effects';
 import { eventChannel, END } from 'redux-saga';
 
@@ -29,12 +28,13 @@ import {
   CANCEL_CHART_USERS,
   CANCEL_CHART_PLAYS,
   CANCEL_CHART_POSTS,
+  USERS,
+  CLEAN_CHART_USERS,
 } from '@/actions';
 
 import {
   getChartImpression,
   getModalCurrentDateSchema,
-  isRealTime,
   isWSChart,
 } from '@/selectors';
 
@@ -70,10 +70,16 @@ const createEventChannel = (client, query, params = {}) =>
 /**
  *  Event handlers
  */
-
-export function* cancelEventChannel(entity, channel) {
-  yield take(entity);
+export function* cancelEventChannel(_, event, entity, channel) {
+  yield take(_);
+  yield put(entity.cancel());
   channel.close();
+  return null;
+}
+
+export function* cleanEventChannel(_, event, entity) {
+  yield take(_);
+  yield put(entity.clean());
   return null;
 }
 
@@ -83,7 +89,7 @@ export function* handleEvent(entity, payload, schema) {
   if (schema?.data) {
     yield put(entity.success(payload, schema?.data || {}));
   } else {
-    yield put(entity.failure(payload, schema?.message || 'Unhandled Error'));
+    yield put(entity.failure(payload, schema?.message || 'UNHANDLED ERROR'));
   }
 }
 
@@ -91,8 +97,7 @@ export function* handleEvent(entity, payload, schema) {
  * WebSocket interaction along with
  * query schema fetching
  */
-
-export function* fetchChartUsers({ payload }) {
+export function* watchChartUsers({ payload }) {
   const client = yield getContext('client');
 
   const channel = yield call(
@@ -105,16 +110,29 @@ export function* fetchChartUsers({ payload }) {
   const handleCancelEventChannel = cancelEventChannel.bind(
     null,
     CANCEL_CHART_USERS,
+    USERS,
+    chartsUsersEntity,
   );
 
-  yield fork(handleCancelEventChannel, channel);
+  const handleCleanEventChannel = cancelEventChannel.bind(
+    null,
+    CLEAN_CHART_USERS,
+    USERS,
+    chartsUsersEntity,
+  );
+
+  yield all([
+    spawn(handleCancelEventChannel, channel),
+    spawn(handleCleanEventChannel),
+  ]);
 
   try {
-    const handleEventChannel = handleEvent.bind(
-      null,
-      chartsUsersEntity,
-      payload,
-    );
+    if (!isWSChart(payload)) {
+      yield cancel();
+    }
+
+    const handleEventChannel = handleEvent.bind(null, chartsUsersEntity, USERS);
+
     yield takeEvery(channel, handleEventChannel);
   } finally {
     if (yield cancelled()) {
@@ -122,14 +140,31 @@ export function* fetchChartUsers({ payload }) {
     }
   }
 }
+export function* fetchChartUsers({ payload }) {
+  const client = yield getContext('client');
+
+  if (!isWSChart(payload)) {
+    const agreegatedSchema = yield call(client.query, {
+      query: fetchChartsUsersEntity,
+      fetchPolicy: 'no-cache',
+      variables: {
+        period: payload.toUpperCase().replace(/\s+!?(\w+)$/gim, ''),
+      },
+    });
+
+    const handleEventSchema = handleEvent.bind(null, chartsUsersEntity, USERS);
+
+    yield fork(handleEventSchema, agreegatedSchema);
+  }
+}
 
 /**
  * Observers for root Sagas
  */
 
-export function* watchLoadChartUsers() {
+export function* loadChartUsers() {
   while (true) {
     const { payload } = yield take(LOAD_CHART_USERS);
-    yield fork(fetchChartUsers, payload);
+    yield all([fork(watchChartUsers, payload), fork(fetchChartUsers, payload)]);
   }
 }

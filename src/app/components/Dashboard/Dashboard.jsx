@@ -51,8 +51,8 @@ const AsyncPieChart = loadable(
 )
 class Dashboard extends Component {
   static propTypes = {
-    impressions: PropTypes.shape(),
-    users: PropTypes.shape(),
+    // impressions: PropTypes.array,
+    users: PropTypes.object,
     loadChartsUsersEntity: PropTypes.func,
     loadChartsImpressionsEntity: PropTypes.func,
   };
@@ -65,11 +65,11 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    this.props.loadChartsUsersEntity({ payload: Period.RealTime });
+    //   //this.props.loadChartsUsersEntity({ payload: Period.RealTime });
   }
 
   render() {
-    const { impressions } = this.props;
+    const { users } = this.props;
 
     return (
       <section className={_['dashboard-section_charts']}>
@@ -84,11 +84,7 @@ class Dashboard extends Component {
                   style={{ height: '100px' }}
                   className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
                 >
-                  <AsyncTinyChart
-                    type="plays"
-                    data={impressions}
-                    color="#3f4af1"
-                  />
+                  <AsyncTinyChart type="plays" color="#3f4af1" />
                 </div>
                 <div
                   style={{ height: '100px' }}
@@ -108,11 +104,12 @@ class Dashboard extends Component {
                     height={400}
                     content={[
                       {
-                        type: 'uv',
+                        type: 'Users',
+                        data: users,
                         color: '#ef263d',
                       },
                       {
-                        type: 'pv',
+                        type: 'Posts',
                         color: '#3f4af1',
                       },
                     ]}

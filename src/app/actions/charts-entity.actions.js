@@ -4,6 +4,8 @@ import {
   REQUEST,
   SUCCESS,
   FAILURE,
+  CANCEL,
+  CLEAN,
 } from './actions';
 
 const chartImpressionsEntitySchema = createRequestSchema('CHART_IMPRESSIONS');
@@ -14,21 +16,25 @@ const chartPostsEntitySchema = createRequestSchema('CHART_POSTS');
 
 const chartUsersEntitySchema = createRequestSchema('CHART_USERS');
 
+export const USERS = 'users';
+export const PLAYS = 'plays';
+export const IMPRESSIONS = 'impressions';
+export const POSTS = 'posts';
+
 export const LOAD_CHART_IMPRESSIONS = 'LOAD_CHART_IMPRESSIONS';
-
 export const LOAD_CHART_POSTS = 'LOAD_CHART_POSTS';
-
 export const LOAD_CHART_PLAYS = 'LOAD_CHART_PLAYS';
-
 export const LOAD_CHART_USERS = 'LOAD_CHART_USERS';
 
 export const CANCEL_CHART_IMPRESSIONS = 'CANCEL_CHART_IMPRESSIONS';
-
 export const CANCEL_CHART_POSTS = 'CANCEL_CHART_POSTS';
-
 export const CANCEL_CHART_PLAYS = 'CANCEL_CHART_PLAYS';
-
 export const CANCEL_CHART_USERS = 'CANCEL_CHART_USERS';
+
+export const CLEAN_CHART_IMPRESSIONS = 'CLEAN_CHART_IMPRESSIONS';
+export const CLEAN_CHART_POSTS = 'CLEAN_CHART_POSTS';
+export const CLEAN_CHART_PLAYS = 'CLEAN_CHART_PLAYS';
+export const CLEAN_CHART_USERS = 'CLEAN_CHART_USERS';
 
 export const chartsImpressionsEntity = {
   request: (payload) =>
@@ -40,6 +46,8 @@ export const chartsImpressionsEntity = {
       payload,
       error,
     }),
+  cancel: (cancel) => action(chartImpressionsEntitySchema[CANCEL], { cancel }),
+  clean: (clean) => action(chartImpressionsEntitySchema[CLEAN], { clean }),
 };
 
 export const chartsPlaysEntity = {
@@ -51,6 +59,8 @@ export const chartsPlaysEntity = {
       payload,
       error,
     }),
+  cancel: (cancel = {}) => action(chartPlaysEntitySchema[CANCEL], { cancel }),
+  clean: (clean) => action(chartPlaysEntitySchema[CANCEL], { clean }),
 };
 
 export const chartsPostsEntity = {
@@ -62,6 +72,8 @@ export const chartsPostsEntity = {
       payload,
       error,
     }),
+  cancel: (cancel = {}) => action(chartPostsEntitySchema[CANCEL], { cancel }),
+  clean: (clean) => action(chartPostsEntitySchema[CLEAN], { clean }),
 };
 
 export const chartsUsersEntity = {
@@ -73,6 +85,8 @@ export const chartsUsersEntity = {
       payload,
       error,
     }),
+  cancel: (cancel = {}) => action(chartUsersEntitySchema[CANCEL], { cancel }),
+  clean: (clean) => action(chartUsersEntitySchema[CLEAN], { clean }),
 };
 
 export const loadChartsUsersEntity = (payload) =>

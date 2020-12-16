@@ -1,4 +1,9 @@
 import { createSelector } from 'reselect';
+import { isRealTime } from './modal.selector';
+
+export const CHART_LENGTH_RESTRICTION = 12;
+
+export const isWSChart = (item) => item.toUpperCase() === isRealTime;
 
 export const getChartsEntity = (state) => state.get('chartsEntity');
 

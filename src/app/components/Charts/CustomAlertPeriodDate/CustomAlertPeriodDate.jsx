@@ -12,6 +12,7 @@ import {
   getModalCurrentDateSchema,
   getModalDateSchema,
   getModalOpenedState,
+  isWSChart,
 } from '~/app/selectors';
 import { ClickOutside } from '~/app/shared/ClickOutside/ClickOutside';
 
@@ -64,6 +65,10 @@ export class CustomAlertPeriodDate extends PureComponent {
   _setCurrentDateSchema({ currentSchema }) {
     this.props.setModalIsOpened({ payload: false });
     this.props.setModalCurrentDateSchema({ payload: currentSchema });
+
+    if (!isWSChart(currentSchema)) {
+      this.props.cancelChartsUsersEntity();
+    }
   }
 
   _renderModalDateSchema() {

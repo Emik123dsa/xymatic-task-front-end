@@ -20,8 +20,6 @@ export class Period {
 
 export const isRealTime = 'REAL TIME';
 
-export const isWSChart = (item) => item.toUpperCase() === isRealTime;
-
 export const getModalOpenedState = createSelector(getModal, (modal) =>
   modal.get('isModalOpened'),
 );

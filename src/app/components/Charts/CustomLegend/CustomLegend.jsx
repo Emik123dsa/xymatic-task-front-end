@@ -11,11 +11,12 @@ export class CustomLegend extends PureComponent {
         value: PropTypes.string,
       }),
     ),
+    types: PropTypes.array,
     title: PropTypes.string,
   };
 
   render() {
-    const { payload, title } = this.props;
+    const { payload, title, types } = this.props;
 
     return (
       <Fragment>
@@ -29,8 +30,7 @@ export class CustomLegend extends PureComponent {
                 className={_['custom-chart_legend-wrapper-item']}
                 key={`item-${index}`}
               >
-                {item.value}
-
+                {(types && types[index]) || null}
                 <span style={{ background: item.color }}></span>
               </div>
             ))}
