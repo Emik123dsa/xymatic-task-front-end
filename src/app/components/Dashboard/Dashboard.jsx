@@ -4,15 +4,23 @@ import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import pMinDelay from 'p-min-delay';
 import { Seq, List } from 'immutable';
-import { getChartImpression, getChartUsers, Period } from '@/selectors';
+import {
+  getChartImpression,
+  getChartUsers,
+  getModalCurrentDateSchema,
+  HEIGHT_ESSENTIAL_CHART_DEFAULT,
+  HEIGHT_TINY_CHART_DEFAULT,
+  isWSChart,
+  Period,
+} from '@/selectors';
 import schema from '@styles/_schema.scss';
-import { loadChartsImpressionsEntity, loadChartsUsersEntity } from '@/actions';
+import {
+  cancelChartsUsersEntity,
+  loadChartsImpressionsEntity,
+  loadChartsUsersEntity,
+} from '@/actions';
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
-
-const HEIGHT_TINY_CHART_DEFAULT = 100;
-
-const HEIGHT_ESSENTIAL_CHART_DEFAULT = 400;
 
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
@@ -43,8 +51,10 @@ const AsyncPieChart = loadable(
   (state) => ({
     users: getChartUsers(state),
     impressions: getChartImpression(state),
+    currentDateSchema: getModalCurrentDateSchema(state),
   }),
   {
+    cancelChartsUsersEntity,
     loadChartsUsersEntity,
     loadChartsImpressionsEntity,
   },
@@ -55,6 +65,8 @@ class Dashboard extends Component {
     users: PropTypes.object,
     loadChartsUsersEntity: PropTypes.func,
     loadChartsImpressionsEntity: PropTypes.func,
+    cancelChartsUsersEntity: PropTypes.func,
+    currentDateSchema: PropTypes.object,
   };
 
   /**
@@ -65,7 +77,14 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    //   //this.props.loadChartsUsersEntity({ payload: Period.RealTime });
+    this.props.loadChartsUsersEntity({ payload: Period.RealTime });
+  }
+
+  componentWillUnmount() {
+    const { currentDateSchema } = this.props;
+    if (isWSChart(currentDateSchema.get(0))) {
+      this.props.cancelChartsUsersEntity();
+    }
   }
 
   render() {

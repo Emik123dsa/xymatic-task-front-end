@@ -73,12 +73,12 @@
     position: relative;
     overflow: hidden;
     height: inherit;
-    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
-    border-left: 1em solid $bg-border;
     border-top: 1em solid $bg-border;
     border-bottom: 1em solid $bg-border;
+    border-left: 1em solid $bg-border;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
 
     &-aside {
       height: calc(100% - 5rem);
@@ -103,6 +103,15 @@
           color: $dark;
           font-size: 1rem;
         }
+      }
+
+      &-logotype {
+        position: relative;
+        display: block;
+        width: auto;
+        height: 25px;
+        background: url('@img/xymatic.svg') no-repeat center center;
+        background-size: contain;
       }
     }
 
@@ -243,8 +252,8 @@
     padding-top: 5rem;
 
     &_wrapper {
-      border-radius: 24px;
       border: 1em solid $bg-border;
+      border-radius: 24px;
     }
   }
 }

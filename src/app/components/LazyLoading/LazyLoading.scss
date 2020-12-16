@@ -21,13 +21,18 @@
     }
 
     &_item {
-      width: 12px;
-      height: 50px;
-      margin-right: 6px;
-      transform: translateY(25px);
-      border-radius: 4px;
-      background-color: $active-bg-link;
-      box-shadow: 0 0 4px $active-bg-link;
+      //  width: 12px;
+      //   height: 50px;
+      //     margin-right: 6px;
+      //    transform: translateY(25px);
+      // border-radius: 4px;
+      //    background-color: $active-bg-link;
+      //box-shadow: 0 0 4px $active-bg-link;
+      display: block;
+      position: relative;
+      background: url('@img/xymatic.svg') no-repeat center center;
+      height: 79px;
+      width: auto;
 
       &-first {
         animation: blockMove 0.5s ease infinite alternate;

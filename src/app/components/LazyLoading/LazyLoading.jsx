@@ -9,22 +9,7 @@ const LazyLoading = () => (
       <div className={_['lazy-loading']}>
         <div className={_['lazy-loading_container']}>
           <div
-            className={[_['lazy-loading_item'], _['lazy-loading_item-first']]
-              .filter((e) => !!e)
-              .join(' ')}
-          ></div>
-          <div
-            className={[_['lazy-loading_item'], _['lazy-loading_item-second']]
-              .filter((e) => !!e)
-              .join(' ')}
-          ></div>
-          <div
-            className={[_['lazy-loading_item'], _['lazy-loading_item-third']]
-              .filter((e) => !!e)
-              .join(' ')}
-          ></div>
-          <div
-            className={[_['lazy-loading_item'], _['lazy-loading_item-fourth']]
+            className={[_['lazy-loading_item'], _['lazy-loading_item-logo']]
               .filter((e) => !!e)
               .join(' ')}
           ></div>

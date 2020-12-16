@@ -10,11 +10,11 @@ export const coercedMoment = (interval, payload) => {
     case 'real time':
       return moment(payload).format('HH:mm:ss');
     case 'today':
-      return moment(payload).format('HH');
+      return moment(payload).format('hh:mm A');
     case 'yesterday':
-      return moment(payload).format('HH');
+      return moment(payload).format('hh:mm A');
     case 'day':
-      return moment(payload).format('DD');
+      return moment(payload).format('DD MMM');
     case 'month':
       return moment(payload).format('MMMM');
     case 'year':

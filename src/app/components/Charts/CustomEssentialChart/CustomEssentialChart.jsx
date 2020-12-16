@@ -16,12 +16,18 @@ import { isImmutable, List } from 'immutable';
 import { connect as Connect } from 'react-redux';
 import { coercedMoment, coercedSeparatedMoment } from '@/shared/coercedMoment';
 import schema from '@styles/_schema.scss';
+import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
 import _ from './CustomEssentialChart.scss';
 
 import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
-import { getModalCurrentDateSchema } from '~/app/selectors';
+import {
+  CHART_LENGTH_RESTRICTION,
+  getModalCurrentDateSchema,
+  HEIGHT_ESSENTIAL_CHART_DEFAULT,
+  isWSChart,
+} from '~/app/selectors';
 
 const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
   content: [
@@ -132,7 +138,22 @@ export class CustomEssentialChart extends PureComponent {
   }
 
   render() {
-    const { height, title, content } = this.props;
+    const { height, title, content, currentDateSchema } = this.props;
+
+    const { dataList } = this.state;
+
+    if (!Array.isArray(dataList)) return null;
+
+    if (dataList.every((item) => Array.isArray(item) && !item.length)) {
+      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+    }
+
+    if (
+      isWSChart(currentDateSchema.get(0)) &&
+      dataList.every((item) => item.length < CHART_LENGTH_RESTRICTION / 6)
+    ) {
+      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+    }
 
     return (
       <div className={_['custom-essential-chart']}>
@@ -149,9 +170,9 @@ export class CustomEssentialChart extends PureComponent {
                   margin={{ top: 30, right: 30, left: 0, bottom: 20 }}
                 >
                   <Brush
-                    // startIndex={26}
-                    // endIndex={30}
-                    dataKey="name"
+                    startIndex={26}
+                    endIndex={30}
+                    dataKey="timestamp"
                     height={30}
                     stroke="#8884d8"
                   />

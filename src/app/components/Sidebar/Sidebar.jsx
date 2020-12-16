@@ -66,6 +66,7 @@ class Sidebar extends Component {
         <div className={_.sidebar_wrapper}>
           <div className={_['sidebar_wrapper-app']}>
             <Link className={_['sidebar_wrapper-app-link']} to="/dashboard">
+              <span className={_['sidebar_wrapper-app-logotype']}> </span>
               <h4>
                 Task&nbsp;
                 <span>App</span>
