@@ -1,17 +1,18 @@
 import { fromJS } from 'immutable';
 import { SET_MODAL_CURRENT_DATE_SCHEMA, SET_MODAL_IS_OPENED } from '../actions';
+import { Period } from '../selectors';
 
 export const initialModalReducer = fromJS({
   isModalOpened: false,
-  modalCurrentDateSchema: ['Real Time'],
+  modalCurrentDateSchema: [Period.RealTime],
   modalDateSchema: [
-    ['Real Time'],
-    ['Today'],
-    ['Yesterday'],
-    ['Day'],
-    ['Month'],
-    ['Year'],
-    ['All time'],
+    [Period.RealTime],
+    [Period.Today],
+    [Period.Yesterday],
+    [Period.Day],
+    [Period.Month],
+    [Period.Year],
+    [Period.AllTime],
   ],
 });
 

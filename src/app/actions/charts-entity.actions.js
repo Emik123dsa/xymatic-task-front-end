@@ -4,7 +4,6 @@ import {
   REQUEST,
   SUCCESS,
   FAILURE,
-  CANCEL,
   CLEAN,
 } from './actions';
 
@@ -31,11 +30,6 @@ export const CANCEL_CHART_POSTS = 'CANCEL_CHART_POSTS';
 export const CANCEL_CHART_PLAYS = 'CANCEL_CHART_PLAYS';
 export const CANCEL_CHART_USERS = 'CANCEL_CHART_USERS';
 
-export const CLEAN_CHART_IMPRESSIONS = 'CLEAN_CHART_IMPRESSIONS';
-export const CLEAN_CHART_POSTS = 'CLEAN_CHART_POSTS';
-export const CLEAN_CHART_PLAYS = 'CLEAN_CHART_PLAYS';
-export const CLEAN_CHART_USERS = 'CLEAN_CHART_USERS';
-
 export const chartsImpressionsEntity = {
   request: (payload) =>
     action(chartImpressionsEntitySchema[REQUEST], { payload }),
@@ -46,7 +40,6 @@ export const chartsImpressionsEntity = {
       payload,
       error,
     }),
-  cancel: (cancel) => action(chartImpressionsEntitySchema[CANCEL], { cancel }),
   clean: (clean) => action(chartImpressionsEntitySchema[CLEAN], { clean }),
 };
 
@@ -59,8 +52,7 @@ export const chartsPlaysEntity = {
       payload,
       error,
     }),
-  cancel: (cancel = {}) => action(chartPlaysEntitySchema[CANCEL], { cancel }),
-  clean: (clean) => action(chartPlaysEntitySchema[CANCEL], { clean }),
+  clean: (clean) => action(chartPlaysEntitySchema[CLEAN], { clean }),
 };
 
 export const chartsPostsEntity = {
@@ -72,7 +64,6 @@ export const chartsPostsEntity = {
       payload,
       error,
     }),
-  cancel: (cancel = {}) => action(chartPostsEntitySchema[CANCEL], { cancel }),
   clean: (clean) => action(chartPostsEntitySchema[CLEAN], { clean }),
 };
 
@@ -85,15 +76,13 @@ export const chartsUsersEntity = {
       payload,
       error,
     }),
-  cancel: (cancel = {}) => action(chartUsersEntitySchema[CANCEL], { cancel }),
   clean: (clean) => action(chartUsersEntitySchema[CLEAN], { clean }),
 };
 
 export const loadChartsUsersEntity = (payload) =>
   action(LOAD_CHART_USERS, { payload });
-
-export const cancelChartsUsersEntity = (payload) =>
-  action(CANCEL_CHART_USERS, { payload });
+export const cancelChartsUsersEntity = (cancel) =>
+  action(CANCEL_CHART_USERS, { cancel });
 
 export const loadChartsImpressionsEntity = (payload) =>
   action(LOAD_CHART_IMPRESSIONS, { payload });

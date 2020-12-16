@@ -29,7 +29,7 @@ import {
   CANCEL_CHART_PLAYS,
   CANCEL_CHART_POSTS,
   USERS,
-  CLEAN_CHART_USERS,
+  cancelChartsUsersEntity,
 } from '@/actions';
 
 import {
@@ -70,16 +70,10 @@ const createEventChannel = (client, query, params = {}) =>
 /**
  *  Event handlers
  */
-export function* cancelEventChannel(_, event, entity, channel) {
+export function* cancelEventChannel(_, entity, channel) {
   yield take(_);
-  yield put(entity.cancel());
+  yield put(entity());
   channel.close();
-  return null;
-}
-
-export function* cleanEventChannel(_, event, entity) {
-  yield take(_);
-  yield put(entity.clean());
   return null;
 }
 
@@ -110,21 +104,10 @@ export function* watchChartUsers({ payload }) {
   const handleCancelEventChannel = cancelEventChannel.bind(
     null,
     CANCEL_CHART_USERS,
-    USERS,
-    chartsUsersEntity,
+    cancelChartsUsersEntity,
   );
 
-  const handleCleanEventChannel = cancelEventChannel.bind(
-    null,
-    CLEAN_CHART_USERS,
-    USERS,
-    chartsUsersEntity,
-  );
-
-  yield all([
-    spawn(handleCancelEventChannel, channel),
-    spawn(handleCleanEventChannel),
-  ]);
+  yield spawn(handleCancelEventChannel, channel);
 
   try {
     if (!isWSChart(payload)) {
