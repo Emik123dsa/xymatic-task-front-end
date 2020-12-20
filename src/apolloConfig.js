@@ -22,10 +22,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const authLink = setContext((_, schema) => {
+const authLink = setContext((_, { headers }) => {
   const token = 'schema';
 
   return {
+    ...headers,
     headers: { Authorization: `Bearer ${token}` },
   };
 });
@@ -33,7 +34,13 @@ const authLink = setContext((_, schema) => {
 const wsLink = new WebSocketLink({
   uri: Config.GRAPHQL_WS,
   options: {
+    lazy: true,
     reconnect: true,
+    connectionParams: {
+      headers: {
+        Authorization: 'Bearer 123123123',
+      },
+    },
   },
 });
 

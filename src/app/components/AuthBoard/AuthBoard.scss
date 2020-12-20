@@ -1,0 +1,51 @@
+.auth {
+  &-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: inherit;
+    margin: 5rem 0;
+    padding: 1rem 0;
+    transition: 0.25s ease-in-out all;
+    border: 1em solid $bg-border;
+    border-radius: 24px;
+    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
+    box-shadow: 0 0 0.4rem $bg-border;
+
+    &:hover {
+      transition: 0.25s ease-in-out all;
+      box-shadow: 0 0 1rem $bg-border;
+    }
+
+    &_app {
+      display: flex;
+      flex: 1 1 auto;
+      justify-content: center;
+      margin-bottom: 2rem;
+
+      &-link {
+        width: inherit;
+        user-select: none;
+        color: $light;
+        font-family: $medium;
+
+        h4 {
+          font-size: 1rem;
+        }
+
+        span {
+          color: $dark;
+          font-size: 1rem;
+        }
+      }
+
+      &-logotype {
+        position: relative;
+        display: block;
+        width: auto;
+        height: 25px;
+        background: url('@img/xymatic.svg') no-repeat center center;
+        background-size: contain;
+      }
+    }
+  }
+}

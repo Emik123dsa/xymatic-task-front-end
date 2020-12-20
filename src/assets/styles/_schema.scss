@@ -130,7 +130,7 @@
     padding-bottom: $i * 1rem;
   }
   .pt-#{$i} {
-    padding-bottom: $i * 1rem;
+    padding-top: $i * 1rem;
   }
 }
 
@@ -156,6 +156,7 @@
 
 .bg {
   &-dark {
+    z-index: -1;
     background: $bg-dark;
     position: fixed;
     width: 100%;

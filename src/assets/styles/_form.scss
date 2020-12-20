@@ -1,0 +1,39 @@
+.form {
+  &-item {
+    position: relative;
+    color: $dark;
+    font-family: $medium;
+
+    &_layout {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: calc(18px + 0.8rem);
+      color: $dark;
+      user-select: none;
+      pointer-events: none;
+      font-family: $medium;
+
+      &-active {
+        font-size: 0.5rem;
+        top: 0.1rem;
+      }
+    }
+
+    &_label {
+      position: relative;
+
+      input {
+        color: $light;
+        position: relative;
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: none !important;
+        border-radius: 1rem;
+        outline: none;
+        background: $inp-field;
+        box-shadow: 0 0 0.1rem $inp-field;
+      }
+    }
+  }
+}

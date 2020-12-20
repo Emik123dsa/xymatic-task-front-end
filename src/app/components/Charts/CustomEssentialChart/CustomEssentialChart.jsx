@@ -144,16 +144,16 @@ export class CustomEssentialChart extends PureComponent {
 
     if (!Array.isArray(dataList)) return null;
 
-    if (dataList.every((item) => Array.isArray(item) && !item.length)) {
-      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
-    }
+    // if (dataList.every((item) => Array.isArray(item) && !item.length)) {
+    //   return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+    // }
 
-    if (
-      isWSChart(currentDateSchema.get(0)) &&
-      dataList.every((item) => item.length < CHART_LENGTH_RESTRICTION / 6)
-    ) {
-      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
-    }
+    // if (
+    //   isWSChart(currentDateSchema.get(0)) &&
+    //   dataList.every((item) => item.length < CHART_LENGTH_RESTRICTION / 6)
+    // ) {
+    //   return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+    // }
 
     return (
       <div className={_['custom-essential-chart']}>

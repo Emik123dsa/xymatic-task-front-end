@@ -5,4 +5,11 @@ export const initialUserReducer = fromJS({
   userCredentials: {},
 });
 
-export const userReducer = (state = initialUserReducer, action) => state;
+export const userReducer = (state = initialUserReducer, action) => {
+  switch (action.type) {
+    case 'YOU WILL BURN!':
+      return state;
+    default:
+      return state;
+  }
+};

@@ -15,7 +15,7 @@ export const configureStore = (initialState = {}, history) => {
   const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare];
 
   if (process.env.NODE_ENV !== 'production') {
-    // middlewares.push(createLogger());
+    middlewares.push(createLogger());
   }
 
   const enhancers = [applyMiddleware(...middlewares)];

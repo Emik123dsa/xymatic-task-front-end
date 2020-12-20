@@ -1,6 +1,5 @@
 /* eslint-disable arrow-body-style */
 import gql from 'graphql-tag';
-import { callGraphQLApi } from './graphql';
 
 export const watchChartsUsersEntity = gql`
   subscription usersSubscribe {
