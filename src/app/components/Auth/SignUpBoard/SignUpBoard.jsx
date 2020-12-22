@@ -2,12 +2,12 @@ import { instanceOf } from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { fromEvent, Subscription, ReplaySubject, of } from 'rxjs';
-import { distinctUntilChanged, mergeMap } from 'rxjs/operators';
+import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
 import schema from '@styles/main.scss';
-import _ from './AuthBoard.scss';
+import _ from './SignUpBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
 
-class Auth extends Component {
+class SignUpBoard extends Component {
   formSubject = new Subscription();
 
   formCredentialsSubject = new ReplaySubject();
@@ -23,6 +23,7 @@ class Auth extends Component {
     this.state = {
       email: null,
       password: null,
+      password_repeat: null,
     };
 
     this.formObject = React.createRef();
@@ -35,25 +36,33 @@ class Auth extends Component {
       this.formSubject.add(
         fromEvent(this.formObject.current, 'submit')
           .pipe(
-            mergeMap((e) => {
+            tap((e) => {
               e.preventDefault();
               e.stopImmediatePropagation();
-              return of(e);
             }),
           )
-          .subscribe((data) => {
-            console.log(this.state);
+          .subscribe((e) => {
+            if (
+              Reflect.ownKeys(this.state).every(
+                (item) => !(this.state && this.state[item]),
+              )
+            ) {
+              alert('EMPTY CREDENTIALS');
+            }
           }),
       );
 
-      this.formCredentials.subscribe((e) => {
-        e.persist();
-        const { target } = e;
-        this.setState((prevState) => ({
-          ...prevState,
-          [target.type]: target.value,
-        }));
-      });
+      this.formCredentials
+        .pipe(
+          tap((e) => e.persist()),
+          mergeMap((e) => of(e?.target)),
+        )
+        .subscribe((target) => {
+          this.setState((prevState) => ({
+            ...prevState,
+            [target.type]: target.value,
+          }));
+        });
     }, 0);
   }
 
@@ -77,23 +86,54 @@ class Auth extends Component {
   render() {
     return (
       <Fragment>
-        <div className={_['auth-wrapper']}>
-          <div className={_['auth-wrapper_app']}>
-            <Link className={_['auth-wrapper_app-link']} to="/">
-              <span className={_['auth-wrapper_app-logotype']}></span>
+        <div className={_['sign-up-wrapper']}>
+          <div className={_['sign-up-wrapper_app']}>
+            <Link className={_['sign-up-wrapper_app-link']} to="/">
+              <span className={_['sign-up-wrapper_app-logotype']}></span>
               <h4>
                 Task&nbsp;
                 <span>App</span>
               </h4>
             </Link>
           </div>
-          <div className={_['auth-wrapper_form']}>
+          <div className={_['sign-up-wrapper_form']}>
             <form
               ref={this.formObject}
-              id="authForm"
+              id="signUpForm"
               acceptCharset="utf-8"
-              name="auth-wrapper_form"
+              name="sign-up-wrapper_form"
             >
+              <div
+                className={[
+                  schema['form-item'],
+                  schema['row-b'],
+                  schema['justify-content-center'],
+                  schema['mb-1'],
+                ]
+                  .filter((e) => !!e)
+                  .join(' ')}
+              >
+                <label
+                  htmlFor="email"
+                  className={[schema['form-item_label'], schema['col-b-8']]
+                    .filter((e) => !!e)
+                    .join(' ')}
+                >
+                  <input
+                    id="name"
+                    type="name"
+                    name="name"
+                    onInput={(e) => {
+                      this.formCredentialsSubject.next(e);
+                    }}
+                    autoComplete="off"
+                  />
+                  <div className={this._activeInputClass(this.state.name)}>
+                    Name
+                  </div>
+                </label>
+              </div>
+
               <div
                 className={[
                   schema['form-item'],
@@ -129,7 +169,7 @@ class Auth extends Component {
                   schema['form-item'],
                   schema['row-b'],
                   schema['justify-content-center'],
-                  schema['pb-2'],
+                  schema['mb-1'],
                 ]
                   .filter((e) => !!e)
                   .join(' ')}
@@ -158,16 +198,37 @@ class Auth extends Component {
                 className={[
                   schema['form-item'],
                   schema['row-b'],
-                  schema['pb-2'],
                   schema['justify-content-center'],
+                  schema['pb-2'],
                 ]
                   .filter((e) => !!e)
                   .join(' ')}
               >
-                <span className={schema['form-item-forgot_password']}>
-                  Forgot password?
-                </span>
+                <label
+                  htmlFor="password"
+                  className={[schema['form-item_label'], schema['col-b-8']]
+                    .filter((e) => !!e)
+                    .join(' ')}
+                >
+                  <input
+                    id="password_repeat"
+                    type="password_repeat"
+                    name="password_repeat"
+                    onInput={(e) => {
+                      this.formCredentialsSubject.next(e);
+                    }}
+                    autoComplete="off"
+                  />
+                  <div
+                    className={this._activeInputClass(
+                      this.state.password_repeat,
+                    )}
+                  >
+                    Password Again
+                  </div>
+                </label>
               </div>
+
               <div
                 className={[
                   schema['form-item'],
@@ -184,7 +245,7 @@ class Auth extends Component {
                     .join(' ')}
                 >
                   <span className={schema['btn-icon-user']}></span>
-                  Sign In
+                  Sign Up
                 </button>
               </div>
             </form>
@@ -195,4 +256,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+export default SignUpBoard;

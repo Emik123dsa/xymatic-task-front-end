@@ -1,11 +1,19 @@
 import React, { Component, Fragment } from 'react';
-import { Transition } from 'react-transition-group';
 
+import { fadeIn } from 'react-animations';
+import { StyleSheet, css } from 'aphrodite';
 import _ from './LazyLoading.scss';
+
+const styles = StyleSheet.create({
+  fadeIn: {
+    animationName: fadeIn,
+    animationDuration: '0.4s',
+  },
+});
 
 const LazyLoading = () => (
   <Fragment>
-    <Transition timeout={300}>
+    <div className={css(styles.fadeIn)}>
       <div className={_['lazy-loading']}>
         <div className={_['lazy-loading_container']}>
           <div
@@ -15,7 +23,7 @@ const LazyLoading = () => (
           ></div>
         </div>
       </div>
-    </Transition>
+    </div>
   </Fragment>
 );
 

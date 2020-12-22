@@ -1,14 +1,105 @@
-import React, { Component } from 'react';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import loadable from '@loadable/component';
+import { connect as Connect } from 'react-redux';
+import schema from '@styles/main.scss';
+import PropTypes from 'prop-types';
+import { fadeInDown } from 'react-animations';
+import { StyleSheet, css } from 'aphrodite';
+import { Helmet } from 'react-helmet';
+import { getRouterLocation } from '../selectors';
 
+const AsyncAuthComponent = loadable((props) =>
+  import(`~/app/components/Auth/${props.tag}/${props.tag}`),
+);
+
+const styles = StyleSheet.create({
+  fadeInDown: {
+    animationName: fadeInDown,
+    animationDuration: '0.4s',
+  },
+});
+
+@Connect(
+  (state) => ({
+    location: getRouterLocation(state),
+  }),
+  null,
+)
 class SignUp extends Component {
   componentDidMount() {}
 
+  _title = 'Xymatic | Auth';
+
+  static propTypes = {
+    location: PropTypes.shape().isRequired,
+    route: PropTypes.shape().isRequired,
+  };
+
+  static credentials = {
+    title: 'Join our team!',
+    description:
+      'Are you having an account already? Click in the button below to sign in!',
+    buttonTitle: 'Sign In',
+    buttonTo: '/auth',
+  };
+
+  _renderSiteMeta() {
+    const canonical = this.props.location.toJS().pathname.toLowerCase();
+    return (
+      <Helmet
+        link={[
+          {
+            href: canonical,
+            rel: 'canonical',
+          },
+        ]}
+        title={this._title}
+      />
+    );
+  }
+
   render() {
     return (
-      <div>
-        <h1>Registration</h1>
-      </div>
+      <Fragment>
+        {this._renderSiteMeta()}
+        <div className={css(styles.fadeInDown)}>
+          <div className={schema.auth}>
+            <div className={schema.container}>
+              <div className={schema['auth-wrapper']}>
+                <div
+                  className={`${schema.row} ${schema['justify-content-center']} ${schema['mt-5']}`}
+                >
+                  <div
+                    className={[
+                      schema['col-4'],
+                      schema['col-md-6'],
+                      schema['col-xs-12'],
+                    ]
+                      .filter((e) => !!e)
+                      .join(' ')}
+                  >
+                    <AsyncAuthComponent tag="SignUpBoard" />
+                  </div>
+                  <div
+                    className={[
+                      schema['col-4'],
+                      schema['col-md-6'],
+                      schema['col-xs-12'],
+                    ]
+                      .filter((e) => !!e)
+                      .join(' ')}
+                  >
+                    <AsyncAuthComponent
+                      tag="AdditionalBoard"
+                      credentials={SignUp.credentials}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Fragment>
     );
   }
 }

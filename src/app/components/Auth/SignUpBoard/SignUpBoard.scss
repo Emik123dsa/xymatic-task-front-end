@@ -1,20 +1,17 @@
-.auth {
+.sign-up {
   &-wrapper {
     position: relative;
     overflow: hidden;
     height: inherit;
-    margin: 5rem 0;
-    padding: 1rem 0;
+    padding: 4rem 0;
     transition: 0.25s ease-in-out all;
     border: 1em solid $bg-border;
+    border-right: 0 solid transparent;
     border-radius: 24px;
-    background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: linear-gradient(to left, $sidebar-top, $sidebar-bottom);
     box-shadow: 0 0 0.4rem $bg-border;
-
-    &:hover {
-      transition: 0.25s ease-in-out all;
-      box-shadow: 0 0 1rem $bg-border;
-    }
 
     &_app {
       display: flex;

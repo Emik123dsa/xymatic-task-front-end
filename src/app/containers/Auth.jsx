@@ -2,13 +2,22 @@ import React, { Component, Fragment } from 'react';
 import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import schema from '@styles/main.scss';
+import { fadeInDown } from 'react-animations';
+import { StyleSheet, css } from 'aphrodite';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { getRouterLocation } from '../selectors';
 
-const AuthComponent = loadable(() =>
-  import('@/components/AuthBoard/AuthBoard'),
+const AsyncAuthComponent = loadable((props) =>
+  import(`~/app/components/Auth/${props.tag}/${props.tag}`),
 );
+
+const styles = StyleSheet.create({
+  fadeInDown: {
+    animationName: fadeInDown,
+    animationDuration: '0.4s',
+  },
+});
 
 @Connect(
   (state) => ({
@@ -24,6 +33,13 @@ class Auth extends Component {
   static propTypes = {
     location: PropTypes.shape().isRequired,
     route: PropTypes.shape().isRequired,
+  };
+
+  static credentials = {
+    title: 'Hello, Friend!',
+    description: 'Enter your details and start journey with us',
+    buttonTitle: 'Sign Up',
+    buttonTo: '/signup',
   };
 
   _renderSiteMeta() {
@@ -44,23 +60,39 @@ class Auth extends Component {
   render() {
     return (
       <Fragment>
-        <div className={schema.auth}>
-          <div className={schema.container}>
-            {this._renderSiteMeta()}
-            <div className={schema['auth-wrapper']}>
-              <div
-                className={`${schema['row-b']} ${schema['justify-content-center']}`}
-              >
+        {this._renderSiteMeta()}
+        <div className={css(styles.fadeInDown)}>
+          <div className={schema.auth}>
+            <div className={schema.container}>
+              <div className={schema['auth-wrapper']}>
                 <div
-                  className={[
-                    schema['col-b-4'],
-                    schema['col-md-6'],
-                    schema['col-xs-12'],
-                  ]
-                    .filter((e) => !!e)
-                    .join(' ')}
+                  className={`${schema.row} ${schema['justify-content-center']} ${schema['mt-5']}`}
                 >
-                  <AuthComponent />
+                  <div
+                    className={[
+                      schema['col-4'],
+                      schema['col-md-6'],
+                      schema['col-xs-12'],
+                    ]
+                      .filter((e) => !!e)
+                      .join(' ')}
+                  >
+                    <AsyncAuthComponent tag="LoginBoard" />
+                  </div>
+                  <div
+                    className={[
+                      schema['col-4'],
+                      schema['col-md-6'],
+                      schema['col-xs-12'],
+                    ]
+                      .filter((e) => !!e)
+                      .join(' ')}
+                  >
+                    <AsyncAuthComponent
+                      tag="AdditionalBoard"
+                      credentials={Auth.credentials}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

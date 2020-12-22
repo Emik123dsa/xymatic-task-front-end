@@ -2,6 +2,10 @@ import React from 'react';
 import loadable from '@loadable/component';
 import LazyLoading from '@/components/LazyLoading/LazyLoading';
 
+const ProtectedAsyncComponent = loadable(() => import('./protectedRoute'), {
+  fallback: <LazyLoading />,
+});
+
 export const dynamicRoutes = [
   {
     key: 'Root',
@@ -13,6 +17,7 @@ export const dynamicRoutes = [
         key: 'App',
         path: '/',
         exact: true,
+        redirect: '/auth',
         component: loadable(() => import('@/containers/App'), {
           fallback: <LazyLoading />,
         }),
@@ -21,9 +26,8 @@ export const dynamicRoutes = [
         key: 'Dashboard',
         path: '/dashboard',
         exact: true,
-        component: loadable(() => import('@/containers/Dashboard'), {
-          fallback: <LazyLoading />,
-        }),
+        redirect: '/auth',
+        component: ProtectedAsyncComponent,
       },
       {
         key: 'SignUp',
