@@ -1,22 +1,30 @@
+/* stylelint-disable at-rule-no-unknown */
+
 .form {
   &-item {
     position: relative;
+    transition: 0.25s ease all;
     color: $dark;
     font-family: $medium;
 
     &_layout {
       position: absolute;
       top: 50%;
-      transform: translateY(-50%);
       left: calc(18px + 0.8rem);
-      color: $dark;
       user-select: none;
+      transition: 0.25s ease all;
+      transform: translateY(calc(-50% + 2px));
       pointer-events: none;
+      color: $dark;
       font-family: $medium;
 
       &-active {
+        @extend .form-item_layout;
+
+        top: 0.25rem;
+        transition: 0.25s ease all;
+        transform: translateY(0);
         font-size: 0.5rem;
-        top: 0.1rem;
       }
     }
 
@@ -24,15 +32,21 @@
       position: relative;
 
       input {
-        color: $light;
         position: relative;
         width: 100%;
-        padding: 0.8rem 1rem;
+        padding: 1rem 0.4rem 0.6rem 1rem;
+        transition: 0.25s ease all;
+        color: $light;
         border: none !important;
         border-radius: 1rem;
         outline: none;
         background: $inp-field;
         box-shadow: 0 0 0.1rem $inp-field;
+
+        &:focus {
+          transition: 0.25s ease all;
+          box-shadow: 0 0 0.1rem $inp-purple;
+        }
       }
     }
   }

@@ -1,12 +1,19 @@
-import { instanceOf } from 'prop-types';
+/* eslint-disable consistent-return */
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { fromEvent, Subscription, ReplaySubject, of } from 'rxjs';
+import { connect as Connect } from 'react-redux';
 import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
 import schema from '@styles/main.scss';
 import _ from './LoginBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
+import { coercedToast } from '~/app/shared/coercedToast';
+import { setLoadAuth } from '~/app/actions';
 
+@Connect(null, {
+  setLoadAuth,
+})
 class LoginBoard extends Component {
   formSubject = new Subscription();
 
@@ -28,6 +35,10 @@ class LoginBoard extends Component {
     this.formObject = React.createRef();
   }
 
+  static propTypes = {
+    setLoadAuth: PropTypes.func.isRequired,
+  };
+
   componentDidMount() {
     setTimeout(() => {
       if (!(this.formSubject || this.formCredentials)) return;
@@ -40,8 +51,15 @@ class LoginBoard extends Component {
               e.stopImmediatePropagation();
             }),
           )
-          .subscribe((data) => {
-            console.log(this.state);
+          .subscribe((e) => {
+            if (
+              Reflect.ownKeys(this.state).every(
+                (item) => !(this.state && this.state[item]),
+              )
+            ) {
+              return coercedToast.failure('Not Full Credentials');
+            }
+            this.props.setLoadAuth(this.state);
           }),
       );
 
@@ -53,7 +71,7 @@ class LoginBoard extends Component {
         .subscribe((target) => {
           this.setState((prevState) => ({
             ...prevState,
-            [target.type]: target.value,
+            [target.name]: target.value,
           }));
         });
     }, 0);

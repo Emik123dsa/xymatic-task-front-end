@@ -18,7 +18,6 @@ export const chartsEntityReducer = (
 
   if (action && action?.success) {
     const type = Reflect.ownKeys(action?.success);
-
     if (type && type[0].match(/(S|s+)ubscribe$/gim)) {
       if (state.getIn([action.payload]).size > CHART_LENGTH_RESTRICTION - 6) {
         return state.setIn([action.payload], state.get(action.payload).shift());

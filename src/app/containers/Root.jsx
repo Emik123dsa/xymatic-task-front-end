@@ -9,6 +9,7 @@ import { fromEvent, Subscription, iif, EMPTY, of } from 'rxjs';
 import { switchMap, distinctUntilChanged } from 'rxjs/operators';
 import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
+import Toastify from '@/components/Toastify/Toastify';
 
 const DEFAULT_MOBILE_WIDTH = 992;
 
@@ -84,6 +85,7 @@ class Root extends Component {
         {this._renderSiteMeta()}
         <div className={schema['bg-dark']}> </div>
         <div className="main">{renderRoutes(route.childRoutes)}</div>
+        <Toastify />
       </Fragment>
     );
   }

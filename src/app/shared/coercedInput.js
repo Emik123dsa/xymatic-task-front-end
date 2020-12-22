@@ -4,5 +4,5 @@
  */
 export const coercedInput = (payload) => {
   if (typeof payload !== 'string') return false;
-  return Object.keys(payload) > 0;
+  return Object.keys(payload).length > 0;
 };

@@ -2,7 +2,7 @@ import { instanceOf } from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { fromEvent, Subscription, ReplaySubject, of } from 'rxjs';
-import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, mergeMap, pluck, tap } from 'rxjs/operators';
 import schema from '@styles/main.scss';
 import _ from './SignUpBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
@@ -20,7 +20,9 @@ class SignUpBoard extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
+      name: null,
       email: null,
       password: null,
       password_repeat: null,
@@ -47,20 +49,22 @@ class SignUpBoard extends Component {
                 (item) => !(this.state && this.state[item]),
               )
             ) {
-              alert('EMPTY CREDENTIALS');
+              return;
             }
+
+            console.log(this.state);
           }),
       );
 
       this.formCredentials
         .pipe(
           tap((e) => e.persist()),
-          mergeMap((e) => of(e?.target)),
+          pluck('target'),
         )
         .subscribe((target) => {
           this.setState((prevState) => ({
             ...prevState,
-            [target.type]: target.value,
+            [target.name]: target.value,
           }));
         });
     }, 0);
@@ -114,7 +118,7 @@ class SignUpBoard extends Component {
                   .join(' ')}
               >
                 <label
-                  htmlFor="email"
+                  htmlFor="name"
                   className={[schema['form-item_label'], schema['col-b-8']]
                     .filter((e) => !!e)
                     .join(' ')}
@@ -205,7 +209,7 @@ class SignUpBoard extends Component {
                   .join(' ')}
               >
                 <label
-                  htmlFor="password"
+                  htmlFor="password_repeat"
                   className={[schema['form-item_label'], schema['col-b-8']]
                     .filter((e) => !!e)
                     .join(' ')}

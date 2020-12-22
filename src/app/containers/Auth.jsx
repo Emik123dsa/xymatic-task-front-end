@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react';
 import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import schema from '@styles/main.scss';
-import { fadeInDown } from 'react-animations';
+import { fadeInDown, shakeX } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { getRouterLocation } from '../selectors';
+import { getUserAuthenticated, getRouterLocation } from '~/app/selectors';
 
 const AsyncAuthComponent = loadable((props) =>
   import(`~/app/components/Auth/${props.tag}/${props.tag}`),
@@ -17,11 +17,16 @@ const styles = StyleSheet.create({
     animationName: fadeInDown,
     animationDuration: '0.4s',
   },
+  shakeX: {
+    animationName: shakeX,
+    animationDuration: '0.4s',
+  },
 });
 
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
+    isAuthenticated: getUserAuthenticated(state),
   }),
   null,
 )

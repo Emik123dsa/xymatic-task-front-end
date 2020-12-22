@@ -5,6 +5,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 
@@ -29,7 +30,11 @@ const _compilerBrowserModule = (isDev) => {
           ],
         },
         {
-          test: /\.(c|sc|sa)ss$/i,
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        },
+        {
+          test: /\.(sa|sc)ss$/i,
           use: [
             {
               loader: 'style-loader',
@@ -121,6 +126,18 @@ const _compilerBrowserOptions = (isDev) => {
     performance: {
       hints: false,
     },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          styles: {
+            name: 'styles',
+            test: /\.css$/,
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
+    },
   };
 };
 
@@ -129,6 +146,9 @@ const _compilerBrowserPlugins = (isDev) => {
     case true:
       return {
         plugins: [
+          new MiniCssExtractPlugin({
+            filename: '[name].css',
+          }),
           new ProgressBarWebpackPlugin(),
           new StylelintPlugin({
             configFile: path.join(process.cwd(), '.stylelintrc.json'),

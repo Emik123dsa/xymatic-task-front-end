@@ -1,0 +1,45 @@
+.toastify {
+  &-container {
+    position: relative !important;
+    border-radius: 12px !important;
+    background: $lazy-loading !important;
+    box-shadow: 0 0 0.2rem $lazy-loading !important;
+    font-size: 0.8rem !important;
+    color: $dark !important;
+    font-family: $medium !important;
+
+    div {
+      padding-left: 2.4rem !important;
+    }
+
+    &-success {
+      &::before {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        box-shadow: 0 0 0.45rem $chart-purple;
+        background: url('@img/check.svg') no-repeat center center;
+      }
+    }
+
+    &-failure {
+      &::before {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 1rem;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        box-shadow: 0 0 0.45rem $chart-red;
+        width: 1rem;
+        height: 1rem;
+        background: url('@img/close.svg') no-repeat center center;
+      }
+    }
+  }
+}

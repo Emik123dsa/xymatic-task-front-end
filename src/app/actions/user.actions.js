@@ -14,7 +14,7 @@ export const newUserSchema = createRequestSchema('NEW_USER');
 
 export const createNewUser = {
   request: (payload) => action(newUserSchema[REQUEST], { payload }),
-  response: (payload, response) =>
+  success: (payload, response) =>
     action(newUserSchema[SUCCESS], { payload, response }),
   failure: (payload, error) =>
     action(newUserSchema[FAILURE], {
@@ -25,7 +25,7 @@ export const createNewUser = {
 
 export const authUser = {
   request: (payload) => action(authSchema[REQUEST], { payload }),
-  response: (payload, response) =>
+  success: (payload, response) =>
     action(authSchema[SUCCESS], { payload, response }),
   failure: (payload, error) =>
     action(authSchema[FAILURE], {
@@ -34,8 +34,6 @@ export const authUser = {
     }),
 };
 
-export const setLoadAuth = (email, password) =>
-  action(LOAD_AUTH_USER, { email, password });
+export const setLoadAuth = (payload) => action(LOAD_AUTH_USER, payload);
 
-export const setLoadNewUser = (name, email, password) =>
-  action(LOAD_AUTH_USER, { name, email, password });
+export const setLoadNewUser = (payload) => action(LOAD_AUTH_USER, payload);
