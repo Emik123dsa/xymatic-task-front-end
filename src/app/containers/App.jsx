@@ -40,8 +40,14 @@ class App extends Component {
 
   render() {
     const { route } = this.props;
-
-    return <Redirect to="/dashboard"></Redirect>;
+    return (
+      <Redirect
+        to={{
+          pathname: route.redirect,
+          state: { from: this.props.location.toJS() },
+        }}
+      ></Redirect>
+    );
   }
 }
 

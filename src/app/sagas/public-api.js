@@ -4,3 +4,4 @@ export * from './charts-entity.sagas';
 export * from './resize.sagas';
 export * from './modal.sagas';
 export * from './user.sagas';
+export * from './error.sagas';

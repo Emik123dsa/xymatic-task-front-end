@@ -2,42 +2,38 @@ import React, { Component, Fragment } from 'react';
 import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import schema from '@styles/main.scss';
-import { fadeInDown, shakeX } from 'react-animations';
-import { StyleSheet, css } from 'aphrodite';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { getUserAuthenticated, getRouterLocation } from '~/app/selectors';
+
+import { coercedStyles } from '@/shared/coercedStyles';
+import { setErrorMessage, resetErrorMessage } from '@/actions';
+
+import {
+  getUserAuthenticated,
+  getRouterLocation,
+  getErrors,
+} from '~/app/selectors';
 
 const AsyncAuthComponent = loadable((props) =>
   import(`~/app/components/Auth/${props.tag}/${props.tag}`),
 );
 
-const styles = StyleSheet.create({
-  fadeInDown: {
-    animationName: fadeInDown,
-    animationDuration: '0.4s',
-  },
-  shakeX: {
-    animationName: shakeX,
-    animationDuration: '0.4s',
-  },
-});
-
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
     isAuthenticated: getUserAuthenticated(state),
+    errors: getErrors(state),
   }),
-  null,
+  { resetErrorMessage },
 )
 class Auth extends Component {
-  componentDidMount() {}
-
   _title = 'Xymatic | Auth';
 
   static propTypes = {
     location: PropTypes.shape().isRequired,
     route: PropTypes.shape().isRequired,
+    errors: PropTypes.shape(),
+    resetErrorMessage: PropTypes.func,
   };
 
   static credentials = {
@@ -46,6 +42,10 @@ class Auth extends Component {
     buttonTitle: 'Sign Up',
     buttonTo: '/signup',
   };
+
+  componentWillUnmount() {
+    this.props.resetErrorMessage();
+  }
 
   _renderSiteMeta() {
     const canonical = this.props.location.toJS().pathname.toLowerCase();
@@ -63,10 +63,11 @@ class Auth extends Component {
   }
 
   render() {
+    const { errors } = this.props;
     return (
       <Fragment>
         {this._renderSiteMeta()}
-        <div className={css(styles.fadeInDown)}>
+        <div className={coercedStyles(errors)}>
           <div className={schema.auth}>
             <div className={schema.container}>
               <div className={schema['auth-wrapper']}>

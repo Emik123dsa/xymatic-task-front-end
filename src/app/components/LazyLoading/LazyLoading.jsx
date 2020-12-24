@@ -16,11 +16,9 @@ const LazyLoading = () => (
     <div className={css(styles.fadeIn)}>
       <div className={_['lazy-loading']}>
         <div className={_['lazy-loading_container']}>
-          <div
-            className={[_['lazy-loading_item'], _['lazy-loading_item-logo']]
-              .filter((e) => !!e)
-              .join(' ')}
-          ></div>
+          <div className={_['lazy-loading_item']}>
+            <span className={_['lazy-loading_item-logo']}></span>
+          </div>
         </div>
       </div>
     </div>

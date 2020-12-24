@@ -1,10 +1,33 @@
 import React, { Component } from 'react';
-// import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { connect as Connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import schema from '@styles/_schema.scss';
 import _ from './Profile.scss';
+import { getUserCredentials } from '~/app/selectors';
 
+@Connect(
+  (state) => ({
+    userCredentials: getUserCredentials(state),
+  }),
+  null,
+)
 class Profile extends Component {
+  static propTypes = {
+    userCredentials: PropTypes.object.isRequired,
+  };
+
+  get _userAuthority() {
+    const { userCredentials } = this.props;
+    if (userCredentials.has('roles')) {
+      const roles = userCredentials.get('roles').valueSeq().first().toString();
+      return `${roles.charAt(0).toUpperCase()}${roles.slice(1).toLowerCase()}`;
+    }
+    return null;
+  }
+
   render() {
+    const { userCredentials } = this.props;
+
     return (
       <div className={_.profile}>
         <div className={_['profile-wrapper']}>
@@ -22,10 +45,14 @@ class Profile extends Component {
                 <span className={_['profile-wrapper_user-picture']}></span>
               </div>
               <div className={schema['col-12']}>
-                <span className={_['profile-wrapper_user-name']}></span>
+                <span className={_['profile-wrapper_user-name']}>
+                  {userCredentials.get('name')}
+                </span>
               </div>
               <div className={schema['col-12']}>
-                <span className={_['profile-wrapper_user-status']}></span>
+                <span className={_['profile-wrapper_user-status']}>
+                  {this._userAuthority}
+                </span>
               </div>
             </div>
           </section>

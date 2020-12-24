@@ -6,34 +6,40 @@ import PropTypes from 'prop-types';
 import { fadeInDown } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
 import { Helmet } from 'react-helmet';
-import { getRouterLocation } from '../selectors';
+import {
+  getErrors,
+  getRouterLocation,
+  getUserAuthenticated,
+} from '../selectors';
+import { resetErrorMessage } from '../actions';
+import { coercedStyles } from '../shared/coercedStyles';
 
 const AsyncAuthComponent = loadable((props) =>
   import(`~/app/components/Auth/${props.tag}/${props.tag}`),
 );
 
-const styles = StyleSheet.create({
-  fadeInDown: {
-    animationName: fadeInDown,
-    animationDuration: '0.4s',
-  },
-});
-
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
+    isAuthenticated: getUserAuthenticated(state),
+    errors: getErrors(state),
   }),
-  null,
+  { resetErrorMessage },
 )
 class SignUp extends Component {
-  componentDidMount() {}
-
-  _title = 'Xymatic | Auth';
+  _title = 'Xymatic | Sign Up';
 
   static propTypes = {
     location: PropTypes.shape().isRequired,
     route: PropTypes.shape().isRequired,
+    isAuthenticated: PropTypes.bool,
+    resetErrorMessage: PropTypes.func,
+    errors: PropTypes.object,
   };
+
+  componentWillUnmount() {
+    this.props.resetErrorMessage();
+  }
 
   static credentials = {
     title: 'Join our team!',
@@ -59,10 +65,11 @@ class SignUp extends Component {
   }
 
   render() {
+    const { errors } = this.props;
     return (
       <Fragment>
         {this._renderSiteMeta()}
-        <div className={css(styles.fadeInDown)}>
+        <div className={coercedStyles(errors)}>
           <div className={schema.auth}>
             <div className={schema.container}>
               <div className={schema['auth-wrapper']}>

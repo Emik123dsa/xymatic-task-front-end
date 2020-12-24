@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { getRouterLocation } from '@/selectors';
 import { fromEvent, Subscription, iif, EMPTY, of } from 'rxjs';
-import { switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { switchMap, distinctUntilChanged, pluck } from 'rxjs/operators';
 import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
 import Toastify from '@/components/Toastify/Toastify';
@@ -40,12 +40,9 @@ class Root extends Component {
       this._windowResize.add(
         fromEvent(window, 'resize')
           .pipe(
-            switchMap(({ target }) =>
-              iif(
-                () => target.innerWidth < DEFAULT_MOBILE_WIDTH,
-                of(target.innerWidth < DEFAULT_MOBILE_WIDTH),
-                EMPTY,
-              ),
+            pluck('target'),
+            switchMap(({ innerWidth }) =>
+              of(innerWidth < DEFAULT_MOBILE_WIDTH),
             ),
             distinctUntilChanged(),
           )

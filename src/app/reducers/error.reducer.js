@@ -9,12 +9,12 @@ export const initialErrorReducer = fromJS({
 export const errorReducer = (state = initialErrorReducer, action) => {
   switch (action.type) {
     case SET_ERROR_MESSAGE:
-      return state.updateIn(
+      return state.setIn(
         ['errors'],
         fromJS(action?.payload || [GRAPHQL_UNHANDLER_ERROR]),
       );
     case RESET_ERROR_MESSAGE:
-      return state;
+      return state.setIn(['errors'], fromJS(action?.payload || []));
     default:
       return state;
   }

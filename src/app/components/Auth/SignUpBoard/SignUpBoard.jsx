@@ -1,12 +1,34 @@
-import { instanceOf } from 'prop-types';
+/* eslint-disable consistent-return */
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { fromEvent, Subscription, ReplaySubject, of } from 'rxjs';
+import {
+  fromEvent,
+  Subscription,
+  ReplaySubject,
+  BehaviorSubject,
+  of,
+  EMPTY,
+  iif,
+} from 'rxjs';
+import { connect as Connect } from 'react-redux';
+import { isEqual } from 'lodash';
 import { distinctUntilChanged, mergeMap, pluck, tap } from 'rxjs/operators';
+import { setErrorMessage, resetErrorMessage, setLoadNewUser } from '@/actions';
 import schema from '@styles/main.scss';
 import _ from './SignUpBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
+import {
+  FAILURE_AUTHORIZED,
+  NOT_SAME_PASSWORD,
+} from '~/app/shared/helpers/messages';
+import { coercedToast } from '~/app/shared/coercedToast';
 
+@Connect(null, {
+  setLoadNewUser,
+  setErrorMessage,
+  resetErrorMessage,
+})
 class SignUpBoard extends Component {
   formSubject = new Subscription();
 
@@ -17,6 +39,8 @@ class SignUpBoard extends Component {
     .pipe(distinctUntilChanged());
 
   formObject = null;
+
+  userSignUpSubject = new BehaviorSubject(this.state);
 
   constructor(props) {
     super(props);
@@ -29,6 +53,22 @@ class SignUpBoard extends Component {
     };
 
     this.formObject = React.createRef();
+  }
+
+  static propTypes = {
+    setLoadNewUser: PropTypes.func.isRequired,
+    resetErrorMessage: PropTypes.func,
+    setErrorMessage: PropTypes.func,
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    this.userSignUpSubject
+      .pipe(
+        mergeMap((data) =>
+          iif(() => !isEqual(data, prevState), of(data), EMPTY),
+        ),
+      )
+      .next(prevState);
   }
 
   componentDidMount() {
@@ -45,14 +85,29 @@ class SignUpBoard extends Component {
           )
           .subscribe((e) => {
             if (
-              Reflect.ownKeys(this.state).every(
+              Reflect.ownKeys(this.state).some(
                 (item) => !(this.state && this.state[item]),
               )
             ) {
-              return;
+              return coercedToast.failure(FAILURE_AUTHORIZED);
             }
 
-            console.log(this.state);
+            if (!isEqual(this.state.password, this.state.password_repeat)) {
+              return coercedToast.failure(NOT_SAME_PASSWORD);
+            }
+
+            const { name, email, password } = this.state;
+
+            if (!isEqual(this.userSignUpSubject.value, this.state)) {
+              this.props.setLoadNewUser({
+                userInput: {
+                  name,
+                  email,
+                  password,
+                },
+              });
+              this.userSignUpSubject.next(this.state);
+            }
           }),
       );
 
@@ -71,11 +126,18 @@ class SignUpBoard extends Component {
   }
 
   componentWillUnmount() {
-    if (this.formSubject || this.formCredentialsSubject) {
+    if (
+      this.formSubject ||
+      this.formCredentialsSubject ||
+      this.userSignUpSubject
+    ) {
       this.formSubject.unsubscribe();
       this.formCredentialsSubject.unsubscribe();
+      this.userSignUpSubject.unsubscribe();
+
       this.formSubject = null;
       this.formCredentialsSubject = null;
+      this.userSignUpSubject = null;
     }
   }
 
@@ -125,7 +187,7 @@ class SignUpBoard extends Component {
                 >
                   <input
                     id="name"
-                    type="name"
+                    type="text"
                     name="name"
                     onInput={(e) => {
                       this.formCredentialsSubject.next(e);
@@ -216,7 +278,7 @@ class SignUpBoard extends Component {
                 >
                   <input
                     id="password_repeat"
-                    type="password_repeat"
+                    type="password"
                     name="password_repeat"
                     onInput={(e) => {
                       this.formCredentialsSubject.next(e);

@@ -15,7 +15,7 @@ export class Period {
 
   static Year = 'Year';
 
-  static AllTime = 'All time';
+  static AllTime = 'All Time';
 }
 
 export const isRealTime = 'REAL TIME';

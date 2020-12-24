@@ -7,6 +7,7 @@ import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { onError } from 'apollo-link-error';
+import { coercedToken } from '~/app/shared/coercedToken';
 import { Config } from './config';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -22,25 +23,15 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const authLink = setContext((_, { headers }) => {
-  const token = 'schema';
-
-  return {
-    ...headers,
-    // headers: { Authorization: `Bearer ${token}` },
-  };
-});
+const authLink = setContext((_, { headers }) => ({
+  headers: coercedToken(headers),
+}));
 
 const wsLink = new WebSocketLink({
   uri: Config.GRAPHQL_WS,
   options: {
     lazy: true,
     reconnect: true,
-    connectionParams: {
-      headers: {
-        Authorization: 'Bearer 123123123',
-      },
-    },
   },
 });
 

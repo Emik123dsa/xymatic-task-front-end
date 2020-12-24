@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { Period } from '../selectors';
 /**
  * Coerced current date schema fetched via redux store
  *
@@ -6,20 +7,20 @@ import moment from 'moment';
  * @param {*} payload
  */
 export const coercedMoment = (interval, payload) => {
-  switch (interval && interval.toLowerCase()) {
-    case 'real time':
+  switch (interval) {
+    case Period.RealTime:
       return moment(payload).format('HH:mm:ss');
-    case 'today':
+    case Period.Today:
       return moment(payload).format('hh:mm A');
-    case 'yesterday':
+    case Period.Yesterday:
       return moment(payload).format('hh:mm A');
-    case 'day':
+    case Period.Day:
       return moment(payload).format('DD MMM');
-    case 'month':
-      return moment(payload).format('MMMM');
-    case 'year':
+    case Period.Month:
+      return moment(payload).format('MMM');
+    case Period.Year:
       return moment(payload).format('YYYY');
-    case 'all time':
+    case Period.AllTime:
       return moment(payload).format('YYYY');
     default:
       return moment(payload).format('YYYY-MM-DD');

@@ -6,6 +6,8 @@ import { Helmet } from 'react-helmet';
 import loadable from '@loadable/component';
 import { getRouterLocation } from '@/selectors';
 import schema from '@styles/main.scss';
+import { css } from 'aphrodite';
+import { styles } from '@/shared/coercedStyles';
 
 const AsyncComponent = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
@@ -42,30 +44,32 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className={schema.dashboard}>
-        <div className={schema.container}>
-          {this._renderSiteMeta()}
-          <div className={schema['dashboard-wrapper']}>
-            <div
-              className={`${schema.row} ${schema['justify-content-center']}`}
-            >
+      <div className={css(styles.fadeInDown)}>
+        <div className={schema.dashboard}>
+          <div className={schema.container}>
+            {this._renderSiteMeta()}
+            <div className={schema['dashboard-wrapper']}>
               <div
-                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']} `}
+                className={`${schema.row} ${schema['justify-content-center']}`}
               >
-                <AsyncComponent name="Sidebar" />
-              </div>
-              <div
-                className={`${schema['col-7']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
-              >
-                <main className={schema['dashboard_main-wrapper']}>
-                  <AsyncComponent name="Dashboard" />
-                </main>
-              </div>
-              <div
-                className={`${schema['col-3']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
-              >
-                <div className={schema['dashboard_profile-wrapper']}>
-                  <AsyncComponent name="Profile" />
+                <div
+                  className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']} `}
+                >
+                  <AsyncComponent name="Sidebar" />
+                </div>
+                <div
+                  className={`${schema['col-7']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
+                >
+                  <main className={schema['dashboard_main-wrapper']}>
+                    <AsyncComponent name="Dashboard" />
+                  </main>
+                </div>
+                <div
+                  className={`${schema['col-3']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
+                >
+                  <div className={schema['dashboard_profile-wrapper']}>
+                    <AsyncComponent name="Profile" />
+                  </div>
                 </div>
               </div>
             </div>

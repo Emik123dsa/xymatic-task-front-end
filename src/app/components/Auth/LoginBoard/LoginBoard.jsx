@@ -2,17 +2,29 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { fromEvent, Subscription, ReplaySubject, of } from 'rxjs';
+import {
+  fromEvent,
+  Subscription,
+  ReplaySubject,
+  BehaviorSubject,
+  of,
+  iif,
+  EMPTY,
+} from 'rxjs';
 import { connect as Connect } from 'react-redux';
 import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
+import { isEqual } from 'lodash';
 import schema from '@styles/main.scss';
 import _ from './LoginBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
+import { setLoadAuth, setErrorMessage, resetErrorMessage } from '~/app/actions';
 import { coercedToast } from '~/app/shared/coercedToast';
-import { setLoadAuth } from '~/app/actions';
+import { FAILURE_AUTHORIZED } from '~/app/shared/helpers/messages';
 
 @Connect(null, {
   setLoadAuth,
+  setErrorMessage,
+  resetErrorMessage,
 })
 class LoginBoard extends Component {
   formSubject = new Subscription();
@@ -22,6 +34,8 @@ class LoginBoard extends Component {
   formCredentials = this.formCredentialsSubject
     .asObservable()
     .pipe(distinctUntilChanged());
+
+  userCredentialsSubject = new BehaviorSubject({ email: null, password: null });
 
   formObject = null;
 
@@ -37,7 +51,19 @@ class LoginBoard extends Component {
 
   static propTypes = {
     setLoadAuth: PropTypes.func.isRequired,
+    resetErrorMessage: PropTypes.func,
+    setErrorMessage: PropTypes.func,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    this.userCredentialsSubject
+      .pipe(
+        mergeMap((data) =>
+          iif(() => !isEqual(data, prevState), of(data), EMPTY),
+        ),
+      )
+      .next(prevState);
+  }
 
   componentDidMount() {
     setTimeout(() => {
@@ -53,19 +79,23 @@ class LoginBoard extends Component {
           )
           .subscribe((e) => {
             if (
-              Reflect.ownKeys(this.state).every(
+              Reflect.ownKeys(this.state).some(
                 (item) => !(this.state && this.state[item]),
               )
             ) {
-              return coercedToast.failure('Not Full Credentials');
+              return coercedToast.failure(FAILURE_AUTHORIZED);
             }
-            this.props.setLoadAuth(this.state);
+
+            if (!isEqual(this.userCredentialsSubject.value, this.state)) {
+              this.props.setLoadAuth(this.state);
+              this.userCredentialsSubject.next(this.state);
+            }
           }),
       );
 
       this.formCredentials
         .pipe(
-          tap((e) => e.persist()),
+          tap((e) => e?.persist()),
           mergeMap((e) => of(e?.target)),
         )
         .subscribe((target) => {
@@ -78,11 +108,18 @@ class LoginBoard extends Component {
   }
 
   componentWillUnmount() {
-    if (this.formSubject || this.formCredentialsSubject) {
+    if (
+      this.formSubject ||
+      this.formCredentialsSubject ||
+      this.userCredentialsSubject
+    ) {
       this.formSubject.unsubscribe();
       this.formCredentialsSubject.unsubscribe();
+      this.userCredentialsSubject.unsubscribe();
+
       this.formSubject = null;
       this.formCredentialsSubject = null;
+      this.userCredentialsSubject = null;
     }
   }
 

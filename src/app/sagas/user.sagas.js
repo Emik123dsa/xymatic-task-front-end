@@ -7,14 +7,14 @@ import {
   put,
   getContext,
 } from 'redux-saga/effects';
-import { isEmpty } from 'lodash';
 import * as actions from '@/actions';
 import * as service from '@/services';
 
 import { getUserAuthenticated, getUserCredentials } from '../selectors';
 
 export function* fetchResponseEntity(entity, query, variables) {
-  yield put(actions.resetErrorMessage());
+  if (variables) yield put(actions.resetErrorMessage());
+
   yield put(entity.request(variables));
 
   const client = yield getContext('client');
@@ -29,7 +29,7 @@ export function* fetchResponseEntity(entity, query, variables) {
   if (response?.data) {
     yield put(entity.success(variables, response?.data));
   } else {
-    yield put(actions.setErrorMessage(response?.errors));
+    if (variables) yield put(actions.setErrorMessage(response?.errors));
     yield put(entity.failure(variables, response?.errors || []));
   }
 }
@@ -40,11 +40,48 @@ export const fetchUserAuth = fetchResponseEntity.bind(
   service.authUser,
 );
 
+export const fetchNewUser = fetchResponseEntity.bind(
+  null,
+  actions.createNewUser,
+  service.createNewUser,
+);
+
+export const fetchCurrentUser = fetchResponseEntity.bind(
+  null,
+  actions.getCurrentUser,
+  service.getCurrentUser,
+);
+
 export function* loadUserAuth(payload) {
   const isAuthenticated = yield select(getUserAuthenticated);
-  const userCredentials = yield select(getUserCredentials);
-  if (!(userCredentials.has('token') && isAuthenticated)) {
+
+  if (!isAuthenticated) {
     yield call(fetchUserAuth, payload);
+  }
+}
+
+export function* loadNewUser(payload) {
+  const isAuthenticated = yield select(getUserAuthenticated);
+
+  if (!isAuthenticated) {
+    yield call(fetchNewUser, payload);
+    const userCredentials = yield select(getUserCredentials);
+    if (userCredentials.has('email')) {
+      yield delay(200);
+      const { userInput } = payload;
+      yield call(fetchUserAuth, {
+        email: userCredentials.get('email'),
+        password: userInput?.password,
+      });
+    }
+  }
+}
+
+export function* loadCurrentUser() {
+  const userCredentials = yield select(getUserCredentials);
+
+  if (!userCredentials.has('token')) {
+    yield call(fetchCurrentUser);
   }
 }
 
@@ -57,6 +94,16 @@ export function* watchUserAuth() {
 
 export function* watchNewUser() {
   while (true) {
-    const { name, email, password } = yield take(actions.LOAD_NEW_USER);
+    const { userInput } = yield take(actions.LOAD_NEW_USER);
+
+    yield fork(loadNewUser, { userInput });
+  }
+}
+
+export function* watchCurrentUser() {
+  while (true) {
+    yield take(actions.LOAD_CURRENT_USER);
+
+    yield fork(loadCurrentUser);
   }
 }

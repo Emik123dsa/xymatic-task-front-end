@@ -9,6 +9,7 @@ const ProtectedAsyncComponent = loadable(() => import('./protectedRoute'), {
 export const dynamicRoutes = [
   {
     key: 'Root',
+    strict: true,
     component: loadable(() => import('@/containers/Root'), {
       fallback: <LazyLoading />,
     }),
@@ -17,10 +18,8 @@ export const dynamicRoutes = [
         key: 'App',
         path: '/',
         exact: true,
-        redirect: '/auth',
-        component: loadable(() => import('@/containers/App'), {
-          fallback: <LazyLoading />,
-        }),
+        redirect: '/dashboard',
+        component: ProtectedAsyncComponent,
       },
       {
         key: 'Dashboard',
@@ -28,26 +27,31 @@ export const dynamicRoutes = [
         exact: true,
         redirect: '/auth',
         component: ProtectedAsyncComponent,
+        // childRoutes: [],
       },
       {
         key: 'SignUp',
         path: '/signup',
         exact: true,
-        component: loadable(() => import('@/containers/SignUp'), {
-          fallback: <LazyLoading />,
-        }),
+        strict: true,
+        isPublic: true,
+        redirect: '/dashboard',
+        component: ProtectedAsyncComponent,
       },
       {
         key: 'Auth',
         path: '/auth',
         exact: true,
-        component: loadable(() => import('@/containers/Auth'), {
-          fallback: <LazyLoading />,
-        }),
+        strict: true,
+        isPublic: true,
+        redirect: '/dashboard',
+        component: ProtectedAsyncComponent,
       },
       {
         key: 'Error',
-        path: '*',
+        path: '**',
+        strict: false,
+        exact: false,
         component: loadable(() => import('@/containers/Error'), {
           fallback: <LazyLoading />,
         }),

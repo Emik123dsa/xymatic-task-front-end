@@ -11,50 +11,37 @@
     background-color: $lazy-loading;
 
     &_container {
-      position: absolute;
+      position: relative;
       top: 50%;
-      left: 50%;
-      display: flex;
-      height: 75px;
+      display: block;
+      transform: translateY(-50%);
       margin: 0 auto;
-      transform: translate(-50%, -50%);
     }
 
     &_item {
-      //  width: 12px;
-      //   height: 50px;
-      //     margin-right: 6px;
-      //    transform: translateY(25px);
-      // border-radius: 4px;
-      //    background-color: $active-bg-link;
-      //box-shadow: 0 0 4px $active-bg-link;
-      display: block;
-      position: relative;
-      background: url('@img/xymatic.svg') no-repeat center center;
-      height: 79px;
-      width: auto;
-
-      &-first {
-        animation: blockMove 0.5s ease infinite alternate;
-      }
-
-      &-second {
-        animation: blockMove 0.5s ease 0.08s infinite alternate;
-      }
-
-      &-third {
-        animation: blockMove 0.5s ease 0.16s infinite alternate;
-      }
-
-      &-fourth {
-        animation: blockMove 0.5s ease 0.24s infinite alternate;
+      &-logo {
+        position: relative;
+        display: block;
+        width: auto;
+        height: 2rem;
+        background: url('@img/xymatic.svg') no-repeat center center;
+        background-size: contain;
+        animation: blockMove 1s ease-in-out infinite alternate;
       }
     }
   }
 }
 
 @keyframes blockMove {
-  to {
-    transform: translateY(0);
+  0% {
+    filter: invert(0%);
+  }
+
+  50% {
+    filter: invert(40%);
+  }
+
+  100% {
+    filter: invert(0%);
   }
 }
