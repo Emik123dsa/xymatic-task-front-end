@@ -29,7 +29,13 @@ function createWebpackDevMiddleware() {
 
 function addWebpackHotMiddleWare(app, middleware) {
   app.use(webpackHotMiddleware(compiler));
+
   const filename = path.join(compiler.outputPath, 'index.html');
+
+  app.get('/serviceWorker.js', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'src', 'serviceWorker.js'));
+  });
+
   app.get('*', (req, res) => {
     middleware.fileSystem.readFile(filename, (err, file) => {
       if (err) {

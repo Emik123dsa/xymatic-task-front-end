@@ -1,26 +1,29 @@
+/* eslint-disable import/order */
 import React, { Component } from 'react';
+import { chartConfig } from '~/chartConfig';
 import PropTypes from 'prop-types';
 import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
-import pMinDelay from 'p-min-delay';
-import { Seq, List } from 'immutable';
 import {
   getChartImpression,
+  getChartPlays,
+  getChartPosts,
+  getChartsEntity,
   getChartUsers,
-  getModalCurrentDateSchema,
-  HEIGHT_ESSENTIAL_CHART_DEFAULT,
-  HEIGHT_TINY_CHART_DEFAULT,
-  isWSChart,
   Period,
 } from '@/selectors';
 import schema from '@styles/_schema.scss';
 import {
-  cancelChartsUsersEntity,
   loadChartsImpressionsEntity,
+  loadChartsPlaysEntity,
+  loadChartsPostsEntity,
   loadChartsUsersEntity,
 } from '@/actions';
+
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
+import { classnames } from '~/app/shared/coercedClassnames';
+import { isEmpty } from 'lodash';
 
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props.name}/${props.name}`),
@@ -29,44 +32,52 @@ const AsyncLayout = loadable((props) =>
 const AsyncTinyChart = loadable(
   () => import('@/components/Charts/CustomTinyChart/CustomTinyChart'),
   {
-    fallback: <SkeletonLoading height={HEIGHT_TINY_CHART_DEFAULT} />,
+    fallback: <SkeletonLoading height={chartConfig.tinyHeight} />,
   },
 );
 
 const AsyncEssentialChart = loadable(
   () => import('@/components/Charts/CustomEssentialChart/CustomEssentialChart'),
   {
-    fallback: <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />,
+    fallback: <SkeletonLoading height={chartConfig.essentialHeight} />,
   },
 );
 
 const AsyncPieChart = loadable(
   () => import('@/components/Charts/CustomPieChart/CustomPieChart'),
   {
-    fallback: <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />,
+    fallback: <SkeletonLoading height={chartConfig.essentialHeight} />,
   },
 );
 
 @Connect(
   (state) => ({
+    charts: getChartsEntity(state),
     users: getChartUsers(state),
+    posts: getChartPosts(state),
+    plays: getChartPlays(state),
     impressions: getChartImpression(state),
-    currentDateSchema: getModalCurrentDateSchema(state),
   }),
   {
-    cancelChartsUsersEntity,
     loadChartsUsersEntity,
+    loadChartsPostsEntity,
+    loadChartsPlaysEntity,
     loadChartsImpressionsEntity,
   },
 )
 class Dashboard extends Component {
   static propTypes = {
-    // impressions: PropTypes.array,
+    charts: PropTypes.object,
+
     users: PropTypes.object,
+    posts: PropTypes.object,
+    plays: PropTypes.object,
+    impressions: PropTypes.object,
+
     loadChartsUsersEntity: PropTypes.func,
+    loadChartsPostsEntity: PropTypes.func,
+    loadChartsPlaysEntity: PropTypes.func,
     loadChartsImpressionsEntity: PropTypes.func,
-    cancelChartsUsersEntity: PropTypes.func,
-    currentDateSchema: PropTypes.object,
   };
 
   /**
@@ -77,18 +88,29 @@ class Dashboard extends Component {
    */
 
   componentDidMount() {
-    this.props.loadChartsUsersEntity({ payload: Period.RealTime });
-  }
-
-  componentWillUnmount() {
-    const { currentDateSchema } = this.props;
-    if (isWSChart(currentDateSchema.get(0))) {
-      this.props.cancelChartsUsersEntity();
+    try {
+      const pseudoKeys = Reflect.ownKeys(this.props);
+      if (!Array.isArray(pseudoKeys)) throw new RangeError(pseudoKeys);
+      pseudoKeys.forEach((key) => {
+        const callback = this.props[key];
+        if (callback instanceof Function) callback(Period.RealTime);
+      });
+    } catch (e) {
+      console.error('[GraphQL]: Init Error');
     }
   }
 
+  componentWillUnmount() {
+    const { charts } = this.props;
+    charts.valueSeq().forEach((item) => {
+      if (!isEmpty(item.get('EVENT_CHANNEL'))) {
+        item.get('EVENT_CHANNEL').close();
+      }
+    });
+  }
+
   render() {
-    const { users } = this.props;
+    const { charts, users, impressions, posts, plays } = this.props;
 
     return (
       <section className={_['dashboard-section_charts']}>
@@ -101,42 +123,61 @@ class Dashboard extends Component {
               <div className={schema['row-b']}>
                 <div
                   style={{ height: '100px' }}
-                  className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                  className={classnames(
+                    schema['col-b-6'],
+                    schema['col-b-md-6'],
+                    schema['col-b-xs-12'],
+                    schema['mb-2'],
+                  )}
                 >
-                  <AsyncTinyChart type="plays" color="#3f4af1" />
+                  <AsyncTinyChart type="plays" data={plays} color="#3f4af1" />
                 </div>
                 <div
                   style={{ height: '100px' }}
-                  className={`${schema['col-b-6']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                  className={classnames(
+                    schema['col-b-6'],
+                    schema['col-b-md-6'],
+                    schema['col-b-xs-12'],
+                    schema['mb-2'],
+                  )}
                 >
-                  <AsyncTinyChart type="impressions" color="#ef263d" />
+                  <AsyncTinyChart
+                    type="impressions"
+                    data={impressions}
+                    color="#ef263d"
+                  />
                 </div>
               </div>
               <div className={schema['row-b']}>
                 <div
                   style={{ height: '400px' }}
-                  className={`${schema['col-b-8']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']} ${schema['mb-2']}`}
+                  className={classnames(
+                    schema['col-b-8'],
+                    schema['col-b-md-12'],
+                    schema['col-b-xs-12'],
+                    schema['mb-2'],
+                  )}
                 >
                   <AsyncEssentialChart
                     type="activity"
                     title="Activity"
-                    height={400}
+                    height={chartConfig.essentialHeight}
                     content={[
                       {
                         type: 'Users',
                         data: users,
-                        color: '#ef263d',
-                      },
-                      {
-                        type: 'Posts',
-                        color: '#3f4af1',
+                        color: '#602dd3',
                       },
                     ]}
                   />
                 </div>
                 <div
                   style={{ height: '400px' }}
-                  className={`${schema['col-b-4']} ${schema['col-b-md-12']} ${schema['col-b-xs-12']}`}
+                  className={classnames(
+                    schema['col-b-4'],
+                    schema['col-b-md-12'],
+                    schema['col-b-xs-12'],
+                  )}
                 >
                   <AsyncPieChart type="multiple" color={['#fff', 'black']} />
                 </div>
@@ -158,18 +199,3 @@ class Dashboard extends Component {
 }
 
 export default Dashboard;
-
-// <Subscription subscription={subscribe}>
-//   {(schema) => {
-//     const { data, loading, error } = schema;
-//     if (loading) return <div>Loading ... </div>;
-
-//     if (error) return <div>Error</div>;
-
-//     const { usersSubscribe } = data;
-
-//     if (!usersSubscribe) return <div>Error</div>;
-
-//     return usersSubscribe.map(({ id }) => <div key={id}>{id}</div>);
-//   }}
-// </Subscription>

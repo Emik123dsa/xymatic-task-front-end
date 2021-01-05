@@ -12,6 +12,7 @@ import {
 } from '@/selectors';
 import { setLoadCurrentUser } from '@/actions';
 import { isTokenExists } from '@/shared/coercedToken';
+import { Config } from '~/config';
 
 const AsyncContainer = loadable(
   (props) => import(`@/containers/${props.name}`),

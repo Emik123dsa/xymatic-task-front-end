@@ -1,37 +1,69 @@
 import { fromJS } from 'immutable';
-import { CHART_LENGTH_RESTRICTION } from '../selectors';
+import { getState } from 'redux-named-reducers';
+import { Period } from '@/selectors';
+import { chartConfig } from '~/chartConfig';
+import { resizeReducer } from './resize.reducer';
+
+const initialChartEntity = fromJS({
+  EVENT_CHANNEL: null,
+  CURRENT_DATE_SCHEMA: [Period.RealTime],
+  data: [],
+});
 
 export const initialChartsEntityReducer = fromJS({
-  impressions: [],
-  users: [],
-  plays: [],
-  posts: [],
+  impressions: initialChartEntity,
+  users: initialChartEntity,
+  plays: initialChartEntity,
+  posts: initialChartEntity,
 });
 
 export const chartsEntityReducer = (
   state = initialChartsEntityReducer,
   action,
 ) => {
+  if (action && action?.current) {
+    return state.setIn(
+      [action.chart, 'CURRENT_DATE_SCHEMA'],
+      fromJS([action?.current]),
+    );
+  }
+
   if (action && action?.clean) {
-    return state.setIn([action.clean], fromJS([]));
+    return state.setIn([action.clean, 'data'], fromJS([]));
+  }
+
+  if (action && action?.close) {
+    return state.setIn([action.close, 'EVENT_CHANNEL'], fromJS(null));
+  }
+
+  if (action && action?.channel) {
+    return state.withMutations((schema) =>
+      schema.setIn([action?.schema, 'EVENT_CHANNEL'], action?.channel),
+    );
   }
 
   if (action && action?.success) {
     const type = Reflect.ownKeys(action?.success);
     if (type && type[0].match(/(S|s+)ubscribe$/gim)) {
-      if (state.getIn([action.payload]).size > CHART_LENGTH_RESTRICTION - 6) {
-        return state.setIn(
-          [action.payload],
-          state.get(action.payload).slice(1),
-        );
-      }
+      return state.withMutations((schema) => {
+        if (
+          schema.getIn([action.payload, 'data']).size <
+          chartConfig.maxLength / 2
+        ) {
+          return schema.updateIn([action.payload, 'data'], (actionSchema) =>
+            fromJS(actionSchema.concat(action?.success[type])),
+          );
+        }
 
-      return state.updateIn([action.payload], (schema) =>
-        fromJS(schema.concat(action?.success[type])),
-      );
+        return schema
+          .deleteIn([action.payload, 'data', 0])
+          .updateIn([action.payload, 'data'], (actionSchema) =>
+            fromJS(actionSchema.concat(action?.success[type])),
+          );
+      });
     }
 
-    return state.updateIn([action.payload], (schema) =>
+    return state.updateIn([action.payload, 'data'], (schema) =>
       fromJS(action?.success[type]),
     );
   }

@@ -2,6 +2,7 @@ import JWTDecode, { InvalidTokenError } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { merge } from 'lodash';
 import moment from 'moment';
+import { Config } from '~/config';
 
 export const coercedToken = (headers = {}) => {
   let authorizationHeaders = {};
@@ -34,8 +35,6 @@ export const coercedToken = (headers = {}) => {
       authorizationHeaders = merge({}, authorizationHeaders);
     }
   }
-
-  console.log(merge(headers, configHeaders, authorizationHeaders));
 
   return merge(headers, configHeaders, authorizationHeaders);
 };

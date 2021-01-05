@@ -10,40 +10,49 @@ import {
   cancel,
   cancelled,
   spawn,
-  all,
+  delay,
 } from 'redux-saga/effects';
 import { eventChannel, END } from 'redux-saga';
-
+import { isEmpty } from 'lodash';
 import {
   chartsPlaysEntity,
   chartsPostsEntity,
   chartsUsersEntity,
-  loadChartsUsersEntity,
-  loadChartsPlaysEntity,
-  loadChartsPostsEntity,
-  loadChartsImpressionsEntity,
+  chartsImpressionsEntity,
   LOAD_CHART_IMPRESSIONS,
   LOAD_CHART_USERS,
-  CANCEL_CHART_IMPRESSIONS,
-  CANCEL_CHART_USERS,
-  CANCEL_CHART_PLAYS,
-  CANCEL_CHART_POSTS,
   USERS,
-  cancelChartsUsersEntity,
+  POSTS,
+  PLAYS,
+  IMPRESSIONS,
+  loadChannel,
+  closeChannel,
+  LOAD_CHART_POSTS,
+  LOAD_CHART_PLAYS,
 } from '@/actions';
 
 import {
   getChartImpression,
-  getModalCurrentDateSchema,
+  getChartsEntity,
+  getChartUsers,
+  getEventChannel,
   isWSChart,
 } from '@/selectors';
 
-import { fetchChartsUsersEntity, watchChartsUsersEntity } from '@/services';
+import {
+  fetchChartsImpressionsEntity,
+  fetchChartsPlayEntity,
+  fetchChartsPostsEntity,
+  fetchChartsUsersEntity,
+  watchChartsImpressionsEntity,
+  watchChartsPlaysEntity,
+  watchChartsPostsEntity,
+  watchChartsUsersEntity,
+} from '@/services';
 /**
  *  Event Channels
  *
  */
-
 const createEventChannel = (client, query, params = {}) =>
   eventChannel((emitter) => {
     const Subscription = client
@@ -68,13 +77,17 @@ const createEventChannel = (client, query, params = {}) =>
   });
 
 /**
- *  Event handlers
+ *  Cancel Event handlers
  */
-export function* cancelEventChannel(_, entity, channel) {
-  yield take(_);
-  yield put(entity());
-  channel.close();
-  return null;
+export function* cancelEventChannelWithEntity(entity, currentEventChannel) {
+  const channel = yield select(getEventChannel, currentEventChannel);
+  try {
+    if (!isEmpty(channel)) yield cancel();
+  } finally {
+    if (yield cancelled()) channel.close();
+    yield put(closeChannel(currentEventChannel));
+    yield put(entity.clean(currentEventChannel));
+  }
 }
 
 export function* handleEvent(entity, payload, schema) {
@@ -86,68 +99,201 @@ export function* handleEvent(entity, payload, schema) {
     yield put(entity.failure(payload, schema?.message || 'UNHANDLED ERROR'));
   }
 }
-
+/**
+ * Dispatchin channel to the Redux Store
+ *
+ * @param { } chart
+ * @param {*} channel
+ */
+export function* handleChannel(chart, channel, chartsEntity) {
+  yield put(chartsEntity.clean(chart));
+  yield put(loadChannel(chart, channel));
+}
 /**
  * WebSocket interaction along with
  * query schema fetching
  */
-export function* watchChartUsers({ payload }) {
+export function* watchChart({
+  chart,
+  current,
+  chartsEntity,
+  watchChartsEntity,
+}) {
   const client = yield getContext('client');
 
   const channel = yield call(
     createEventChannel,
     client,
-    watchChartsUsersEntity,
-    payload,
+    watchChartsEntity,
+    current,
   );
-
-  const handleCancelEventChannel = cancelEventChannel.bind(
-    null,
-    CANCEL_CHART_USERS,
-    cancelChartsUsersEntity,
-  );
-
-  yield spawn(handleCancelEventChannel, channel);
 
   try {
-    if (!isWSChart(payload)) {
-      yield cancel();
-    }
-
-    const handleEventChannel = handleEvent.bind(null, chartsUsersEntity, USERS);
+    const handleEventChannel = handleEvent.bind(
+      null,
+      chartsEntity,
+      chart.toLowerCase(),
+    );
 
     yield takeEvery(channel, handleEventChannel);
   } finally {
-    if (yield cancelled()) {
-      channel.close();
-    }
+    yield call(handleChannel, chart, channel, chartsEntity);
   }
 }
-export function* fetchChartUsers({ payload }) {
+
+export const cancelEventUserChannelWithEntity = cancelEventChannelWithEntity.bind(
+  null,
+  chartsUsersEntity,
+  USERS.toLowerCase(),
+);
+
+export const cancelEventPostsChannelWithEntity = cancelEventChannelWithEntity.bind(
+  null,
+  chartsPostsEntity,
+  POSTS.toLowerCase(),
+);
+
+export const cancelEventPlaysChannelWithEntity = cancelEventChannelWithEntity.bind(
+  null,
+  chartsPlaysEntity,
+  PLAYS.toLowerCase(),
+);
+
+export const cancelEventImpressionsChannelWithEntity = cancelEventChannelWithEntity.bind(
+  null,
+  chartsImpressionsEntity,
+  IMPRESSIONS.toLowerCase(),
+);
+
+export function* fetchChart({
+  chart,
+  current,
+  chartsEntity,
+  cancelEventChannel,
+  fetchChartsEntity,
+}) {
   const client = yield getContext('client');
 
-  if (!isWSChart(payload)) {
+  try {
+    yield fork(cancelEventChannel);
+
     const agreegatedSchema = yield call(client.query, {
-      query: fetchChartsUsersEntity,
+      query: fetchChartsEntity,
       fetchPolicy: 'no-cache',
       variables: {
-        period: payload.toUpperCase().replace(/\s+!?(\w+)$/gim, ''),
+        period: current.toUpperCase().replace(/\s+!?(\w+)$/gim, ''),
       },
     });
 
-    const handleEventSchema = handleEvent.bind(null, chartsUsersEntity, USERS);
+    const handleEventSchema = handleEvent.bind(null, chartsEntity, chart);
 
     yield fork(handleEventSchema, agreegatedSchema);
+  } finally {
+    if (yield cancelled()) {
+      console.warn('[GraphQL] : Unrecognized charts entity');
+    }
   }
 }
 
 /**
  * Observers for root Sagas
- */
-
+ * */
 export function* loadChartUsers() {
   while (true) {
-    const { payload } = yield take(LOAD_CHART_USERS);
-    yield all([fork(watchChartUsers, payload), fork(fetchChartUsers, payload)]);
+    const { current, chart } = yield take(LOAD_CHART_USERS);
+
+    const payload = {
+      chart,
+      current,
+      chartsEntity: chartsUsersEntity,
+    };
+
+    if (isWSChart(current)) {
+      yield spawn(watchChart, {
+        ...payload,
+        watchChartsEntity: watchChartsUsersEntity,
+      });
+    } else {
+      yield spawn(fetchChart, {
+        ...payload,
+        cancelEventChannel: cancelEventUserChannelWithEntity,
+        fetchChartsEntity: fetchChartsUsersEntity,
+      });
+    }
+  }
+}
+
+export function* loadChartPosts() {
+  while (true) {
+    const { current, chart } = yield take(LOAD_CHART_POSTS);
+
+    const payload = {
+      chart,
+      current,
+      chartsEntity: chartsPostsEntity,
+    };
+
+    if (isWSChart(current)) {
+      yield spawn(watchChart, {
+        ...payload,
+        watchChartsEntity: watchChartsPostsEntity,
+      });
+    } else {
+      yield spawn(fetchChart, {
+        ...payload,
+        cancelEventChannel: cancelEventPostsChannelWithEntity,
+        fetchChartsEntity: fetchChartsPostsEntity,
+      });
+    }
+  }
+}
+
+export function* loadChartImpressions() {
+  while (true) {
+    const { current, chart } = yield take(LOAD_CHART_IMPRESSIONS);
+
+    const payload = {
+      chart,
+      current,
+      chartsEntity: chartsImpressionsEntity,
+    };
+
+    if (isWSChart(current)) {
+      yield spawn(watchChart, {
+        ...payload,
+        watchChartsEntity: watchChartsImpressionsEntity,
+      });
+    } else {
+      yield spawn(fetchChart, {
+        ...payload,
+        cancelEventChannel: cancelEventImpressionsChannelWithEntity,
+        fetchChartsEntity: fetchChartsImpressionsEntity,
+      });
+    }
+  }
+}
+
+export function* loadChartPlays() {
+  while (true) {
+    const { current, chart } = yield take(LOAD_CHART_PLAYS);
+
+    const payload = {
+      chart,
+      current,
+      chartsEntity: chartsPlaysEntity,
+    };
+
+    if (isWSChart(current)) {
+      yield spawn(watchChart, {
+        ...payload,
+        watchChartsEntity: watchChartsPlaysEntity,
+      });
+    } else {
+      yield spawn(fetchChart, {
+        ...payload,
+        cancelEventChannel: cancelEventPlaysChannelWithEntity,
+        fetchChartsEntity: fetchChartsPlayEntity,
+      });
+    }
   }
 }

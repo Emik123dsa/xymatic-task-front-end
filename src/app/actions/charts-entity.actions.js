@@ -8,33 +8,28 @@ import {
 } from './actions';
 
 const chartImpressionsEntitySchema = createRequestSchema('CHART_IMPRESSIONS');
-
 const chartPlaysEntitySchema = createRequestSchema('CHART_PLAYS');
-
 const chartPostsEntitySchema = createRequestSchema('CHART_POSTS');
-
 const chartUsersEntitySchema = createRequestSchema('CHART_USERS');
 
-export const USERS = 'users';
-export const PLAYS = 'plays';
-export const IMPRESSIONS = 'impressions';
-export const POSTS = 'posts';
+export const USERS = 'USERS';
+export const PLAYS = 'PLAYS';
+export const IMPRESSIONS = 'IMPRESSIONS';
+export const POSTS = 'POSTS';
 
 export const LOAD_CHART_IMPRESSIONS = 'LOAD_CHART_IMPRESSIONS';
 export const LOAD_CHART_POSTS = 'LOAD_CHART_POSTS';
 export const LOAD_CHART_PLAYS = 'LOAD_CHART_PLAYS';
 export const LOAD_CHART_USERS = 'LOAD_CHART_USERS';
 
-export const CANCEL_CHART_IMPRESSIONS = 'CANCEL_CHART_IMPRESSIONS';
-export const CANCEL_CHART_POSTS = 'CANCEL_CHART_POSTS';
-export const CANCEL_CHART_PLAYS = 'CANCEL_CHART_PLAYS';
-export const CANCEL_CHART_USERS = 'CANCEL_CHART_USERS';
+export const LOAD_CHANNEL = 'LOAD_CHANNEL';
+export const CLOSE_CHANNEL = 'CLOSE_CHANNEL';
 
 export const chartsImpressionsEntity = {
   request: (payload) =>
     action(chartImpressionsEntitySchema[REQUEST], { payload }),
-  success: (payload, response) =>
-    action(chartImpressionsEntitySchema[SUCCESS], { payload, response }),
+  success: (payload, success) =>
+    action(chartImpressionsEntitySchema[SUCCESS], { payload, success }),
   failure: (payload, error) =>
     action(chartImpressionsEntitySchema[FAILURE], {
       payload,
@@ -45,8 +40,8 @@ export const chartsImpressionsEntity = {
 
 export const chartsPlaysEntity = {
   request: (payload) => action(chartPlaysEntitySchema[REQUEST], { payload }),
-  success: (payload, response) =>
-    action(chartPlaysEntitySchema[SUCCESS], { payload, response }),
+  success: (payload, success) =>
+    action(chartPlaysEntitySchema[SUCCESS], { payload, success }),
   failure: (payload, error) =>
     action(chartPlaysEntitySchema[FAILURE], {
       payload,
@@ -57,8 +52,8 @@ export const chartsPlaysEntity = {
 
 export const chartsPostsEntity = {
   request: (payload) => action(chartPostsEntitySchema[REQUEST], { payload }),
-  success: (payload, response) =>
-    action(chartPostsEntitySchema[SUCCESS], { payload, response }),
+  success: (payload, success) =>
+    action(chartPostsEntitySchema[SUCCESS], { payload, success }),
   failure: (payload, error) =>
     action(chartPostsEntitySchema[FAILURE], {
       payload,
@@ -79,16 +74,37 @@ export const chartsUsersEntity = {
   clean: (clean) => action(chartUsersEntitySchema[CLEAN], { clean }),
 };
 
-export const loadChartsUsersEntity = (payload) =>
-  action(LOAD_CHART_USERS, { payload });
-export const cancelChartsUsersEntity = (cancel) =>
-  action(CANCEL_CHART_USERS, { cancel });
+/**
+ * We also demand to unsubscribe
+ * from eventChannel, which were created by
+ * Subscriptions GraphQL
+ */
+export const loadChannel = (schema, channel) =>
+  action(LOAD_CHANNEL, { schema, channel });
 
-export const loadChartsImpressionsEntity = (payload) =>
-  action(LOAD_CHART_IMPRESSIONS, { payload });
+export const closeChannel = (close) => action(CLOSE_CHANNEL, { close });
 
-export const loadChartsPlaysEntity = (payload) =>
-  action(LOAD_CHART_PLAYS, { payload });
+/**
+ * Standard Charts Loaders
+ * @param {} period
+ */
+export const loadChartsUsersEntity = (current) =>
+  action(LOAD_CHART_USERS, { current, chart: USERS.toLowerCase() });
 
-export const loadChartsPostsEntity = (payload) =>
-  action(LOAD_CHART_POSTS, { payload });
+export const loadChartsImpressionsEntity = (current) =>
+  action(LOAD_CHART_IMPRESSIONS, {
+    current,
+    chart: IMPRESSIONS.toLowerCase(),
+  });
+
+export const loadChartsPlaysEntity = (current) =>
+  action(LOAD_CHART_PLAYS, {
+    current,
+    chart: PLAYS.toLowerCase(),
+  });
+
+export const loadChartsPostsEntity = (current) =>
+  action(LOAD_CHART_POSTS, {
+    current,
+    chart: POSTS.toLowerCase(),
+  });

@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { CustomAlterPeriodDate } from '@/components/Charts/CustomAlterPeriodDate/CustomAlterPeriodDate';
 import _ from './CustomLegend.scss';
-import { CustomAlertPeriodDate } from '../CustomAlertPeriodDate/CustomAlertPeriodDate';
 
 export class CustomLegend extends PureComponent {
   static propTypes = {
@@ -34,7 +34,7 @@ export class CustomLegend extends PureComponent {
                 <span style={{ background: item.color }}></span>
               </div>
             ))}
-            <CustomAlertPeriodDate />
+            <CustomAlterPeriodDate types={types} />
           </div>
         </div>
       </Fragment>

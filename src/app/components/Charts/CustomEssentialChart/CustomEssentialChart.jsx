@@ -1,4 +1,4 @@
-/* eslint-disable object-curly-newline, no-confusing-arrow, indent */
+/* eslint-disable object-curly-newline, no-confusing-arrow, indent, import/order */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -12,22 +12,18 @@ import {
   YAxis,
   Brush,
 } from 'recharts';
+
 import { isImmutable, List } from 'immutable';
 import { connect as Connect } from 'react-redux';
-import { coercedMoment, coercedSeparatedMoment } from '@/shared/coercedMoment';
+import { chartConfig } from '~/chartConfig';
+import { coercedMoment } from '@/shared/coercedMoment';
 import schema from '@styles/_schema.scss';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
 import _ from './CustomEssentialChart.scss';
-
 import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
-import {
-  CHART_LENGTH_RESTRICTION,
-  getModalCurrentDateSchema,
-  HEIGHT_ESSENTIAL_CHART_DEFAULT,
-  isWSChart,
-} from '~/app/selectors';
+import { getChartCurrentDate, Period } from '~/app/selectors';
 
 const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
   content: [
@@ -35,18 +31,14 @@ const CUSTOM_ESSENTIAL_CHART_FACTORY = () => ({
       type: 'uv',
       color: '#fff',
     },
-    {
-      type: 'pv',
-      color: '#0c0c0c',
-    },
   ],
-  height: 400,
+  height: chartConfig.essentialHeight,
   title: 'Default',
 });
 
 @Connect(
   (state) => ({
-    currentDateSchema: getModalCurrentDateSchema(state),
+    currentDates: getChartCurrentDate(state),
   }),
   null,
 )
@@ -61,10 +53,49 @@ export class CustomEssentialChart extends PureComponent {
     ),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
-    currentDateSchema: PropTypes.object,
+    currentDates: PropTypes.object,
   };
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataList: null,
+    };
+  }
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    const { content, currentDates } = prevProps;
+    return {
+      dataList: content.map(({ data, type }) =>
+        List(data).reduce((acc, item, index) => {
+          const _type = type.toLowerCase();
+          acc[index] = !isImmutable(item)
+            ? {
+                delta: item.delta,
+                timestamp: coercedMoment(
+                  currentDates.has(_type)
+                    ? currentDates.get(_type)
+                    : Period.AllTime,
+                  item.timestamp,
+                ),
+              }
+            : {
+                delta: item.get('delta'),
+                deltaTotal: item.get('deltaTotal'),
+                timestamp: coercedMoment(
+                  currentDates.has(_type)
+                    ? currentDates.get(_type)
+                    : Period.AllTime,
+                  item.get('timestamp'),
+                ),
+              };
+          return acc;
+        }, []),
+      ),
+    };
+  }
 
   _renderLinearGradient() {
     const { content } = this.props;
@@ -102,57 +133,38 @@ export class CustomEssentialChart extends PureComponent {
     );
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataList: null,
-    };
-  }
+  get _isWSChartLoading() {
+    const { content, currentDates } = this.props;
+    const { dataList } = this.state;
 
-  static getDerivedStateFromProps(prevProps, prevState) {
-    const { content, currentDateSchema } = prevProps;
+    let isWSChartLoading = false;
 
-    return {
-      dataList: content.map(({ data, type }) =>
-        List(data).reduce((acc, item, index) => {
-          acc[index] = !isImmutable(item)
-            ? {
-                delta: item.delta,
-                timestamp: coercedMoment(
-                  currentDateSchema.get(0),
-                  item.timestamp,
-                ),
-              }
-            : {
-                delta: item.get('delta'),
-                deltaTotal: item.get('deltaTotal'),
-                timestamp: coercedMoment(
-                  currentDateSchema.get(0),
-                  item.get('timestamp'),
-                ),
-              };
-          return acc;
-        }, []),
-      ),
-    };
+    content.forEach(({ type }) => {
+      if (currentDates.has(type.toLowerCase())) {
+        if (currentDates.get(type.toLowerCase()) === Period.RealTime) {
+          if (dataList[0].length < chartConfig.maxLength / 6) {
+            isWSChartLoading = true;
+          }
+        }
+      }
+    });
+
+    return isWSChartLoading;
   }
 
   render() {
-    const { height, title, content, currentDateSchema } = this.props;
+    const { height, title, content, currentDates } = this.props;
 
     const { dataList } = this.state;
 
     if (!Array.isArray(dataList)) return null;
 
     if (dataList.every((item) => Array.isArray(item) && !item.length)) {
-      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+      return <SkeletonLoading height={chartConfig.essentialHeight} />;
     }
 
-    if (
-      isWSChart(currentDateSchema.get(0)) &&
-      dataList.every((item) => item.length < CHART_LENGTH_RESTRICTION / 6)
-    ) {
-      return <SkeletonLoading height={HEIGHT_ESSENTIAL_CHART_DEFAULT} />;
+    if (this._isWSChartLoading) {
+      return <SkeletonLoading height={chartConfig.essentialHeight} />;
     }
 
     return (
@@ -169,13 +181,6 @@ export class CustomEssentialChart extends PureComponent {
                   cursor="pointer"
                   margin={{ top: 30, right: 30, left: 0, bottom: 20 }}
                 >
-                  <Brush
-                    startIndex={26}
-                    endIndex={30}
-                    dataKey="timestamp"
-                    height={30}
-                    stroke="#8884d8"
-                  />
                   <Legend
                     verticalAlign="top"
                     align="right"

@@ -5,3 +5,21 @@
   overflow: hidden;
   // margin-left: 24px;
 }
+
+.enter {
+  opacity: 0.01;
+}
+
+.enterActive {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.exit {
+  opacity: 1;
+}
+
+.extiActive {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

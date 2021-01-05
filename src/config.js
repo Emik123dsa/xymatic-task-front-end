@@ -10,4 +10,6 @@ export class Config {
   static production = environment.production;
 
   static hmr = environment.hmr;
+
+  static serviceWorker = environment.serviceWorker;
 }

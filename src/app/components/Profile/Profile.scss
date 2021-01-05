@@ -14,24 +14,72 @@
     &_edit {
       position: relative;
       display: block;
-      width: 100%;
-      height: 1.25rem;
+      width: auto;
+      height: 1.2rem;
       cursor: pointer;
-      background: url('@img/edit.svg') no-repeat center left;
+      transition: 0.25s ease all;
+      background: url('@img/edit.svg') no-repeat center center;
 
       &:hover {
-        background: url('@img/edit-active.svg') no-repeat bottom right !important;
+        filter: brightness(0) invert(1);
       }
     }
 
     &_user {
       padding-top: 2rem;
       text-align: center;
+      text-transform: capitalize;
+      color: $light;
+      font-family: $medium;
+
+      &-name {
+        font-size: 1rem;
+      }
 
       &-title {
-        color: $light;
-        font-family: $medium;
         font-size: 1rem;
+      }
+
+      &-status {
+        font-size: 0.8rem;
+        color: $dark;
+      }
+
+      &-picture {
+        position: relative;
+        display: block;
+        width: 8.5rem;
+        height: 8.5rem;
+        margin: 0 auto;
+        padding: 0 1rem;
+        border-radius: 24px;
+        background: $user-bg;
+        box-shadow: 0 0 0.3rem $user-border-bg;
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+        }
+
+        &::before {
+          top: 50%;
+          left: 50%;
+          width: 100%;
+          height: 6rem;
+          transform: translate(-50%, -50%);
+          background: url('@img/avatar.png') no-repeat center center;
+          background-size: contain;
+        }
+
+        &::after {
+          top: calc(100% - 1rem);
+          right: -0.2rem;
+          width: 1.8rem;
+          height: 1.8rem;
+          background: url('@img/check.svg') no-repeat center center;
+          background-size: contain;
+        }
       }
     }
   }

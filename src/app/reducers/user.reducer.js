@@ -7,6 +7,7 @@ import {
 } from '@/shared/helpers/messages';
 
 import { coercedToast } from '@/shared/coercedToast';
+import { Config } from '~/config';
 
 export const initialUserReducer = fromJS({
   isAuthenticated: false,

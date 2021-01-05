@@ -1,19 +1,19 @@
 @import '../../../node_modules/animate.css/animate.compat.css';
 
-.my-node-enter {
+.dropdown-enter {
   opacity: 0;
 }
 
-.my-node-enter-active {
+.dropdown-enter-active {
   opacity: 1;
   transition: opacity 200ms;
 }
 
-.my-node-exit {
+.dropdown-exit {
   opacity: 1;
 }
 
-.my-node-exit-active {
+.dropdown-exit-active {
   opacity: 0;
   transition: opacity 200ms;
 }

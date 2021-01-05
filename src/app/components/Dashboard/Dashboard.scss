@@ -21,7 +21,7 @@
           position: sticky;
           top: 5rem;
           background: $bg-border;
-          height: 1rem;
+          height: calc(1rem - 3px);
           z-index: 2;
         }
       }
@@ -38,7 +38,7 @@
           bottom: 5rem;
           width: inherit;
           background: $bg-border;
-          height: 1rem;
+          height: calc(1rem - 2px);
           z-index: 2;
         }
       }
@@ -65,6 +65,13 @@
 @media screen and (max-width: $bp-md) {
   .dashboard {
     &-section {
+      &_charts {
+        &-wrapper {
+          border-radius: 24px;
+          border: 1em solid $bg-border;
+        }
+      }
+
       &_restrictor {
         &-top {
           display: none;

@@ -3,6 +3,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import thunk from 'redux-thunk';
+import { namedReducerEnhancer } from 'redux-named-reducers';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router/immutable';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
@@ -15,10 +16,13 @@ export const configureStore = (initialState = {}, history) => {
   const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare];
 
   if (process.env.NODE_ENV !== 'production') {
-    middlewares.push(createLogger());
+    // middlewares.push(createLogger());
   }
 
-  const enhancers = [applyMiddleware(...middlewares)];
+  const enhancers = [
+    applyMiddleware(...middlewares),
+    namedReducerEnhancer(createRootReducer(history)),
+  ];
 
   const composeEnhancers =
     process.env.NODE_ENV !== 'production' &&

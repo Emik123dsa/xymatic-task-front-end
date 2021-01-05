@@ -9577,6 +9577,11 @@ redux-logger@^3.0.6:
   dependencies:
     deep-diff "^0.3.5"
 
+redux-named-reducers@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/redux-named-reducers/-/redux-named-reducers-1.1.0.tgz#b58fc3508ea2882d24d0f13fc5927b690bc33a5b"
+  integrity sha512-G8kWBa49HN6XteRvFvAN+gYG5lUOPeLmfHRamDtqBomyuy8bAUhjmfzGu++UkYkAw/sSX9Oeyak5J6IzDZ2JDQ==
+
 redux-saga@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.1.3.tgz#9f3e6aebd3c994bbc0f6901a625f9a42b51d1112"

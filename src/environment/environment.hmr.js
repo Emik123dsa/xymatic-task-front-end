@@ -3,4 +3,7 @@ export default {
   GRAPHQL_WS: 'ws://localhost:8080/subscriptions',
   production: false,
   hmr: true,
+  development: true,
+  isAuthEnabled: false,
+  serviceWorker: 'serviceWorker.js',
 };

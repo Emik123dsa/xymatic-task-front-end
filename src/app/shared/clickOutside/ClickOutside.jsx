@@ -1,7 +1,8 @@
 /* eslint-disable no-return-assign */
 import React, { Component, Fragment } from 'react';
 import { fromEvent, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { tap, distinctUntilChanged, filter, pluck } from 'rxjs/operators';
+
 import PropTypes from 'prop-types';
 
 export class ClickOutside extends Component {
@@ -26,17 +27,18 @@ export class ClickOutside extends Component {
       this.clickOutside.add(
         fromEvent(document, 'click')
           .pipe(
-            filter((e) => {
+            tap((e) => {
               e.preventDefault();
               e.stopImmediatePropagation();
-
-              const clickTarget = e.target;
-
-              return !this._removeEventListener(
-                this.elementRef.current,
-                clickTarget,
-              );
             }),
+            pluck('target'),
+            filter(
+              (clickTarget) =>
+                !this._removeEventListener(
+                  this.elementRef.current,
+                  clickTarget,
+                ),
+            ),
           )
           .subscribe((e) => {
             this.props.emitOnClick(false);
@@ -71,13 +73,12 @@ export class ClickOutside extends Component {
       <Fragment>
         <div ref={this.elementRef}>
           {React.Children.map(this.props.children, (mutableChild) => {
-            if (mutableChild) {
-              return React.cloneElement(mutableChild, {
-                ref: (node) => (this.buttonRef = node),
-              });
-            }
-
-            return null;
+            if (!mutableChild) return null;
+            return React.cloneElement(mutableChild, {
+              ref: (node) => {
+                if (node instanceof HTMLButtonElement) this.buttonRef = node;
+              },
+            });
           })}
         </div>
       </Fragment>

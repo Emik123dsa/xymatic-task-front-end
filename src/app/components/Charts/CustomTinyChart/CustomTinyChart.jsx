@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { List } from 'immutable';
+import { connect as Connect } from 'react-redux';
 import {
   AreaChart,
   Area,
@@ -18,20 +19,31 @@ import { CustomAlterValue } from '../CustomAlterValue/CustomAlterValue';
 import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
 
 import _ from './CustomTinyChart.scss';
+import { coercedMoment } from '~/app/shared/coercedMoment';
+import { getChartCurrentDate, Period } from '~/app/selectors';
+import { chartConfig } from '~/chartConfig';
 
 const CUSTOM_TINY_CHART_FACTORY = () => ({
   color: '#fff',
-  type: 'uv',
+  type: 'default',
   height: 100,
 });
 
+@Connect(
+  (state) => ({
+    currentDates: getChartCurrentDate(state),
+  }),
+  null,
+)
 export default class CustomTinyChart extends PureComponent {
   constructor(props) {
     super(props);
-
     this._definePropertyDescription = this._definePropertyDescription.bind(
       this,
     );
+    this.state = {
+      tinyList: null,
+    };
   }
 
   static propTypes = {
@@ -39,6 +51,7 @@ export default class CustomTinyChart extends PureComponent {
     color: PropTypes.string,
     type: PropTypes.string,
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    currentDates: PropTypes.object,
   };
 
   static defaultProps = CUSTOM_TINY_CHART_FACTORY();
@@ -48,11 +61,39 @@ export default class CustomTinyChart extends PureComponent {
     return `color${type.charAt(0).toUpperCase()}${type.slice(1)}`;
   }
 
+  get _isWSEnabled() {
+    const { type, currentDates } = this.props;
+    if (!currentDates.has(type.toLowerCase())) return false;
+
+    const currentDate = currentDates.get(type.toLowerCase());
+
+    console.log(currentDate);
+
+    return null;
+  }
+
+  static getDerivedStateFromProps(prevProps, prevState) {
+    const { data, currentDates, type } = prevProps;
+    return {
+      tinyList: List(data)
+        .toArray()
+        .map(({ delta, timestamp }) => ({
+          delta,
+          timestamp: coercedMoment(
+            currentDates.has(type.toLowerCase())
+              ? currentDates.get(type.toLowerCase())
+              : Period.AllTime,
+          ),
+        })),
+    };
+  }
+
   render() {
     const { color, data } = this.props;
+    const { tinyList } = this.state;
 
-    if (!(data && data.size > 1)) {
-      return <SkeletonLoading height={100} />;
+    if (!tinyList.length) {
+      return <SkeletonLoading height={chartConfig.tinyHeight} />;
     }
 
     return (
@@ -67,12 +108,7 @@ export default class CustomTinyChart extends PureComponent {
               >
                 <AreaChart
                   cursor="pointer"
-                  data={List(data)
-                    .map((item) => ({
-                      uv: item.symbol,
-                      name: item.ldt,
-                    }))
-                    .toJS()}
+                  data={tinyList}
                   margin={{ top: 25, right: 25, left: 45, bottom: 0 }}
                 >
                   <defs>
@@ -113,7 +149,7 @@ export default class CustomTinyChart extends PureComponent {
                   <Area
                     activeDot={<CustomActiveDot fill={color} />}
                     type="monotone"
-                    dataKey="uv"
+                    dataKey="delta"
                     stroke={color}
                     strokeWidth="2"
                     fillOpacity={1}

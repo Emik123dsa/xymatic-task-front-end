@@ -126,18 +126,18 @@ const _compilerBrowserOptions = (isDev) => {
     performance: {
       hints: false,
     },
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          styles: {
-            name: 'styles',
-            test: /\.css$/,
-            chunks: 'all',
-            enforce: true,
-          },
-        },
-      },
-    },
+    // optimization: {
+    //   splitChunks: {
+    //     cacheGroups: {
+    //       styles: {
+    //         name: 'styles',
+    //         test: /\.css$/,
+    //         chunks: 'all',
+    //         enforce: true,
+    //       },
+    //     },
+    //   },
+    // },
   };
 };
 

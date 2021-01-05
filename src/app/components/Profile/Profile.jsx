@@ -32,24 +32,36 @@ class Profile extends Component {
       <div className={_.profile}>
         <div className={_['profile-wrapper']}>
           <section className={_['profile-wrapper_user']}>
-            <div className={`${schema.row} ${schema['align-center']}`}>
-              <div className={schema['col-6']}>
+            <div
+              className={`${schema.row} ${schema['align-center']} ${schema['justify-content-between']} ${schema['mb-3']}`}
+            >
+              <div className={schema['col-b-6']}>
                 <h2 className={_['profile-wrapper_user-title']}>Profile</h2>
               </div>
-              <div className={`${schema['col-4']} ${schema['mr-2']} `}>
+              <div className={schema['col-b-4']}>
                 <span className={_['profile-wrapper_edit']}></span>
               </div>
             </div>
-            <div className={schema.row}>
-              <div className={schema['col-12']}>
+            <div
+              className={[schema.row, schema['justify-content-center']]
+                .filter((e) => !!e)
+                .join(' ')}
+            >
+              <div className={schema['col-b-12']}>
                 <span className={_['profile-wrapper_user-picture']}></span>
               </div>
-              <div className={schema['col-12']}>
+              <div
+                style={{ marginTop: '1.5rem' }}
+                className={schema['col-b-12']}
+              >
                 <span className={_['profile-wrapper_user-name']}>
                   {userCredentials.get('name')}
                 </span>
               </div>
-              <div className={schema['col-12']}>
+              <div
+                style={{ marginTop: '0.3rem' }}
+                className={schema['col-b-12']}
+              >
                 <span className={_['profile-wrapper_user-status']}>
                   {this._userAuthority}
                 </span>

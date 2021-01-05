@@ -11,6 +11,36 @@ export const watchChartsUsersEntity = gql`
   }
 `;
 
+export const watchChartsPostsEntity = gql`
+  subscription postSubscribe {
+    postSubscribe {
+      delta
+      timestamp
+      __typename
+    }
+  }
+`;
+
+export const watchChartsPlaysEntity = gql`
+  subscription playsSubscribe {
+    playsSubscribe {
+      delta
+      timestamp
+      __typename
+    }
+  }
+`;
+
+export const watchChartsImpressionsEntity = gql`
+  subscription impressionsSubscribe {
+    impressionsSubscribe {
+      delta
+      timestamp
+      __typename
+    }
+  }
+`;
+
 export const fetchChartsUsersEntity = gql`
   query userChart($period: Period) {
     findUserByChart(period: $period) {
@@ -22,20 +52,35 @@ export const fetchChartsUsersEntity = gql`
   }
 `;
 
-// export const fetchChartsPlaysEntity = (payload) =>
-//   callGraphQLApi('/', {
-//     query: `query GetRates {
-//     rates(currency: "USD") {
-//       currency
-//     }
-//   }`,
-//   });
+export const fetchChartsPostsEntity = gql`
+  query postChart($period: Period) {
+    findPostByChart(period: $period) {
+      delta
+      deltaTotal
+      timestamp
+      __typename
+    }
+  }
+`;
 
-// export const fetchChartsPostsEntity = (payload) =>
-//   callGraphQLApi('/', {
-//     query: `query GetRates {
-//     rates(currency: "USD") {
-//       currency
-//     }
-//   }`,
-//   });
+export const fetchChartsImpressionsEntity = gql`
+  query findImpressionsByChart($period: Period) {
+    findImpressionsByChart(period: $period) {
+      delta
+      deltaTotal
+      timestamp
+      __typename
+    }
+  }
+`;
+
+export const fetchChartsPlayEntity = gql`
+  query findPlayByChart($period: Period) {
+    findPlayByChart(period: $period) {
+      delta
+      deltaTotal
+      timestamp
+      __typename
+    }
+  }
+`;

@@ -2,13 +2,18 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { toNumber } from 'lodash';
 import ContentLoader from 'react-content-loader';
-import { fadeIn } from 'react-animations';
+import { fadeIn, fadeOut } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
+
 import _ from './SkeletonLoading.scss';
 
 const styles = StyleSheet.create({
   fadeIn: {
     animationName: fadeIn,
+    animationDuration: '0.4s',
+  },
+  fadeOut: {
+    animationName: fadeOut,
     animationDuration: '0.4s',
   },
 });
@@ -24,10 +29,17 @@ export default class SpinLoading extends PureComponent {
 
   static defaultProps = SKELETON_LOADING_FACTORY();
 
+  skeletonLoading = null;
+
+  constructor(props) {
+    super(props);
+    this.skeletonLoading = React.createRef();
+  }
+
   render() {
     return (
       <Fragment>
-        <div className={css(styles.fadeIn)}>
+        <div ref={this.skeletonLoading} className={css(styles.fadeIn)}>
           <ContentLoader
             speed={1}
             className={_.skeleton}
