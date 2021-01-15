@@ -6,7 +6,7 @@ import { resizeReducer } from './resize.reducer';
 
 const initialChartEntity = fromJS({
   EVENT_CHANNEL: null,
-  CURRENT_DATE_SCHEMA: [Period.RealTime],
+  CURRENT_DATE_SCHEMA: [Period.AllTime],
   data: [],
 });
 

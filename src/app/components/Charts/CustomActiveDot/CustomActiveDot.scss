@@ -2,6 +2,8 @@
 .custom {
   &-active {
     &-dot {
+      animation: appearIn 0.2s ease;
+
       &_circle {
         stroke-width: 3px;
         fill: #fff;
@@ -12,5 +14,15 @@
         opacity: 0.05;
       }
     }
+  }
+}
+
+@keyframes appearIn {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }

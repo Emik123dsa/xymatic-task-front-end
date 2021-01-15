@@ -7,7 +7,8 @@ import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { onError } from 'apollo-link-error';
-import { coercedToken } from '~/app/shared/coercedToken';
+import { isNull } from 'lodash';
+import { coercedToken, coercedWSToken } from '~/app/shared/coercedToken';
 import { Config } from './config';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -27,11 +28,16 @@ const authLink = setContext((_, { headers }) => ({
   headers: coercedToken(headers),
 }));
 
+const wsOptions = !isNull(coercedWSToken())
+  ? { connectionParams: coercedWSToken() }
+  : {};
+
 const wsLink = new WebSocketLink({
   uri: Config.GRAPHQL_WS,
   options: {
     lazy: true,
     reconnect: true,
+    ...wsOptions,
   },
 });
 
@@ -53,6 +59,9 @@ const link = split(
 export const client = () =>
   new ApolloClient({
     link,
+    ssrMode: false,
+    ssrForceFetchDelay: 0,
+    connectToDevTools: process.env.NODE_ENV !== 'production',
     cache: new InMemoryCache({
       addTypename: false,
     }),

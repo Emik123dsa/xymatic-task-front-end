@@ -1,5 +1,5 @@
 /* eslint-disable import/order */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { chartConfig } from '~/chartConfig';
 import PropTypes from 'prop-types';
 import loadable from '@loadable/component';
@@ -23,10 +23,10 @@ import {
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
 import { classnames } from '~/app/shared/coercedClassnames';
-import { isEmpty } from 'lodash';
+import { isNull } from 'lodash';
 
 const AsyncLayout = loadable((props) =>
-  import(`@/components/${props.name}/${props.name}`),
+  import(`@/components/${props?.name}/${props?.name}`),
 );
 
 const AsyncTinyChart = loadable(
@@ -93,7 +93,7 @@ class Dashboard extends Component {
       if (!Array.isArray(pseudoKeys)) throw new RangeError(pseudoKeys);
       pseudoKeys.forEach((key) => {
         const callback = this.props[key];
-        if (callback instanceof Function) callback(Period.RealTime);
+        if (callback instanceof Function) callback(Period.AllTime);
       });
     } catch (e) {
       console.error('[GraphQL]: Init Error');
@@ -103,9 +103,7 @@ class Dashboard extends Component {
   componentWillUnmount() {
     const { charts } = this.props;
     charts.valueSeq().forEach((item) => {
-      if (!isEmpty(item.get('EVENT_CHANNEL'))) {
-        item.get('EVENT_CHANNEL').close();
-      }
+      if (!isNull(item.get('EVENT_CHANNEL'))) item.get('EVENT_CHANNEL').close();
     });
   }
 
@@ -164,9 +162,14 @@ class Dashboard extends Component {
                     height={chartConfig.essentialHeight}
                     content={[
                       {
+                        type: 'Posts',
+                        data: posts,
+                        color: '#3f4af1',
+                      },
+                      {
                         type: 'Users',
                         data: users,
-                        color: '#602dd3',
+                        color: '#ef263d',
                       },
                     ]}
                   />

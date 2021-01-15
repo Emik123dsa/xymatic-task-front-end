@@ -8,7 +8,10 @@ import {
   loadChartUsers,
 } from './charts-entity.sagas';
 import { watchResize } from './resize.sagas';
-import { watchCurrentDateSchema } from './modal.sagas';
+import {
+  watchCurrentDateSchema,
+  watchCurrentModalClientSchema,
+} from './modal.sagas';
 import { watchCurrentUser, watchNewUser, watchUserAuth } from './user.sagas';
 import { watchErrors } from './error.sagas';
 
@@ -19,6 +22,7 @@ export function* rootSaga() {
      * Utils Principle
      */
     fork(watchResize),
+    fork(watchCurrentModalClientSchema),
     fork(watchCurrentDateSchema),
     /**
      *  Web Socket Fetchers for chart entity

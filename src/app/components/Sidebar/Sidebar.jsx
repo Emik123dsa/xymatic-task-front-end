@@ -1,10 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
-import schema from '@styles/main.scss';
+import { distinctUntilChanged, Subscription, tap } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent, ReplaySubject } from 'rxjs';
+import loadable from '@loadable/component';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
+import { classnames } from '~/app/shared/coercedClassnames';
+
+const SideBarModal = loadable((props) =>
+  import(`@/components/Auth/${props.name}/${props.name}`),
+);
 
 @Connect(
   (state) => ({
@@ -19,23 +26,39 @@ class Sidebar extends Component {
     features: PropTypes.object.isRequired,
   };
 
-  componentDidMount() {}
+  _actionSubject = new ReplaySubject(1);
+
+  _actionSubsciption = this._actionSubject
+    .asObservable()
+    .pipe(distinctUntilChanged());
+
+  componentDidMount() {
+    setTimeout(() => {
+      this._actionSubsciption.subscribe((item) => {
+        console.log(item);
+      });
+    }, 0);
+  }
+
+  componentWillUnmount() {
+    if (this._actionSubject) {
+      this._actionSubject.unsubscribe();
+      this._actionSubject = null;
+    }
+  }
 
   render() {
     const { actions, features } = this.props;
-
     const sideBarActions = actions.map((item) => (
       <li key={item.toString()}>
-        <button type="button">
+        <button onClick={() => this._actionSubject.next(item)} type="button">
           {item}
           <span className={_['sidebar_navbar-link-bg']}></span>
           <span
-            className={[
+            className={classnames(
               _[`sidebar_navbar-link_${item.toLowerCase()}`],
               _['sidebar_navbar-link'],
-            ]
-              .filter((e) => !!e)
-              .join(' ')}
+            )}
           ></span>
         </button>
       </li>
@@ -50,12 +73,10 @@ class Sidebar extends Component {
           {item}
           <span className={_['sidebar_navbar-link-bg']}></span>
           <span
-            className={[
+            className={classnames(
               _[`sidebar_navbar-link_${item.toLowerCase()}`],
               _['sidebar_navbar-link'],
-            ]
-              .filter((e) => !!e)
-              .join(' ')}
+            )}
           ></span>
         </NavLink>
       </li>

@@ -11,6 +11,11 @@ export const initialModalReducer = fromJS({
     [Period.Year],
     [Period.AllTime],
   ],
+  modalClientSchema: {
+    settingsModal: false,
+    logOutModal: false,
+    manualModal: false,
+  },
 });
 
 export const modalReducer = (state = initialModalReducer, action) => state;

@@ -2,11 +2,12 @@
  * Monitor.js
  */
 const chalk = require('chalk');
+
 const { green, cyan, underline } = chalk;
 
 const MONITOR_TITLE = 'Xymatic Task @ v0.0.1';
 
-const log = console.log;
+const { log } = console;
 
 /**
  * Environment variables for monitor
@@ -43,7 +44,7 @@ const monitorLineGather = ({
   let mrPX = '';
 
   const spaceSeparator = separator ? Object.keys(separator).length : 0;
-  const spaceSchema = schema ? schema : ' ';
+  const spaceSchema = schema || ' ';
   const spaceBar = isSpacebar ? MONITOR_DEFAULT_SPACEBAR : 0;
 
   for (
@@ -57,9 +58,7 @@ const monitorLineGather = ({
   return mrPX;
 };
 
-const monitorSpaceBuilder = () => {
-  return '   ';
-};
+const monitorSpaceBuilder = () => '   ';
 
 const monitorTopBuilder = () => {
   let mrPX = '';

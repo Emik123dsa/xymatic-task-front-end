@@ -5,7 +5,7 @@ import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { getRouterLocation } from '@/selectors';
-import { fromEvent, Subscription, iif, EMPTY, of } from 'rxjs';
+import { fromEvent, Subscription, iif, EMPTY, of, merge } from 'rxjs';
 import { switchMap, distinctUntilChanged, pluck } from 'rxjs/operators';
 import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
@@ -38,7 +38,10 @@ class Root extends Component {
   componentDidMount() {
     setTimeout(() => {
       this._windowResize.add(
-        fromEvent(window, 'resize')
+        merge(
+          fromEvent(window, 'resize'),
+          fromEvent(window, 'DOMContentLoaded'),
+        )
           .pipe(
             pluck('target'),
             switchMap(({ innerWidth }) =>

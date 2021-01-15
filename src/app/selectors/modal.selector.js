@@ -21,3 +21,7 @@ export class Period {
 export const getModalDateSchema = createSelector(getModal, (modal) =>
   modal.get('modalDateSchema'),
 );
+
+export const getModalClientSchema = createSelector(getModal, (modal) =>
+  modal.get('modalClientSchema'),
+);

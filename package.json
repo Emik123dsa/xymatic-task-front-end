@@ -8,6 +8,7 @@
     "clean": "rimraf ./build",
     "fix": "eslint --fix --config=./.eslintrc.json **/*/*.jsx",
     "dev": "yarn run clean && cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 webpack -w --config webpack.config.js",
+    "build": "yarn run clean && cross-env NODE_ENV=production NODE_HMR=false NODE_PORT=4200 webpack --config webpack.config.js",
     "hmr": "cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 NODE_HOST=127.0.0.1 node ./server.js"
   },
   "repository": {
@@ -134,9 +135,11 @@
     "react-apollo": "^3.1.5",
     "react-content-loader": "^5.1.4",
     "react-cookie": "^4.0.3",
+    "react-date-picker": "^8.0.5",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-hot-loader": "^4.13.0",
+    "react-modal": "^3.12.1",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-config": "^5.1.1",

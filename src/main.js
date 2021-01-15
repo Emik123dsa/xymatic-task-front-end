@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import React from 'react';
+import Modal from 'react-modal';
 import { render } from 'react-dom';
 import { AppContainer as HotContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
@@ -27,6 +28,8 @@ if (!process.env.NODE_SERVER) {
 }
 
 const ROOT = document.getElementById('root');
+
+Modal.setAppElement('#root');
 
 export const clientProvider = () => (
   <ApolloProvider client={client()}>

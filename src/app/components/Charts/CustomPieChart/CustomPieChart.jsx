@@ -13,8 +13,6 @@ import { toNumber } from 'lodash';
 import schema from '@styles/_schema.scss';
 import _ from './CustomPieChart.scss';
 
-const RADIAN = Math.PI / 180;
-
 const PAYLOAD = [
   { name: 'Group A', value: 400 },
   { name: 'Group B', value: 300 },

@@ -2,7 +2,6 @@ import JWTDecode, { InvalidTokenError } from 'jwt-decode';
 import Cookies from 'js-cookie';
 import { merge } from 'lodash';
 import moment from 'moment';
-import { Config } from '~/config';
 
 export const coercedToken = (headers = {}) => {
   let authorizationHeaders = {};
@@ -40,3 +39,11 @@ export const coercedToken = (headers = {}) => {
 };
 
 export const isTokenExists = () => !!Cookies.get('Bearer');
+/**
+ * Authenticate Web Socket
+ * connection via Connection Params instead of Headers
+ */
+export const coercedWSToken = () => {
+  const token = Cookies.get('Bearer') || null;
+  return isTokenExists() ? { Bearer: token } : null;
+};

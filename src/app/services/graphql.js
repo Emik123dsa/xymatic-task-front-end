@@ -27,7 +27,10 @@ export const callGraphQLApi = (
     merge({}, GRAPHQL_HEADERS, headers);
   }
 
+  const { signal } = new AbortController();
+
   const graphQLSResponse = fetch(graphQLUrl, {
+    signal,
     method: GRAPHQL_METHOD,
     headers,
     body: JSON.stringify(payload),
