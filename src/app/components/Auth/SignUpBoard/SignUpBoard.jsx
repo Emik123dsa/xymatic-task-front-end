@@ -12,7 +12,7 @@ import {
   iif,
 } from 'rxjs';
 import { connect as Connect } from 'react-redux';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import { distinctUntilChanged, mergeMap, pluck, tap } from 'rxjs/operators';
 import { setErrorMessage, resetErrorMessage, setLoadNewUser } from '@/actions';
 import schema from '@styles/main.scss';
@@ -141,12 +141,10 @@ class SignUpBoard extends Component {
     }
   }
 
-  get _activeInputClass() {
-    return function (payload) {
-      return coercedInput(payload)
-        ? schema['form-item_layout-active']
-        : schema['form-item_layout'];
-    };
+  _activeInputClass(payload) {
+    return coercedInput(payload)
+      ? schema['form-item_layout-active']
+      : schema['form-item_layout'];
   }
 
   render() {

@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import { createSelector } from 'reselect';
 
 export const getModal = (state) => state.get('modal');
@@ -16,6 +17,41 @@ export class Period {
   static Year = 'Year';
 
   static AllTime = 'All Time';
+
+  static Manual = 'Manual';
+}
+
+export class OverridedModal {
+  /**
+   * Modal factory
+   *
+   * @static
+   * @returns
+   * @memberof Modal
+   */
+  static MODAL_FACTORY() {
+    return {
+      clientSchema: null,
+    };
+  }
+
+  /**
+   * Modal style facade
+   *
+   * @readonly
+   * @memberof Modal
+   */
+  static get modalStyleFacade() {
+    return {
+      overlay: {
+        zIndex: '9999 !important',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+      },
+      content: {
+        borderRadius: '2rem',
+      },
+    };
+  }
 }
 
 export const getModalDateSchema = createSelector(getModal, (modal) =>

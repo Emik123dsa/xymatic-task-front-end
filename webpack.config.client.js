@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable indent */
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -9,6 +11,9 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const _HMRSchema = () => [
   'react-hot-loader',
@@ -27,6 +32,7 @@ const _compilerOptimization = () => ({
       },
     },
   },
+  minimizer: [new TerserPlugin()],
 });
 
 const _compilerHMREnabled = () => [
@@ -40,7 +46,7 @@ const _compilerBrowserModule = (isDev) => ({
     rules: [
       {
         test: /\.(js|jsx)$/i,
-        exclude: [/(node_modules|bower_components)/, /\.test.(js|jsx)$/i],
+        exclude: [/(node_modules|bower_components)/],
         use: [
           {
             loader: 'babel-loader',
@@ -57,6 +63,7 @@ const _compilerBrowserModule = (isDev) => ({
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        sideEffects: true,
       },
       {
         test: /\.(sa|sc)ss$/i,
@@ -104,22 +111,23 @@ const _compilerBrowserModule = (isDev) => ({
           },
         ],
         include: path.resolve(__dirname, 'src'),
+        sideEffects: true,
       },
       {
-        test: /\.(eot|svg|otf|ttf|woff|woff2|png)$/i,
-        use: 'base64-inline-loader',
+        test: /\.(png|img|svg|eot|svg|otf|ttf|woff|woff2)$/i,
+        use: { loader: 'file-loader' },
       },
       {
         test: /\.(mp4|webm|gif)$/i,
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 8192,
           },
         },
       },
       {
-        test: /\.(html|html)$/i,
+        test: /\.html$/i,
         use: 'html-loader',
       },
     ],
@@ -131,7 +139,7 @@ const _compilerBrowserOptions = (isDev) => ({
   entry: {
     main: [
       './src/main.js',
-      './src/polyfills.js',
+      // './src/polyfills.js',
       './src/assets/styles/main.scss',
     ].concat(isDev ? _HMRSchema() : []),
   },
@@ -141,8 +149,9 @@ const _compilerBrowserOptions = (isDev) => ({
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
   },
-  devtool: `${isDev ? 'eval' : 'inline'}-source-map`,
+  devtool: !isDev ? undefined : 'inline-source-map',
   target: 'web',
+
   performance: {
     hints: false,
   },
@@ -151,6 +160,9 @@ const _compilerBrowserOptions = (isDev) => ({
 
 const _compilerBrowserPlugins = (isDev) => ({
   plugins: [
+    // new LodashModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new MomentLocalesPlugin(),
     new MiniCssExtractPlugin({
       filename: '[contenthash].css',
     }),
@@ -161,12 +173,17 @@ const _compilerBrowserPlugins = (isDev) => ({
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/assets/img', to: 'img' },
-        { from: 'static/**', to: '.' },
+        { from: 'static/favicon.ico', to: 'public' },
+        { from: 'src/serviceWorker.js', to: '.' },
       ],
+    }),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.ProvidePlugin({
+      Promise: 'bluebird',
     }),
     new HtmlWebpackPlugin({
       template: 'static/index.html',
-      filename: 'index.html',
+      filename: 'public/index.html',
       inject: true,
     }),
     new CircularDependencyPlugin({
@@ -181,7 +198,15 @@ const _compilerBrowserPlugins = (isDev) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
     }),
-  ].concat(isDev ? _compilerHMREnabled() : [new TerserPlugin()]),
+  ].concat(
+    isDev
+      ? _compilerHMREnabled()
+      : [
+          new TerserPlugin(),
+          new webpack.optimize.ModuleConcatenationPlugin(),
+          new BundleAnalyzerPlugin(),
+        ],
+  ),
 });
 
 module.exports = {

@@ -8,22 +8,22 @@ import loadable from '@loadable/component';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
 import { classnames } from '~/app/shared/coercedClassnames';
-
-const SideBarModal = loadable((props) =>
-  import(`@/components/Auth/${props.name}/${props.name}`),
-);
+import { setModalCurrentClientSchema } from '~/app/actions';
 
 @Connect(
   (state) => ({
     actions: getSidebarActions(state),
     features: getSidebarFeatures(state),
   }),
-  null,
+  {
+    setModalCurrentClientSchema,
+  },
 )
 class Sidebar extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     features: PropTypes.object.isRequired,
+    setModalCurrentClientSchema: PropTypes.func.isRequired,
   };
 
   _actionSubject = new ReplaySubject(1);
@@ -34,9 +34,9 @@ class Sidebar extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this._actionSubsciption.subscribe((item) => {
-        console.log(item);
-      });
+      this._actionSubsciption.subscribe((item) =>
+        this.props.setModalCurrentClientSchema(item),
+      );
     }, 0);
   }
 

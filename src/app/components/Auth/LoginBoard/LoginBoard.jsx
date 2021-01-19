@@ -13,7 +13,7 @@ import {
 } from 'rxjs';
 import { connect as Connect } from 'react-redux';
 import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 import schema from '@styles/main.scss';
 import _ from './LoginBoard.scss';
 import { coercedInput } from '~/app/shared/coercedInput';
@@ -123,12 +123,10 @@ class LoginBoard extends Component {
     }
   }
 
-  get _activeInputClass() {
-    return function (payload) {
-      return coercedInput(payload)
-        ? schema['form-item_layout-active']
-        : schema['form-item_layout'];
-    };
+  _activeInputClass(payload) {
+    return coercedInput(payload)
+      ? schema['form-item_layout-active']
+      : schema['form-item_layout'];
   }
 
   render() {

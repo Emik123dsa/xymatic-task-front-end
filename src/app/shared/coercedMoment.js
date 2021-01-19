@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { isImmutable, List, Map } from 'immutable';
-import { isMap, merge } from 'lodash';
+import { isImmutable, List, Map, isMap } from 'immutable';
+import merge from 'lodash/merge';
 import moment from 'moment';
 import { isWSChart, Period } from '../selectors';
 /**

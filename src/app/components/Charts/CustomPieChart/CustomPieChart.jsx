@@ -9,7 +9,7 @@ import {
   Label,
   Text,
 } from 'recharts';
-import { toNumber } from 'lodash';
+import toNumber from 'lodash/toNumber';
 import schema from '@styles/_schema.scss';
 import _ from './CustomPieChart.scss';
 

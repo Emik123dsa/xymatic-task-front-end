@@ -4,16 +4,17 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const isHMR = process.env.NODE_HMR === 'true';
+const isDev = process.env.NODE_ENV === 'development';
 const PORT = process.env.NODE_PORT || 3000;
 const HOST = process.env.NODE_HOST || '0.0.0.0';
 
 const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
 const { monitor } = require('./monitor');
 const webpackConfig = require('./webpack.config')();
 
 const compiler = webpack(webpackConfig);
 
-const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
 function createWebpackDevMiddleware() {
@@ -27,10 +28,22 @@ function createWebpackDevMiddleware() {
   });
 }
 
+function handleMiddleware(app) {
+  app.get('*.js', (req, res, next) => {
+    req.url += '.gz';
+    res.set('Content-Encoding', 'gzip');
+    next();
+  });
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'build', 'public', 'index.html'));
+  });
+}
+
 function addWebpackHotMiddleWare(app, middleware) {
   app.use(webpackHotMiddleware(compiler));
 
-  const filename = path.join(compiler.outputPath, 'index.html');
+  const filename = path.join(compiler.outputPath, 'public', 'index.html');
 
   app.get('/serviceWorker.js', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'src', 'serviceWorker.js'));
@@ -55,11 +68,19 @@ function addMiddleware(app) {
 
 const app = express();
 
-app.use(webpackHotMiddleware(compiler));
+if (isDev) {
+  app.use(webpackHotMiddleware(compiler));
+  addMiddleware(app);
+} else {
+  app.use(express.static(path.resolve(__dirname, 'build')));
+  handleMiddleware(app);
+}
+
+app.use(express.static(path.resolve(__dirname, 'static')));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-addMiddleware(app);
 
 app.listen(PORT, HOST, () => {
   monitor(webpackConfig, HOST, PORT);

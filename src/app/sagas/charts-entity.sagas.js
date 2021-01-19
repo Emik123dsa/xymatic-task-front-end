@@ -13,7 +13,7 @@ import {
   delay,
 } from 'redux-saga/effects';
 import { eventChannel, END } from 'redux-saga';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {
   chartsPlaysEntity,
   chartsPostsEntity,

@@ -1,6 +1,6 @@
 import JWTDecode, { InvalidTokenError } from 'jwt-decode';
 import Cookies from 'js-cookie';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import moment from 'moment';
 
 export const coercedToken = (headers = {}) => {
