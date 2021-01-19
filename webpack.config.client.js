@@ -139,7 +139,7 @@ const _compilerBrowserOptions = (isDev) => ({
   entry: {
     main: [
       './src/main.js',
-      // './src/polyfills.js',
+      './src/polyfills.js',
       './src/assets/styles/main.scss',
     ].concat(isDev ? _HMRSchema() : []),
   },
