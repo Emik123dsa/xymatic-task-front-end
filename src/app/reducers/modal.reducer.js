@@ -19,10 +19,11 @@ export const initialModalReducer = fromJS({
 });
 
 export const modalReducer = (state = initialModalReducer, action) => {
-  if (action && action?.modalState && action?.modalCurrent) {
+  if (action && action?.modalCurrent) {
     return state.withMutations((schema) => {
       const prepareSchema = schema.getIn(['modalClientSchema']);
       const preparedSchemaKeys = prepareSchema.keySeq().toArray();
+
       preparedSchemaKeys.forEach((item) => {
         if (schema.getIn(['modalClientSchema', item])) {
           schema.setIn(['modalClientSchema', item], false);

@@ -22,7 +22,9 @@ export function* watchCurrentModalClientSchema() {
     const { modal } = yield take(actions.SET_MODAL_CURRENT_CLIENT_SCHEMA);
 
     const coercedModal = !modal.endsWith('Modal') ? `${modal}Modal` : modal;
+
     const modalState = yield select(getModalClientSchema);
+
     try {
       if (modalState && modalState.has(coercedModal)) {
         let currentModal = modalState.get(coercedModal);

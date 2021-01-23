@@ -7,16 +7,20 @@ import { CSSTransition } from 'react-transition-group';
 import _ from '@styles/main.scss';
 import { StyleSheet, style } from 'aphrodite';
 import { getModalClientSchema, OverridedModal } from '~/app/selectors';
+import { setModalCurrentClientSchema } from '../../../actions/modal.actions';
 
 @Connect(
   (state) => ({
     clientSchema: getModalClientSchema(state),
   }),
-  null,
+  {
+    setModalCurrentClientSchema,
+  },
 )
-export default class LogOutModal extends Component {
+export default class LogoutModal extends Component {
   static propTypes = {
     clientSchema: PropTypes.object,
+    setModalCurrentClientSchema: PropTypes.func.isRequired,
   };
 
   static defaultProps = OverridedModal.MODAL_FACTORY();
@@ -30,8 +34,8 @@ export default class LogOutModal extends Component {
   get _getLogOutModalState() {
     const { clientSchema } = this.props;
 
-    return clientSchema.has('logOutModal')
-      ? clientSchema.get('logOutModal')
+    return clientSchema.has('LogoutModal')
+      ? clientSchema.get('LogoutModal')
       : false;
   }
 
@@ -48,7 +52,7 @@ export default class LogOutModal extends Component {
             style={OverridedModal.modalStyleFacade}
             isOpen={this._getLogOutModalState}
             onRequestClose={($event) => {
-              console.log(123);
+              this.props.setModalCurrentClientSchema(LogoutModal.name);
             }}
           >
             <div> Hello from Schema</div>

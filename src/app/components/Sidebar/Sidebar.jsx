@@ -28,9 +28,7 @@ class Sidebar extends Component {
 
   _actionSubject = new ReplaySubject(1);
 
-  _actionSubsciption = this._actionSubject
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  _actionSubsciption = this._actionSubject.asObservable();
 
   componentDidMount() {
     setTimeout(() => {

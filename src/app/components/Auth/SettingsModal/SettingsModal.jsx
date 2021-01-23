@@ -6,17 +6,21 @@ import Modal from 'react-modal';
 import { CSSTransition } from 'react-transition-group';
 import _ from '@styles/main.scss';
 import { StyleSheet, style } from 'aphrodite';
+import { setModalCurrentClientSchema } from '@/actions/modal.actions';
 import { getModalClientSchema, OverridedModal } from '~/app/selectors';
 
 @Connect(
   (state) => ({
     clientSchema: getModalClientSchema(state),
   }),
-  null,
+  {
+    setModalCurrentClientSchema,
+  },
 )
-export default class LogOutModal extends Component {
+export default class SettingsModal extends Component {
   static propTypes = {
     clientSchema: PropTypes.object,
+    setModalCurrentClientSchema: PropTypes.func.isRequired,
   };
 
   static defaultProps = OverridedModal.MODAL_FACTORY();
@@ -26,36 +30,34 @@ export default class LogOutModal extends Component {
    * fetched via redux
    *
    * @readonly
-   * @memberof LogOutModal
+   * @memberof SettingsModal
    */
   get _getSettingsModalState() {
     const { clientSchema } = this.props;
 
-    return clientSchema.has('logOutModal')
-      ? clientSchema.get('logOutModal')
+    return clientSchema.has('SettingsModal')
+      ? clientSchema.get('SettingsModal')
       : false;
   }
 
   render() {
     return (
-      <Fragment>
-        <CSSTransition
-          in={this._getSettingsModalState}
-          timeout={300}
-          classNames="dropdown"
-          unmountOnExit
+      <CSSTransition
+        in={this._getSettingsModalState}
+        timeout={300}
+        classNames="dropdown"
+        unmountOnExit
+      >
+        <Modal
+          style={OverridedModal.modalStyleFacade}
+          isOpen={this._getSettingsModalState}
+          onRequestClose={() =>
+            this.props.setModalCurrentClientSchema(SettingsModal.name)
+          }
         >
-          <Modal
-            style={OverridedModal.modalStyleFacade}
-            isOpen={this._getSettingsModalState}
-            onRequestClose={() => {
-              console.log(123);
-            }}
-          >
-            <div> Hello from Schema</div>
-          </Modal>
-        </CSSTransition>
-      </Fragment>
+          <div> Hello from Schema</div>
+        </Modal>
+      </CSSTransition>
     );
   }
 }

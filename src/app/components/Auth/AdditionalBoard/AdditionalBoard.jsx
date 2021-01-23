@@ -11,7 +11,12 @@ const ADDITIONAL_BOARD_FACTORY = () => ({
     button: '',
   },
 });
-
+/**
+ *
+ *
+ * @class AdditionalBoard
+ * @extends {Component}
+ */
 class AdditionalBoard extends Component {
   static propTypes = {
     credentials: PropTypes.shape({

@@ -31,6 +31,7 @@ const _compilerOptimization = () => ({
         enforce: true,
       },
     },
+    chunks: 'all',
   },
   minimizer: [new TerserPlugin()],
 });
@@ -144,18 +145,17 @@ const _compilerBrowserOptions = (isDev) => ({
     ].concat(isDev ? _HMRSchema() : []),
   },
   output: {
-    filename: isDev ? '[fullhash].dev.js' : '[contenthash].js',
-    chunkFilename: '[id].[chunkhash].js',
+    filename: isDev ? '[chunkhash:8].dev.js' : '[contenthash].js',
+    chunkFilename: '[id].[chunkhash:8].js',
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
   },
-  devtool: !isDev ? undefined : 'inline-source-map',
+  devtool: !isDev ? undefined : 'eval-source-map',
   target: 'web',
-
   performance: {
     hints: false,
   },
-  optimization: !isDev ? _compilerOptimization() : {},
+  optimization: _compilerOptimization(),
 });
 
 const _compilerBrowserPlugins = (isDev) => ({

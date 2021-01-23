@@ -4,15 +4,12 @@ import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
 import { List, Map } from 'immutable';
 import { CSSTransition } from 'react-transition-group';
-import {
-  getChartCurrentDate,
-  getModalDateSchema,
-  Period,
-} from '~/app/selectors';
-import { ClickOutside } from '~/app/shared/ClickOutside/ClickOutside';
-import '@styles/animations.css';
+import { getChartCurrentDate, getModalDateSchema, Period } from '@/selectors';
+import { ClickOutside } from '@/shared/clickOutside/ClickOutside';
+import { setModalCurrentDateSchema } from '@/actions';
 import _ from './CustomAlterPeriodDate.scss';
-import { setModalCurrentDateSchema } from '~/app/actions';
+
+import '@styles/animations.css';
 
 const customAlertButtonRadius = [
   {
@@ -69,7 +66,7 @@ export class CustomAlterPeriodDate extends PureComponent {
       return e instanceof ReferenceError || e instanceof RangeError;
     }
 
-    return Map(currentDateSchema).getIn([types && types[0].toLowerCase()]);
+    return currentDateSchema.getIn([types && types[0].toLowerCase()]);
   }
 
   _setCurrentDateSchema({ currentSchema }) {

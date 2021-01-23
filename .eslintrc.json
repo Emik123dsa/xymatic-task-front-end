@@ -2,14 +2,16 @@
   "extends": [
     "airbnb-base",
     "plugin:jest/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier"
   ],
   "parserOptions": {
     "ecmaFeatures": {
       "legacyDecorators": true
     }
   },
-  "plugins": ["@babel", "jest", "react"],
+  "plugins": ["@babel", "jest", "react", "prettier"],
   "env": {
     "browser": true
   },
@@ -24,7 +26,8 @@
     "implicit-arrow-linebreak": 0,
     "import/prefer-default-export": 0,
     "function-paren-newline": 0,
-    "object-curly-newline": 0
+    "object-curly-newline": 0,
+    "prettier/prettier": 2
   },
   "parser": "@babel/eslint-parser",
   "settings": {
