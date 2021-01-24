@@ -4,6 +4,10 @@ export const isWSChart = (item) => item.toUpperCase() === 'REAL TIME';
 
 export const getChartsEntity = (state) => state.get('chartsEntity');
 
+export const getChartRowsAmount = createSelector(getChartsEntity, (chart) =>
+  chart.get('chartRowsAmount'),
+);
+
 export const getChartCurrentDate = createSelector(getChartsEntity, (chart) =>
   chart.map((item) => item.getIn(['CURRENT_DATE_SCHEMA', 0])),
 );

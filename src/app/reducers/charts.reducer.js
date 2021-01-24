@@ -15,6 +15,7 @@ export const initialChartsEntityReducer = fromJS({
   users: initialChartEntity,
   plays: initialChartEntity,
   posts: initialChartEntity,
+  chartRowsAmount: [],
 });
 
 export const chartsEntityReducer = (

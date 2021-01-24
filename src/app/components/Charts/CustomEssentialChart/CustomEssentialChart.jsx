@@ -188,7 +188,7 @@ export class CustomEssentialChart extends PureComponent {
                     <defs>{this._renderLinearGradient()}</defs>
                     <Tooltip
                       cursor={false}
-                      offset={-26}
+                      position="top"
                       content={
                         <CustomToolTip
                           fill={content.map((item) => item.color)}

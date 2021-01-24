@@ -84,3 +84,13 @@ export const fetchChartsPlayEntity = gql`
     }
   }
 `;
+
+export const fetchRowsCount = gql`
+  query {
+    countAllRows {
+      type
+      count
+      __typename
+    }
+  }
+`;

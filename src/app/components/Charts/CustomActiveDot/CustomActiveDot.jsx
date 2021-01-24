@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from './CustomActiveDot.scss';
 
-export const CustomActiveDot = ({ index, cx, cy, fill }) => {
+export const CustomActiveDot = ({ cx, cy, fill }) => {
   const x = Math.round(cx);
   const y = Math.round(cy);
 

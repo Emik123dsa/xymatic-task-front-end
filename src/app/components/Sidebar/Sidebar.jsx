@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { NavLink, Link } from 'react-router-dom';
 import { distinctUntilChanged, Subscription, tap } from 'rxjs/operators';
 import { BehaviorSubject, fromEvent, ReplaySubject } from 'rxjs';
+import { css } from 'aphrodite';
 import loadable from '@loadable/component';
+import { styles } from '@/shared/coercedStyles';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
 import { classnames } from '~/app/shared/coercedClassnames';
@@ -47,8 +49,15 @@ class Sidebar extends Component {
 
   render() {
     const { actions, features } = this.props;
-    const sideBarActions = actions.map((item) => (
-      <li key={item.toString()}>
+
+    const sideBarActions = actions.map((item, index) => (
+      <li
+        style={{
+          animationDelay: `${index * 0.075}s`,
+        }}
+        className={css(styles.slideInLeft)}
+        key={item.toString()}
+      >
         <button onClick={() => this._actionSubject.next(item)} type="button">
           {item}
           <span className={_['sidebar_navbar-link-bg']}></span>
@@ -62,8 +71,14 @@ class Sidebar extends Component {
       </li>
     ));
 
-    const sideBarFeatures = features.map((item) => (
-      <li key={item.toString()}>
+    const sideBarFeatures = features.map((item, index) => (
+      <li
+        style={{
+          animationDelay: `${index * 0.075}s`,
+        }}
+        className={css(styles.slideInLeft)}
+        key={item.toString()}
+      >
         <NavLink
           activeClassName={_['sidebar_navbar-active']}
           to={`/${item.toLowerCase()}`}
@@ -84,7 +99,13 @@ class Sidebar extends Component {
       <div className={_.sidebar}>
         <div className={_.sidebar_wrapper}>
           <div className={_['sidebar_wrapper-app']}>
-            <Link className={_['sidebar_wrapper-app-link']} to="/dashboard">
+            <Link
+              className={classnames(
+                css(styles.slideInLeft),
+                _['sidebar_wrapper-app-link'],
+              )}
+              to="/dashboard"
+            >
               <span className={_['sidebar_wrapper-app-logotype']}> </span>
               <h4>
                 Task&nbsp;

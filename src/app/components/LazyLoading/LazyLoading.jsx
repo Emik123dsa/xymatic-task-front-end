@@ -5,15 +5,15 @@ import { StyleSheet, css } from 'aphrodite';
 import _ from './LazyLoading.scss';
 
 const styles = StyleSheet.create({
-  fadeIn: {
+  slideInUp: {
     animationName: fadeIn,
-    animationDuration: '0.4s',
+    animationDuration: '1.6s',
   },
 });
 
 const LazyLoading = () => (
   <Fragment>
-    <div className={css(styles.fadeIn)}>
+    <div className={css(styles.slideInUp)}>
       <div className={_['lazy-loading']}>
         <div className={_['lazy-loading_container']}>
           <div className={_['lazy-loading_item']}>

@@ -50,9 +50,7 @@ export class CustomPieChart extends PureComponent {
           (item && typeof item.value === 'string'
             ? toNumber(item.value)
             : item.value) || 0;
-
         amount += acc;
-
         return acc;
       }, {});
     }
@@ -104,7 +102,6 @@ export class CustomPieChart extends PureComponent {
                         fill={colors[index % colors.length]}
                       />
                     ))}
-
                     <Label
                       className={_['custom-pie-chart-wrapper_label']}
                       offset={0}

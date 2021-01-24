@@ -29,6 +29,7 @@ import {
   closeChannel,
   LOAD_CHART_POSTS,
   LOAD_CHART_PLAYS,
+  LOAD_CHART_ROWS,
 } from '@/actions';
 
 import {
@@ -295,5 +296,12 @@ export function* loadChartPlays() {
         fetchChartsEntity: fetchChartsPlayEntity,
       });
     }
+  }
+}
+
+export function* loadChartRowsAmountEntity() {
+  while (true) {
+    const { rows } = yield take(LOAD_CHART_ROWS);
+    console.log(rows);
   }
 }

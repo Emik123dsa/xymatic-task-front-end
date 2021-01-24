@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline, no-shadow */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { List } from 'immutable';
+import { isImmutable, isMap, List } from 'immutable';
 import { connect as Connect } from 'react-redux';
 import {
   AreaChart,
@@ -13,11 +13,19 @@ import {
 import toNumber from 'lodash/toNumber';
 import schema from '@styles/_schema.scss';
 
-import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
-import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
-import { CustomAlterValue } from '../CustomAlterValue/CustomAlterValue';
-import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
+import { BehaviorSubject, of } from 'rxjs';
+import {
+  distinctUntilChanged,
+  scan,
+  takeWhile,
+  map,
+  pairwise,
+  switchMap,
+} from 'rxjs/operators';
 
+import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
+import { CustomToolTipTiny } from '../CustomToolTip/CustomToolTipTiny';
+import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
 import _ from './CustomTinyChart.scss';
 import { coercedMoment } from '~/app/shared/coercedMoment';
 import { getChartCurrentDate, Period } from '~/app/selectors';
@@ -41,7 +49,11 @@ export default class CustomTinyChart extends PureComponent {
     this._definePropertyDescription = this._definePropertyDescription.bind(
       this,
     );
+
+    this._emitOnTouched = this._emitOnTouched.bind(this);
+
     this.state = {
+      previousToolTipValue: 0,
       tinyList: null,
     };
   }
@@ -61,24 +73,49 @@ export default class CustomTinyChart extends PureComponent {
     return `color${type.charAt(0).toUpperCase()}${type.slice(1)}`;
   }
 
+  _customToolTipValueSubject = new BehaviorSubject(0);
+
+  _customToolTip = this._customToolTipValueSubject.asObservable().pipe(
+    distinctUntilChanged(),
+    pairwise(),
+    switchMap(([oldValue, newValue]) => of(oldValue)),
+    takeWhile(() => !this._customToolTipValueSubject.closed),
+  );
+
+  _emitOnTouched($payload) {
+    this._customToolTipValueSubject.next($payload && $payload[0]);
+  }
+
   get _isWSEnabled() {
     const { type, currentDates } = this.props;
     if (!currentDates.has(type.toLowerCase())) return false;
-
     const currentDate = currentDates.get(type.toLowerCase());
-
-    console.log(currentDate);
-
     return null;
+  }
+
+  componentDidMount() {
+    this._customToolTip.subscribe(($event) => {
+      this.setState((prevState) => ({
+        previousToolTipValue: $event,
+      }));
+    });
+  }
+
+  componentWillUnmount() {
+    if (this._customToolTipValueSubject) {
+      this._customToolTipValueSubject.unsubscribe();
+      this._customToolTipValueSubject = null;
+    }
   }
 
   static getDerivedStateFromProps(prevProps, prevState) {
     const { data, currentDates, type } = prevProps;
+
     return {
       tinyList: List(data)
         .toArray()
-        .map(({ delta, timestamp }) => ({
-          delta,
+        .map((data) => ({
+          delta: data.has('delta') ? data.getIn(['delta']) : null,
           timestamp: coercedMoment(
             currentDates.has(type.toLowerCase())
               ? currentDates.get(type.toLowerCase())
@@ -90,7 +127,7 @@ export default class CustomTinyChart extends PureComponent {
 
   render() {
     const { color, data } = this.props;
-    const { tinyList } = this.state;
+    const { tinyList, previousToolTipValue } = this.state;
 
     if (!tinyList.length) {
       return <SkeletonLoading height={chartConfig.tinyHeight} />;
@@ -109,7 +146,7 @@ export default class CustomTinyChart extends PureComponent {
                 <AreaChart
                   cursor="pointer"
                   data={tinyList}
-                  margin={{ top: 25, right: 25, left: 45, bottom: 0 }}
+                  margin={{ top: 45, right: 25, left: 45, bottom: 0 }}
                 >
                   <defs>
                     <linearGradient
@@ -134,16 +171,25 @@ export default class CustomTinyChart extends PureComponent {
                     <rect x="0" y="0" width="100%" height="100%" />
                   </svg>
 
-                  <Legend
+                  {/* <Legend
                     verticalAlign="top"
                     align="right"
                     height="3rem"
                     content={<CustomAlterValue schema={List(data)} />}
-                  />
+                  /> */}
 
                   <Tooltip
+                    position={{
+                      x: 45,
+                      y: 0,
+                    }}
                     cursor={false}
-                    content={<CustomToolTip fill={color} />}
+                    content={
+                      <CustomToolTipTiny
+                        prevValue={previousToolTipValue}
+                        emitOnTouched={this._emitOnTouched}
+                      />
+                    }
                   />
 
                   <Area

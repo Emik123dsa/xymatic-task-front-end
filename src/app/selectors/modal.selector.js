@@ -44,10 +44,11 @@ export class OverridedModal {
   static get modalStyleFacade() {
     return {
       overlay: {
-        zIndex: '9999 !important',
+        zIndex: '2 !important',
         backgroundColor: 'rgba(0,0,0,0.5)',
       },
       content: {
+        zIndex: '2 !important',
         borderRadius: '2rem',
       },
     };

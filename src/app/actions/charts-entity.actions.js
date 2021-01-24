@@ -12,6 +12,8 @@ const chartPlaysEntitySchema = createRequestSchema('CHART_PLAYS');
 const chartPostsEntitySchema = createRequestSchema('CHART_POSTS');
 const chartUsersEntitySchema = createRequestSchema('CHART_USERS');
 
+const chartRowsAmountSchema = createRequestSchema('ROWS_AMOUNT');
+
 export const USERS = 'USERS';
 export const PLAYS = 'PLAYS';
 export const IMPRESSIONS = 'IMPRESSIONS';
@@ -21,6 +23,8 @@ export const LOAD_CHART_IMPRESSIONS = 'LOAD_CHART_IMPRESSIONS';
 export const LOAD_CHART_POSTS = 'LOAD_CHART_POSTS';
 export const LOAD_CHART_PLAYS = 'LOAD_CHART_PLAYS';
 export const LOAD_CHART_USERS = 'LOAD_CHART_USERS';
+
+export const LOAD_CHART_ROWS = 'LOAD_CHART_ROWS';
 
 export const LOAD_CHANNEL = 'LOAD_CHANNEL';
 export const CLOSE_CHANNEL = 'CLOSE_CHANNEL';
@@ -74,6 +78,18 @@ export const chartsUsersEntity = {
   clean: (clean) => action(chartUsersEntitySchema[CLEAN], { clean }),
 };
 
+export const chartRowsAmountEntity = {
+  request: (payload) => action(chartRowsAmountSchema[REQUEST], { payload }),
+  success: (payload, rows) => {
+    action(chartRowsAmountSchema[SUCCESS], { payload, rows });
+  },
+  failure: (payload, error) =>
+    action(chartRowsAmountSchema[FAILURE], {
+      payload,
+      error,
+    }),
+};
+
 /**
  * We also demand to unsubscribe
  * from eventChannel, which were created by
@@ -108,3 +124,6 @@ export const loadChartsPostsEntity = (current) =>
     current,
     chart: POSTS.toLowerCase(),
   });
+
+export const loadChartRowsAmountEntity = (rows) =>
+  action(LOAD_CHART_ROWS, { rows });

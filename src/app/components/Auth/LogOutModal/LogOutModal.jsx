@@ -6,8 +6,8 @@ import Modal from 'react-modal';
 import { CSSTransition } from 'react-transition-group';
 import _ from '@styles/main.scss';
 import { StyleSheet, style } from 'aphrodite';
-import { getModalClientSchema, OverridedModal } from '~/app/selectors';
-import { setModalCurrentClientSchema } from '../../../actions/modal.actions';
+import { setModalCurrentClientSchema } from '@/actions/modal.actions';
+import { getModalClientSchema, OverridedModal } from '@/selectors';
 
 @Connect(
   (state) => ({

@@ -88,7 +88,10 @@ export class CustomAlterPeriodDate extends PureComponent {
       <div className={_['custom-alter-period-date_credentials']}>
         <aside className={_['custom-alter-period-date_credentials_wrapper']}>
           <nav className={_['custom-alter-period-date_credentials_navbar']}>
-            <ul className={_['custom-alter-period-date_credentials_list']}>
+            <ul
+              role="tablist"
+              className={_['custom-alter-period-date_credentials_list']}
+            >
               {List(this.props.dateSchema).map((item, index) => (
                 <li
                   onClick={() =>
@@ -96,9 +99,10 @@ export class CustomAlterPeriodDate extends PureComponent {
                       currentSchema: item.get(0),
                     })
                   }
+                  role="presentation"
                   key={index}
                 >
-                  <span>{item.get('0')}</span>
+                  <span role="tab">{item.get('0')}</span>
                 </li>
               ))}
             </ul>

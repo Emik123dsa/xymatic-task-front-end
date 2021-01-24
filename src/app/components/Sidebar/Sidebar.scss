@@ -68,7 +68,6 @@
   top: 0;
   height: calc(100vh - 10rem);
   padding-top: 5rem;
-  z-index: 2;
 
   &_wrapper {
     position: relative;
@@ -89,6 +88,7 @@
     &-app {
       margin-top: 2rem;
       text-align: center;
+      animation: fadeInOut 2.4s ease-in-out;
 
       &-link {
         width: inherit;
@@ -183,6 +183,7 @@
 
     &-list {
       &-features {
+        animation: fadeInOut 2.4s ease-in-out;
         position: relative;
         z-index: 999;
         letter-spacing: 0.4px;
@@ -214,6 +215,7 @@
       }
 
       &-actions {
+        animation: fadeInOut 2.4s ease-in-out;
         color: $dark;
         font-weight: 600;
 
@@ -242,6 +244,16 @@
         }
       }
     }
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 

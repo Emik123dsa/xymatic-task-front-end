@@ -1,11 +1,21 @@
 import { isImmutable } from 'immutable';
-import { fadeInDown, shake } from 'react-animations';
+import {
+  fadeInDown,
+  slideInLeft,
+  shake,
+  fadeIn,
+  slideOutRight,
+} from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
 
 export const styles = StyleSheet.create({
   fadeInDown: {
     animationName: fadeInDown,
-    animationDuration: '0.4s',
+    animationDuration: '1.6s',
+  },
+  slideInLeft: {
+    animationName: slideInLeft,
+    animationDuration: '1.6s',
   },
   shake: {
     animationName: shake,
