@@ -88,7 +88,7 @@
     &-app {
       margin-top: 2rem;
       text-align: center;
-      animation: fadeInOut 2.4s ease-in-out;
+      animation: fadeInOut 1.6s ease-in-out both;
 
       &-link {
         width: inherit;
@@ -183,7 +183,7 @@
 
     &-list {
       &-features {
-        animation: fadeInOut 2.4s ease-in-out;
+        animation: fadeInOut 1.6s ease-in-out both;
         position: relative;
         z-index: 999;
         letter-spacing: 0.4px;
@@ -215,7 +215,7 @@
       }
 
       &-actions {
-        animation: fadeInOut 2.4s ease-in-out;
+        animation: fadeInOut 1.6s ease-in-out both;
         color: $dark;
         font-weight: 600;
 

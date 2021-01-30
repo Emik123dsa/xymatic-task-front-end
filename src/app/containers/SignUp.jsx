@@ -10,7 +10,7 @@ import {
   getErrors,
   getRouterLocation,
   getUserAuthenticated,
-} from '../selectors';
+} from '@/selectors';
 import { resetErrorMessage } from '../actions';
 import { coercedStyles } from '../shared/coercedStyles';
 

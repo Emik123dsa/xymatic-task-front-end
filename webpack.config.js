@@ -8,7 +8,6 @@ const {
 } = require('./webpack.config.client');
 
 const isDev = process.env.NODE_ENV === 'development';
-const isHMR = process.env.NODE_HMR === 'true';
 
 /**
  * Custom aliases for webpack
@@ -19,11 +18,11 @@ const _compilerBrowserResolve = () => ({
   resolve: {
     alias: {
       '@': path.join(process.cwd(), './src/app'),
+      'react-dom': '@hot-loader/react-dom',
       '~': path.join(process.cwd(), './src'),
       '@styles': path.join(process.cwd(), './src/assets/styles'),
       '@img': path.join(process.cwd(), './src/assets/img'),
       xymatic: path.join(process.cwd(), 'src/app'),
-      'react-dom': '@hot-loader/react-dom',
     },
     modules: ['node_modules'],
     extensions: ['.js', '.jsx', '.react.js'],

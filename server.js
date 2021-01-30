@@ -29,12 +29,6 @@ function createWebpackDevMiddleware() {
 }
 
 function handleMiddleware(app) {
-  app.get('*.js', (req, res, next) => {
-    req.url += '.gz';
-    res.set('Content-Encoding', 'gzip');
-    next();
-  });
-
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'build', 'public', 'index.html'));
   });

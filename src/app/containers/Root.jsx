@@ -10,12 +10,14 @@ import { switchMap, distinctUntilChanged, pluck } from 'rxjs/operators';
 import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
 import Toastify from '@/components/Toastify/Toastify';
+import { hot } from 'react-hot-loader/root';
 
 const DEFAULT_MOBILE_WIDTH = 992;
 
 /**
  * Decorators instead of mapStateToProps | mapDispatchToProps
  */
+@hot
 @Connect(
   (state) => ({
     location: getRouterLocation(state),

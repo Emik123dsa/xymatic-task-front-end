@@ -1,25 +1,28 @@
 /* eslint-disable indent */
-import React from 'react';
+
+import React, { Fragment } from 'react';
 import Modal from 'react-modal';
+import { Router } from 'react-router';
 import { render } from 'react-dom';
+import { hot } from 'react-hot-loader/root';
 import { AppContainer as HotContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
-import { createBrowserHistory, createMemoryHistory } from 'history';
+import {
+  createBrowserHistory,
+  createMemoryHistory,
+  createHashHistory,
+} from 'history';
 import { ConnectedRouter } from 'connected-react-router/immutable';
 import { ReduxAsyncConnect } from 'redux-connect';
 import { dynamicRoutes } from '@/routes';
-import { configureStore } from '@/store';
+import { configureStore, history } from '@/store';
 import { rootSaga } from '@/sagas';
 import { ApolloProvider } from 'react-apollo';
 import { client } from './apolloConfig';
 
-const initialState = process.env.NODE_SERVER ? window.__INITIAL_STATE__ : {};
+const initialState = !process.env.NODE_SERVER ? window.__INITIAL_STATE__ : {};
 
-const history = process.env.NODE_SERVER
-  ? createMemoryHistory({ initialEntries: ['/'] })
-  : createBrowserHistory();
-
-const store = configureStore(initialState, history);
+const store = configureStore(initialState);
 
 store.runSaga(rootSaga);
 
@@ -31,24 +34,33 @@ const ROOT = document.getElementById('root');
 
 Modal.setAppElement('#root');
 
-export const clientProvider = () => (
-  <ApolloProvider client={client()}>
-    <Provider key="provider" store={store}>
-      <ConnectedRouter history={history}>
-        <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
-      </ConnectedRouter>
-    </Provider>
-  </ApolloProvider>
-);
-
-export const HotClientProvider = () => {
-  <HotContainer>{clientProvider()}</HotContainer>;
-};
-
-if (module.hot) {
-  module.hot.accept(clientProvider, () => {
-    render(clientProvider(), ROOT);
-  });
+@hot
+class Bootstrap extends React.Component {
+  render() {
+    return (
+      <Provider key="provider" store={store}>
+        <ApolloProvider client={client()}>
+          <ConnectedRouter history={history}>
+            <Fragment>
+              <ReduxAsyncConnect helpers={{}} routes={dynamicRoutes} />
+            </Fragment>
+          </ConnectedRouter>
+        </ApolloProvider>
+      </Provider>
+    );
+  }
 }
 
-render(clientProvider(), ROOT);
+export const clientRender = (Component) =>
+  render(
+    <HotContainer>
+      <Component />
+    </HotContainer>,
+    ROOT,
+  );
+
+clientRender(Bootstrap);
+
+if (module.hot) {
+  module.hot.accept();
+}

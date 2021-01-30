@@ -30,10 +30,12 @@ import {
   LOAD_CHART_POSTS,
   LOAD_CHART_PLAYS,
   LOAD_CHART_ROWS,
+  chartRowsAmountEntity,
 } from '@/actions';
 
 import {
   getChartImpression,
+  getChartRowsAmount,
   getChartsEntity,
   getChartUsers,
   getEventChannel,
@@ -45,11 +47,13 @@ import {
   fetchChartsPlayEntity,
   fetchChartsPostsEntity,
   fetchChartsUsersEntity,
+  fetchRowsCount,
   watchChartsImpressionsEntity,
   watchChartsPlaysEntity,
   watchChartsPostsEntity,
   watchChartsUsersEntity,
 } from '@/services';
+import { fetchEvent, handleEvent } from './fetch-entity.sagas';
 /**
  *  Event Channels
  *
@@ -91,15 +95,6 @@ export function* cancelEventChannelWithEntity(entity, currentEventChannel) {
   }
 }
 
-export function* handleEvent(entity, payload, schema) {
-  yield put(entity.request(payload));
-
-  if (schema?.data) {
-    yield put(entity.success(payload, schema?.data || {}));
-  } else {
-    yield put(entity.failure(payload, schema?.message || 'UNHANDLED ERROR'));
-  }
-}
 /**
  * Dispatchin channel to the Redux Store
  *
@@ -301,7 +296,13 @@ export function* loadChartPlays() {
 
 export function* loadChartRowsAmountEntity() {
   while (true) {
-    const { rows } = yield take(LOAD_CHART_ROWS);
-    console.log(rows);
+    const { exception } = yield take(LOAD_CHART_ROWS);
+    const chartsRows = yield select(getChartRowsAmount);
+    if (isEmpty(chartsRows.toArray())) {
+      yield spawn(fetchEvent, {
+        query: fetchRowsCount,
+        entity: chartRowsAmountEntity,
+      });
+    }
   }
 }

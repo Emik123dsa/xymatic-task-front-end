@@ -80,9 +80,8 @@ export const chartsUsersEntity = {
 
 export const chartRowsAmountEntity = {
   request: (payload) => action(chartRowsAmountSchema[REQUEST], { payload }),
-  success: (payload, rows) => {
-    action(chartRowsAmountSchema[SUCCESS], { payload, rows });
-  },
+  success: (payload, rows) =>
+    action(chartRowsAmountSchema[SUCCESS], { payload, rows }),
   failure: (payload, error) =>
     action(chartRowsAmountSchema[FAILURE], {
       payload,
@@ -125,5 +124,5 @@ export const loadChartsPostsEntity = (current) =>
     chart: POSTS.toLowerCase(),
   });
 
-export const loadChartRowsAmountEntity = (rows) =>
-  action(LOAD_CHART_ROWS, { rows });
+export const loadChartRowsAmountEntity = (exception) =>
+  action(LOAD_CHART_ROWS, { exception });

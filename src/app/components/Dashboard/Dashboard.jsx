@@ -8,6 +8,7 @@ import {
   getChartImpression,
   getChartPlays,
   getChartPosts,
+  getChartRowsAmount,
   getChartsEntity,
   getChartUsers,
   Period,
@@ -18,12 +19,14 @@ import {
   loadChartsPlaysEntity,
   loadChartsPostsEntity,
   loadChartsUsersEntity,
+  loadChartRowsAmountEntity,
 } from '@/actions';
 
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
 import { classnames } from '~/app/shared/coercedClassnames';
-import { isNull } from 'lodash';
+import isNil from 'lodash/isNil';
+import { hot } from 'react-hot-loader/root';
 
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props?.name}/${props?.name}`),
@@ -50,6 +53,7 @@ const AsyncPieChart = loadable(
   },
 );
 
+@hot
 @Connect(
   (state) => ({
     charts: getChartsEntity(state),
@@ -57,12 +61,14 @@ const AsyncPieChart = loadable(
     posts: getChartPosts(state),
     plays: getChartPlays(state),
     impressions: getChartImpression(state),
+    rows: getChartRowsAmount(state),
   }),
   {
     loadChartsUsersEntity,
     loadChartsPostsEntity,
     loadChartsPlaysEntity,
     loadChartsImpressionsEntity,
+    loadChartRowsAmountEntity,
   },
 )
 class Dashboard extends Component {
@@ -73,11 +79,14 @@ class Dashboard extends Component {
     posts: PropTypes.object,
     plays: PropTypes.object,
     impressions: PropTypes.object,
+    rows: PropTypes.object,
 
     loadChartsUsersEntity: PropTypes.func,
     loadChartsPostsEntity: PropTypes.func,
     loadChartsPlaysEntity: PropTypes.func,
     loadChartsImpressionsEntity: PropTypes.func,
+
+    loadChartRowsAmountEntity: PropTypes.func,
   };
 
   /**
@@ -93,6 +102,7 @@ class Dashboard extends Component {
       if (!Array.isArray(pseudoKeys)) throw new RangeError(pseudoKeys);
       pseudoKeys.forEach((key) => {
         const callback = this.props[key];
+
         if (callback instanceof Function) callback(Period.AllTime);
       });
     } catch (e) {
@@ -103,12 +113,14 @@ class Dashboard extends Component {
   componentWillUnmount() {
     const { charts } = this.props;
     charts.valueSeq().forEach((item) => {
-      if (!isNull(item.get('EVENT_CHANNEL'))) item.get('EVENT_CHANNEL').close();
+      if (!isNil(item.get('EVENT_CHANNEL'))) {
+        item.get('EVENT_CHANNEL').close();
+      }
     });
   }
 
   render() {
-    const { charts, users, impressions, posts, plays } = this.props;
+    const { charts, users, impressions, posts, plays, rows } = this.props;
 
     return (
       <section className={_['dashboard-section_charts']}>
@@ -118,6 +130,7 @@ class Dashboard extends Component {
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncLayout name="Header" />
+
               <div className={schema['row-b']}>
                 <div
                   style={{ height: '100px' }}
@@ -174,6 +187,7 @@ class Dashboard extends Component {
                     ]}
                   />
                 </div>
+
                 <div
                   style={{ height: '400px' }}
                   className={classnames(
@@ -182,7 +196,17 @@ class Dashboard extends Component {
                     schema['col-b-xs-12'],
                   )}
                 >
-                  <AsyncPieChart type="multiple" color={['#fff', 'black']} />
+                  <AsyncPieChart
+                    type="multiple"
+                    colors={[
+                      '#602dd3',
+                      '#3f4af1',
+                      '#ef263d',
+                      '#eee',
+                      '#f39c12',
+                    ]}
+                    data={rows}
+                  />
                 </div>
               </div>
               <div className={schema['row-b']}>

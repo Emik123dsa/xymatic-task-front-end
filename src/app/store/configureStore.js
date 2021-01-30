@@ -9,20 +9,20 @@ import { routerMiddleware } from 'connected-react-router/immutable';
 import sagaMonitor from '@redux-saga/simple-saga-monitor';
 import { createRootReducer } from '@/reducers/reducers';
 import { createLogger } from 'redux-logger';
+import { createBrowserHistory, createMemoryHistory } from 'history';
 
-export const configureStore = (initialState = {}, history) => {
+export const history = !process.env.NODE_SERVER
+  ? createBrowserHistory()
+  : createMemoryHistory({ initialEntries: ['/'] });
+
+export const configureStore = (initialState = {}) => {
   const sagaMiddleWare = createSagaMiddleware({ sagaMonitor });
 
-  const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare];
+  const middlewares = [thunk, routerMiddleware(history), sagaMiddleWare].concat(
+    process.env.NODE_ENV === 'development' ? [createLogger()] : [],
+  );
 
-  if (process.env.NODE_ENV !== 'production') {
-    // middlewares.push(createLogger());
-  }
-
-  const enhancers = [
-    applyMiddleware(...middlewares),
-    namedReducerEnhancer(createRootReducer(history)),
-  ];
+  const enhancers = [applyMiddleware(...middlewares)];
 
   const composeEnhancers =
     process.env.NODE_ENV !== 'production' &&
@@ -43,7 +43,8 @@ export const configureStore = (initialState = {}, history) => {
   store.injectedReducers = {};
 
   if (module.hot) {
-    module.hot.accept('../reducers', () => {
+    // eslint-disable-next-line global-require
+    module.hot.accept(require('../reducers/reducers'), () => {
       store.replaceReducer(createRootReducer(store.injectedReducers));
     });
   }

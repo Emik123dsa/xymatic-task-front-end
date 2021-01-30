@@ -3,6 +3,30 @@
     &-chart {
       height: inherit;
 
+      &_feature {
+        margin-bottom: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        font-family: $medium;
+
+        &-label {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.7rem;
+        }
+
+        &-input {
+          font-size: 0.7rem;
+        }
+
+        &-label span {
+          // opacity: 0;
+          padding-left: 0.7rem;
+        }
+      }
+
       &-wrapper {
         position: relative;
         display: block;

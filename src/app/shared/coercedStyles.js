@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   },
   slideInLeft: {
     animationName: slideInLeft,
+    animationDirection: 'alternate',
     animationDuration: '1.6s',
   },
   shake: {

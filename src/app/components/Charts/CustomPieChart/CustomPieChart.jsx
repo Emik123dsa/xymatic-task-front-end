@@ -8,54 +8,58 @@ import {
   ResponsiveContainer,
   Label,
   Text,
+  LabelList,
 } from 'recharts';
+import { BarChart } from '@/components/Icons/BarChart';
 import toNumber from 'lodash/toNumber';
 import schema from '@styles/_schema.scss';
+import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
+import { coercedThousandNumbers } from '@/shared/coercedNumber';
+import { css } from 'aphrodite';
 import _ from './CustomPieChart.scss';
-
-const PAYLOAD = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group C', value: 200 },
-];
-
-const COLORS = ['#602dd3', '#3f4af1', '#ef263d', '#eee'];
+import { chartConfig } from '~/chartConfig';
+import { styles } from '~/app/shared/coercedStyles';
+import { classnames } from '~/app/shared/coercedClassnames';
 
 const CUSTOM_PIE_CHART_FACTORY = () => ({
-  colors: COLORS,
-  type: 'uv',
+  colors: [],
   height: 200,
-  data: PAYLOAD,
+  data: [],
+  exception: ['triggers', 'roles'],
 });
 
 export class CustomPieChart extends PureComponent {
   static propTypes = {
     colors: PropTypes.array,
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    data: PropTypes.array,
+    data: PropTypes.object,
     title: PropTypes.string,
+    exception: PropTypes.array,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: null,
+    };
+  }
 
   static defaultProps = CUSTOM_PIE_CHART_FACTORY();
 
   get _totalInitilValues() {
-    const { data } = this.props;
+    const { data } = this.state;
 
-    let amount = 0;
+    let _amount = 0;
 
     if (Array.isArray(data) && data.length > 0) {
-      data.reduce((acc, item) => {
-        acc =
-          (item && typeof item.value === 'string'
-            ? toNumber(item.value)
-            : item.value) || 0;
-        amount += acc;
+      _amount = data.reduce((acc, { count }) => {
+        acc += typeof value === 'string' ? toNumber(count) : count;
         return acc;
-      }, {});
+      }, 0);
     }
 
-    return amount >= 1000 ? `${(amount / 1000).toFixed(2)}k` : amount;
+    return _amount;
   }
 
   get _heightPieChart() {
@@ -64,8 +68,40 @@ export class CustomPieChart extends PureComponent {
       : this.props.height;
   }
 
+  static getDerivedStateFromProps(prevProps, prevState) {
+    return {
+      data: prevProps.data
+        ?.valueSeq()
+        .toArray()
+        .map((data, index) => ({
+          color: (prevProps.colors && prevProps.colors[index]) || '#fff',
+          type: data.has('type') ? data.get('type') : null,
+          count: data.has('count') ? data.get('count') : null,
+        }))
+        .filter(
+          ({ type }) => !prevProps.exception?.some((exc) => type.endsWith(exc)),
+        ),
+    };
+  }
+
+  _formatTypeString($payload) {
+    const prefixType = /^xt_(\w*)/gi;
+    const formatType = $payload && $payload.replace(prefixType, '$1');
+
+    return prefixType.test($payload)
+      ? `${formatType?.charAt(0).toUpperCase()}${formatType?.slice(1)}`
+      : null;
+  }
+
   render() {
-    const { colors, data } = this.props;
+    const { data } = this.state;
+
+    console.log(data);
+
+    if (!data.length) {
+      return <SkeletonLoading height={chartConfig.essentialHeight} />;
+    }
+
     return (
       <div className={_['custom-pie-chart']}>
         <div className={_['custom-pie-chart-wrapper']}>
@@ -89,29 +125,61 @@ export class CustomPieChart extends PureComponent {
                     data={data}
                     startAngle={0}
                     cornerRadius={12}
-                    innerRadius={45}
+                    innerRadius={50}
                     outerRadius={60}
                     fill="#000"
                     paddingAngle={-12}
-                    dataKey="value"
+                    dataKey="count"
                     isAnimationActive={true}
                   >
-                    {data.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colors[index % colors.length]}
-                      />
+                    {data.map(({ color }, index) => (
+                      <Cell key={`cell-${index}`} fill={color} />
                     ))}
                     <Label
                       className={_['custom-pie-chart-wrapper_label']}
                       offset={0}
                       position="center"
                     >
-                      {this._totalInitilValues}
+                      {coercedThousandNumbers(this._totalInitilValues)}
                     </Label>
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
+            </div>
+            <div className={schema.row}>
+              <div className={schema['col-b-12']}>
+                <nav className={_['custom-pie-chart_features']}>
+                  <ul role="tablist">
+                    {data.map(({ count, type, color }, index) => (
+                      <li
+                        className={classnames(
+                          css(styles.slideInLeft),
+                          'appear',
+                          _['custom-pie-chart_feature'],
+                        )}
+                        style={{ animationDelay: `${index * 0.075}s` }}
+                        key={`${type}-${index}`}
+                        role="presentation"
+                      >
+                        <span
+                          className={_['custom-pie-chart_feature-label']}
+                          role="tab"
+                        >
+                          <BarChart color={color} />
+                          <span> {this._formatTypeString(type)} </span>
+                        </span>
+                        <span className={_['custom-pie-chart_feature-input']}>
+                          {`${
+                            Math.abs(count / this._totalInitilValues).toFixed(
+                              2,
+                            ) * 100
+                          }%`}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,18 @@
 @import '../../../node_modules/animate.css/animate.min.css';
 
+.appear {
+  animation: appear 1.6s ease-in-out both;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 .dropdown-enter {
   opacity: 0;
 }

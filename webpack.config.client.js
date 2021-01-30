@@ -9,14 +9,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin');
+const WebpackBar = require('webpackbar');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const _HMRSchema = () => [
-  'react-hot-loader',
   'react-hot-loader/patch',
   'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 ];
@@ -33,13 +32,12 @@ const _compilerOptimization = () => ({
     },
     chunks: 'all',
   },
-  minimizer: [new TerserPlugin()],
 });
 
 const _compilerHMREnabled = () => [
-  new CleanWebpackPlugin(),
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.HotModuleReplacementPlugin(),
+  new CleanWebpackPlugin(),
 ];
 
 const _compilerBrowserModule = (isDev) => ({
@@ -47,7 +45,7 @@ const _compilerBrowserModule = (isDev) => ({
     rules: [
       {
         test: /\.(js|jsx)$/i,
-        exclude: [/(node_modules|bower_components)/],
+        exclude: /node_modules/,
         use: [
           {
             loader: 'babel-loader',
@@ -137,13 +135,15 @@ const _compilerBrowserModule = (isDev) => ({
 
 const _compilerBrowserOptions = (isDev) => ({
   mode: isDev ? 'development' : 'production',
-  entry: {
-    main: [
+  entry: []
+    .concat(isDev ? _HMRSchema() : [])
+    .concat([
+      'babel-polyfill',
       './src/main.js',
       './src/polyfills.js',
       './src/assets/styles/main.scss',
-    ].concat(isDev ? _HMRSchema() : []),
-  },
+    ]),
+
   output: {
     filename: isDev ? '[chunkhash:8].dev.js' : '[contenthash].js',
     chunkFilename: '[id].[chunkhash:8].js',
@@ -164,12 +164,12 @@ const _compilerBrowserPlugins = (isDev) => ({
     new webpack.NoEmitOnErrorsPlugin(),
     new MomentLocalesPlugin(),
     new MiniCssExtractPlugin({
-      filename: '[contenthash].css',
+      filename: '[chunkhash:8].css',
     }),
-    new ProgressBarWebpackPlugin(),
-    new StylelintPlugin({
-      configFile: path.join(process.cwd(), '.stylelintrc.json'),
-    }),
+    new WebpackBar(),
+    // new StylelintPlugin({
+    //   // configFile: path.join(process.cwd(), '.stylelintrc.json'),
+    // }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/assets/img', to: 'img' },
@@ -178,9 +178,6 @@ const _compilerBrowserPlugins = (isDev) => ({
       ],
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.ProvidePlugin({
-      Promise: 'bluebird',
-    }),
     new HtmlWebpackPlugin({
       template: 'static/index.html',
       filename: 'public/index.html',

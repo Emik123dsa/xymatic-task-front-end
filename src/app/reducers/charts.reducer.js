@@ -22,6 +22,15 @@ export const chartsEntityReducer = (
   state = initialChartsEntityReducer,
   action,
 ) => {
+  if (action && action?.rows) {
+    return state.withMutations((schema) =>
+      schema.setIn(
+        ['chartRowsAmount'],
+        fromJS(action?.rows?.countAllRows || {}),
+      ),
+    );
+  }
+
   if (action && action?.current) {
     return state.setIn(
       [action.chart, 'CURRENT_DATE_SCHEMA'],

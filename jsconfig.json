@@ -8,7 +8,8 @@
       "~/*": ["./src/*"],
       "@/*": ["./src/app/*"],
       "@styles/*": ["./src/assets/styles/*"],
-      "@img/*": ["./src/assets/img/*"]
+      "@img/*": ["./src/assets/img/*"],
+      "react-dom": ["@hot-loader/react-dom"]
     }
   },
   "include": ["src/**/*"],

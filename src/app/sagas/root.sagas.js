@@ -1,10 +1,11 @@
 /* eslint-disable object-curly-newline */
-import { all, fork, getContext, setContext } from 'redux-saga/effects';
+import { all, fork, setContext } from 'redux-saga/effects';
 import { client } from '~/apolloConfig';
 import {
   loadChartImpressions,
   loadChartPlays,
   loadChartPosts,
+  loadChartRowsAmountEntity,
   loadChartUsers,
 } from './charts-entity.sagas';
 import { watchResize } from './resize.sagas';
@@ -31,6 +32,11 @@ export function* rootSaga() {
     fork(loadChartPosts),
     fork(loadChartImpressions),
     fork(loadChartPlays),
+
+    /**
+     *  Rows Table Enumeration Principle
+     */
+    fork(loadChartRowsAmountEntity),
     /**
      *  User Authentication Principle
      */

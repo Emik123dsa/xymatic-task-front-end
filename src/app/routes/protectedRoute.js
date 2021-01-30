@@ -12,6 +12,7 @@ import {
 } from '@/selectors';
 import { setLoadCurrentUser } from '@/actions';
 import { isTokenExists } from '@/shared/coercedToken';
+import { hot } from 'react-hot-loader/root';
 import { Config } from '~/config';
 
 const AsyncContainer = loadable(
@@ -21,6 +22,7 @@ const AsyncContainer = loadable(
   },
 );
 
+@hot
 @withRouter
 @Connect(
   (state) => ({
