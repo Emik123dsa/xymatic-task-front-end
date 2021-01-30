@@ -31,6 +31,7 @@ import {
   LOAD_CHART_PLAYS,
   LOAD_CHART_ROWS,
   chartRowsAmountEntity,
+  RESET_CHARTS_ENTITIES,
 } from '@/actions';
 
 import {
@@ -291,6 +292,12 @@ export function* loadChartPlays() {
         fetchChartsEntity: fetchChartsPlayEntity,
       });
     }
+  }
+}
+
+export function* resetChartsEntities() {
+  while (true) {
+    yield take(RESET_CHARTS_ENTITIES);
   }
 }
 

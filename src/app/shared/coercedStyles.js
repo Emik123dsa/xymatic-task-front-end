@@ -4,7 +4,7 @@ import {
   slideInLeft,
   shake,
   fadeIn,
-  slideOutRight,
+  slideInRight,
 } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
 
@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
   },
   slideInLeft: {
     animationName: slideInLeft,
+    animationDirection: 'alternate',
+    animationDuration: '1.6s',
+  },
+  slideInRight: {
+    animationName: slideInRight,
     animationDirection: 'alternate',
     animationDuration: '1.6s',
   },

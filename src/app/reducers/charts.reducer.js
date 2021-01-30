@@ -1,6 +1,7 @@
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { getState } from 'redux-named-reducers';
 import { Period } from '@/selectors';
+import { isNil } from 'lodash';
 import { chartConfig } from '~/chartConfig';
 import { resizeReducer } from './resize.reducer';
 
@@ -36,6 +37,27 @@ export const chartsEntityReducer = (
       [action.chart, 'CURRENT_DATE_SCHEMA'],
       fromJS([action?.current]),
     );
+  }
+
+  if (action && action?.mode) {
+    return state.withMutations((schema) => {
+      const schemaEntites = schema.keySeq().toArray();
+      schemaEntites.forEach((item) => {
+        if (Map.isMap(schema.get(item))) {
+          if (action?.mode.startsWith('ALL')) {
+            if (!isNil(state.getIn([item, 'EVENT_CHANNEL']))) {
+              state.getIn([item, 'EVENT_CHANNEL'])?.close();
+            }
+            return schema
+              .setIn([item, 'CURRENT_DATE_SCHEMA'], fromJS([Period.AllTime]))
+              .setIn([item, 'data'], fromJS([]))
+              .setIn([item, 'EVENT_CHANNEL'], fromJS(null));
+          }
+          return schema;
+        }
+        return schema;
+      });
+    });
   }
 
   if (action && action?.clean) {

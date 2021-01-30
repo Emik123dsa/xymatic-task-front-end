@@ -1,7 +1,14 @@
 import { fromJS } from 'immutable';
 
 export const initialSidebarReducer = fromJS({
-  sidebarFeatures: ['Dashboard', 'Orders', 'Tracking', 'Revenue', 'Analytics'],
+  sidebarFeatures: [
+    'Dashboard',
+    'Impressions',
+    'Plays',
+    'Posts',
+    'Users',
+    'Analytics',
+  ],
   sidebarActions: ['Settings', 'Logout'],
 });
 

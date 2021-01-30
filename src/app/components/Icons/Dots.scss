@@ -1,0 +1,50 @@
+.dots {
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    .dots-wrapper {
+      transition: 0.1s ease-in-out;
+      background: $light;
+
+      &::before,
+      &::after {
+        transition: 0.1s ease-in-out;
+        background: $light !important;
+      }
+    }
+  }
+
+  &-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    transition: 0.1s ease-in-out;
+    transform: translate(-50%, -50);
+    border-radius: 50%;
+    background: $dark;
+
+    &::before {
+      left: 8px;
+    }
+
+    &::after {
+      right: 8px;
+    }
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: $dark;
+    }
+  }
+}

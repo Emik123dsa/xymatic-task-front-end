@@ -4,54 +4,8 @@
   .sidebar {
     &_navbar {
       &-link {
-        &_dashboard {
-          transition: 0.25s ease all;
-          background: url('@img/dashboard-active.svg') no-repeat center center;
-        }
-
-        &_orders {
-          transition: 0.25s ease all;
-          background: url('@img/orders-active.svg') no-repeat center center;
-        }
-
-        &_tracking {
-          transition: 0.25s ease all;
-          background: url('@img/tracking-active.svg') no-repeat center center;
-        }
-
-        &_revenue {
-          transition: 0.25s ease all;
-          background: url('@img/revenue-active.svg') no-repeat center center;
-        }
-
-        &_analytics {
-          transition: 0.25s ease all;
-          background: url('@img/analytics-active.svg') no-repeat center center;
-        }
-
-        &-bg {
-          width: 100%;
-          opacity: 1;
-          border-radius: 16px;
-        }
-      }
-    }
-  }
-}
-
-@mixin sidebar-active-actions-links {
-  .sidebar {
-    &_navbar {
-      &-link {
-        &_settings {
-          transition: 0.25s ease all;
-          background: url('@img/settings-active.svg') no-repeat center center;
-        }
-
-        &_logout {
-          transition: 0.25s ease all;
-          background: url('@img/logout-active.svg') no-repeat center center;
-        }
+        filter: brightness(0) invert(1);
+        transition: 0.25s ease all;
 
         &-bg {
           width: 100%;
@@ -144,16 +98,20 @@
         background: url('@img/dashboard.svg') no-repeat center center;
       }
 
-      &_orders {
-        background: url('@img/orders.svg') no-repeat center center;
+      &_impressions {
+        background: url('@img/heart.svg') no-repeat center center;
       }
 
-      &_tracking {
-        background: url('@img/tracking.svg') no-repeat center center;
+      &_plays {
+        background: url('@img/play.svg') no-repeat center center;
       }
 
-      &_revenue {
-        background: url('@img/revenue.svg') no-repeat center center;
+      &_posts {
+        background: url('@img/mailbox.svg') no-repeat center center;
+      }
+
+      &_users {
+        background: url('@img/user.svg') no-repeat center center;
       }
 
       &_analytics {
@@ -239,7 +197,7 @@
             transition: 0.25s ease all;
             color: $light !important;
 
-            @include sidebar-active-actions-links;
+            @include sidebar-active-hover-links;
           }
         }
       }

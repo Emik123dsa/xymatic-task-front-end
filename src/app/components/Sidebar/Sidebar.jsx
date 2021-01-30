@@ -7,11 +7,13 @@ import { BehaviorSubject, fromEvent, ReplaySubject } from 'rxjs';
 import { css } from 'aphrodite';
 import loadable from '@loadable/component';
 import { styles } from '@/shared/coercedStyles';
+import { hot } from 'react-hot-loader/root';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
 import { classnames } from '~/app/shared/coercedClassnames';
 import { setModalCurrentClientSchema } from '~/app/actions';
 
+@hot
 @Connect(
   (state) => ({
     actions: getSidebarActions(state),

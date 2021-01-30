@@ -55,8 +55,8 @@
       box-shadow: 0 0 0.2rem $btn-purple;
 
       .btn-icon-user {
+        filter: brightness(0) invert(1);
         transition: 0.25s ease-in-out all;
-        background: url('@img/user-active.svg') no-repeat center center;
       }
     }
   }

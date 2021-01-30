@@ -23,6 +23,7 @@ import {
   switchMap,
 } from 'rxjs/operators';
 
+import { css } from 'aphrodite';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTipTiny } from '../CustomToolTip/CustomToolTipTiny';
 import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
@@ -30,6 +31,8 @@ import _ from './CustomTinyChart.scss';
 import { coercedMoment } from '~/app/shared/coercedMoment';
 import { getChartCurrentDate, Period } from '~/app/selectors';
 import { chartConfig } from '~/chartConfig';
+import { classnames } from '~/app/shared/coercedClassnames';
+import { styles } from '~/app/shared/coercedStyles';
 
 const CUSTOM_TINY_CHART_FACTORY = () => ({
   color: '#fff',
@@ -64,6 +67,7 @@ export default class CustomTinyChart extends PureComponent {
     type: PropTypes.string,
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     currentDates: PropTypes.object,
+    direction: PropTypes.string,
   };
 
   static defaultProps = CUSTOM_TINY_CHART_FACTORY();
@@ -84,6 +88,17 @@ export default class CustomTinyChart extends PureComponent {
 
   _emitOnTouched($payload) {
     this._customToolTipValueSubject.next($payload && $payload[0]);
+  }
+
+  get _animateWrapperDirection() {
+    const { direction } = this.props;
+    return classnames(
+      _['custom-tiny-chart-wrapper'],
+      'appear',
+      css(
+        direction.startsWith('left') ? styles.slideInLeft : styles.slideInRight,
+      ),
+    );
   }
 
   get _isWSEnabled() {
@@ -135,7 +150,7 @@ export default class CustomTinyChart extends PureComponent {
 
     return (
       <div className={_['custom-tiny-chart']}>
-        <div className={_['custom-tiny-chart-wrapper']}>
+        <div className={this._animateWrapperDirection}>
           <div className={schema.row}>
             <div className={schema['col-12']}>
               <ResponsiveContainer
@@ -170,14 +185,6 @@ export default class CustomTinyChart extends PureComponent {
                   >
                     <rect x="0" y="0" width="100%" height="100%" />
                   </svg>
-
-                  {/* <Legend
-                    verticalAlign="top"
-                    align="right"
-                    height="3rem"
-                    content={<CustomAlterValue schema={List(data)} />}
-                  /> */}
-
                   <Tooltip
                     position={{
                       x: 45,

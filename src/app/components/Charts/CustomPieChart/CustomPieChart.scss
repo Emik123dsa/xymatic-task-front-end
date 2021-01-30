@@ -3,6 +3,11 @@
     &-chart {
       height: inherit;
 
+      &_title {
+        font-family: $medium;
+        font-size: 14px;
+      }
+
       &_feature {
         margin-bottom: 0.85rem;
         display: flex;

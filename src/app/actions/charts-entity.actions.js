@@ -29,6 +29,8 @@ export const LOAD_CHART_ROWS = 'LOAD_CHART_ROWS';
 export const LOAD_CHANNEL = 'LOAD_CHANNEL';
 export const CLOSE_CHANNEL = 'CLOSE_CHANNEL';
 
+export const RESET_CHARTS_ENTITIES = 'RESET_CHARTS_ENTITIES';
+
 export const chartsImpressionsEntity = {
   request: (payload) =>
     action(chartImpressionsEntitySchema[REQUEST], { payload }),
@@ -126,3 +128,6 @@ export const loadChartsPostsEntity = (current) =>
 
 export const loadChartRowsAmountEntity = (exception) =>
   action(LOAD_CHART_ROWS, { exception });
+
+export const resetChartsEntities = (mode) =>
+  action(RESET_CHARTS_ENTITIES, { mode });

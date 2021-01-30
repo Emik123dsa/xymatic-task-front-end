@@ -7,8 +7,7 @@ import {
   Cell,
   ResponsiveContainer,
   Label,
-  Text,
-  LabelList,
+  Legend,
 } from 'recharts';
 import { BarChart } from '@/components/Icons/BarChart';
 import toNumber from 'lodash/toNumber';
@@ -16,6 +15,7 @@ import schema from '@styles/_schema.scss';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
 import { coercedThousandNumbers } from '@/shared/coercedNumber';
 import { css } from 'aphrodite';
+import { Dots } from '@/components/Icons/Dots';
 import _ from './CustomPieChart.scss';
 import { chartConfig } from '~/chartConfig';
 import { styles } from '~/app/shared/coercedStyles';
@@ -35,6 +35,7 @@ export class CustomPieChart extends PureComponent {
     data: PropTypes.object,
     title: PropTypes.string,
     exception: PropTypes.array,
+    direction: PropTypes.string,
   };
 
   constructor(props) {
@@ -46,6 +47,17 @@ export class CustomPieChart extends PureComponent {
   }
 
   static defaultProps = CUSTOM_PIE_CHART_FACTORY();
+
+  get _animateWrapperDirection() {
+    const { direction } = this.props;
+    return classnames(
+      _['custom-pie-chart-wrapper'],
+      'appear',
+      css(
+        direction.startsWith('left') ? styles.slideInLeft : styles.slideInRight,
+      ),
+    );
+  }
 
   get _totalInitilValues() {
     const { data } = this.state;
@@ -104,7 +116,20 @@ export class CustomPieChart extends PureComponent {
 
     return (
       <div className={_['custom-pie-chart']}>
-        <div className={_['custom-pie-chart-wrapper']}>
+        <div className={this._animateWrapperDirection}>
+          <div className={classnames(schema.row, schema['mt-2'])}>
+            <div
+              className={classnames(
+                schema['col-b-12'],
+                schema['d-flex'],
+                schema['justify-content-between'],
+                schema['align-center'],
+              )}
+            >
+              <h4 className={_['custom-pie-chart_title']}> By Analytics </h4>
+              <Dots />
+            </div>
+          </div>
           <div className={schema.row}>
             <div className={schema['col-12']}>
               <ResponsiveContainer
@@ -153,7 +178,7 @@ export class CustomPieChart extends PureComponent {
                     {data.map(({ count, type, color }, index) => (
                       <li
                         className={classnames(
-                          css(styles.slideInLeft),
+                          css(styles.slideInRight),
                           'appear',
                           _['custom-pie-chart_feature'],
                         )}

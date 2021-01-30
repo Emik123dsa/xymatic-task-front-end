@@ -24,6 +24,9 @@ import { CustomLegend } from '../CustomLegend/CustomLegend';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
 import { getChartCurrentDate, isWSChart, Period } from '~/app/selectors';
+import { css } from 'aphrodite';
+import { styles } from '~/app/shared/coercedStyles';
+import { classnames } from '~/app/shared/coercedClassnames';
 
 const Moment = loadable.lib(() => import('moment'));
 
@@ -56,18 +59,30 @@ export class CustomEssentialChart extends PureComponent {
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
     currentDates: PropTypes.object,
+    direction: PropTypes.string,
   };
 
   static defaultProps = CUSTOM_ESSENTIAL_CHART_FACTORY();
+
+  get _animateWrapperDirection() {
+    const { direction } = this.props;
+    return classnames(
+      css(
+        direction.startsWith('left') ? styles.slideInLeft : styles.slideInRight,
+      ),
+      'appear',
+      _['custom-essential-chart-wrapper'],
+    );
+  }
 
   constructor(props) {
     super(props);
     this.state = {
       dataList: null,
     };
-  }
 
-  moment = React.createRef();
+    this.moment = React.createRef();
+  }
 
   static getDerivedStateFromProps(prevProps, prevState) {
     const { content, currentDates } = prevProps;
@@ -161,7 +176,7 @@ export class CustomEssentialChart extends PureComponent {
     return (
       <Fragment>
         <div className={_['custom-essential-chart']}>
-          <div className={_['custom-essential-chart-wrapper']}>
+          <div className={this._animateWrapperDirection}>
             <div className={schema.row}>
               <div className={schema['col-12']}>
                 <ResponsiveContainer

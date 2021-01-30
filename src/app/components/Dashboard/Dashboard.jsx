@@ -20,6 +20,7 @@ import {
   loadChartsPostsEntity,
   loadChartsUsersEntity,
   loadChartRowsAmountEntity,
+  resetChartsEntities,
 } from '@/actions';
 
 import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
@@ -27,6 +28,8 @@ import _ from './Dashboard.scss';
 import { classnames } from '~/app/shared/coercedClassnames';
 import isNil from 'lodash/isNil';
 import { hot } from 'react-hot-loader/root';
+import { styles } from '~/app/shared/coercedStyles';
+import { css } from 'aphrodite';
 
 const AsyncLayout = loadable((props) =>
   import(`@/components/${props?.name}/${props?.name}`),
@@ -69,6 +72,7 @@ const AsyncPieChart = loadable(
     loadChartsPlaysEntity,
     loadChartsImpressionsEntity,
     loadChartRowsAmountEntity,
+    resetChartsEntities,
   },
 )
 class Dashboard extends Component {
@@ -87,6 +91,8 @@ class Dashboard extends Component {
     loadChartsImpressionsEntity: PropTypes.func,
 
     loadChartRowsAmountEntity: PropTypes.func,
+
+    resetChartsEntities: PropTypes.func,
   };
 
   /**
@@ -102,8 +108,8 @@ class Dashboard extends Component {
       if (!Array.isArray(pseudoKeys)) throw new RangeError(pseudoKeys);
       pseudoKeys.forEach((key) => {
         const callback = this.props[key];
-
-        if (callback instanceof Function) callback(Period.AllTime);
+        if (callback instanceof Function && !key.startsWith('reset'))
+          callback(Period.AllTime);
       });
     } catch (e) {
       console.error('[GraphQL]: Init Error');
@@ -111,12 +117,7 @@ class Dashboard extends Component {
   }
 
   componentWillUnmount() {
-    const { charts } = this.props;
-    charts.valueSeq().forEach((item) => {
-      if (!isNil(item.get('EVENT_CHANNEL'))) {
-        item.get('EVENT_CHANNEL').close();
-      }
-    });
+    this.props.resetChartsEntities('ALL');
   }
 
   render() {
@@ -131,7 +132,7 @@ class Dashboard extends Component {
             <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncLayout name="Header" />
 
-              <div className={schema['row-b']}>
+              <div className={classnames(schema['row-b'], schema['hidden-x'])}>
                 <div
                   style={{ height: '100px' }}
                   className={classnames(
@@ -141,7 +142,12 @@ class Dashboard extends Component {
                     schema['mb-2'],
                   )}
                 >
-                  <AsyncTinyChart type="plays" data={plays} color="#3f4af1" />
+                  <AsyncTinyChart
+                    direction="left"
+                    type="plays"
+                    data={plays}
+                    color="#3f4af1"
+                  />
                 </div>
                 <div
                   style={{ height: '100px' }}
@@ -153,13 +159,14 @@ class Dashboard extends Component {
                   )}
                 >
                   <AsyncTinyChart
+                    direction="right"
                     type="impressions"
                     data={impressions}
                     color="#ef263d"
                   />
                 </div>
               </div>
-              <div className={schema['row-b']}>
+              <div className={classnames(schema['row-b'], schema['hidden-x'])}>
                 <div
                   style={{ height: '400px' }}
                   className={classnames(
@@ -172,6 +179,7 @@ class Dashboard extends Component {
                   <AsyncEssentialChart
                     type="activity"
                     title="Activity"
+                    direction="left"
                     height={chartConfig.essentialHeight}
                     content={[
                       {
@@ -198,6 +206,7 @@ class Dashboard extends Component {
                 >
                   <AsyncPieChart
                     type="multiple"
+                    direction="right"
                     colors={[
                       '#602dd3',
                       '#3f4af1',
@@ -212,7 +221,6 @@ class Dashboard extends Component {
               <div className={schema['row-b']}>
                 <div className={schema['col-b-12']}>Actions</div>
               </div>
-              <AsyncLayout name="Footer" />
             </div>
             <div
               className={_['dashboard-section_restrictor-bottom-stripe']}

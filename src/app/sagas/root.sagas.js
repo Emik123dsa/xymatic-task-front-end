@@ -7,6 +7,7 @@ import {
   loadChartPosts,
   loadChartRowsAmountEntity,
   loadChartUsers,
+  resetChartsEntities,
 } from './charts-entity.sagas';
 import { watchResize } from './resize.sagas';
 import {
@@ -37,6 +38,14 @@ export function* rootSaga() {
      *  Rows Table Enumeration Principle
      */
     fork(loadChartRowsAmountEntity),
+    /**
+     * We merely demand
+     * to unsubcribe  from all
+     * of the sagas event channel
+     * to prevent forward execution
+     * in the next routers
+     */
+    fork(resetChartsEntities),
     /**
      *  User Authentication Principle
      */
