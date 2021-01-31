@@ -108,8 +108,6 @@ export class CustomPieChart extends PureComponent {
   render() {
     const { data } = this.state;
 
-    console.log(data);
-
     if (!data.length) {
       return <SkeletonLoading height={chartConfig.essentialHeight} />;
     }

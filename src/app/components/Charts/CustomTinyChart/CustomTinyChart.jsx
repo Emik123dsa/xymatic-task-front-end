@@ -22,7 +22,7 @@ import {
   pairwise,
   switchMap,
 } from 'rxjs/operators';
-
+import { hot } from 'react-hot-loader/root';
 import { css } from 'aphrodite';
 import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTipTiny } from '../CustomToolTip/CustomToolTipTiny';
@@ -33,6 +33,7 @@ import { getChartCurrentDate, Period } from '~/app/selectors';
 import { chartConfig } from '~/chartConfig';
 import { classnames } from '~/app/shared/coercedClassnames';
 import { styles } from '~/app/shared/coercedStyles';
+import { CustomTinyLegend } from '../CustomTinyLegend/CustomTinyLegend';
 
 const CUSTOM_TINY_CHART_FACTORY = () => ({
   color: '#fff',
@@ -40,6 +41,7 @@ const CUSTOM_TINY_CHART_FACTORY = () => ({
   height: 100,
 });
 
+@hot
 @Connect(
   (state) => ({
     currentDates: getChartCurrentDate(state),
@@ -141,7 +143,7 @@ export default class CustomTinyChart extends PureComponent {
   }
 
   render() {
-    const { color, data } = this.props;
+    const { color, type } = this.props;
     const { tinyList, previousToolTipValue } = this.state;
 
     if (!tinyList.length) {
@@ -161,7 +163,7 @@ export default class CustomTinyChart extends PureComponent {
                 <AreaChart
                   cursor="pointer"
                   data={tinyList}
-                  margin={{ top: 45, right: 25, left: 45, bottom: 0 }}
+                  margin={{ top: 45, right: 25, left: 65, bottom: 0 }}
                 >
                   <defs>
                     <linearGradient
@@ -175,8 +177,7 @@ export default class CustomTinyChart extends PureComponent {
                       <stop offset="95%" stopColor={color} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-
-                  <svg
+                  {/* <svg
                     width="45"
                     height="100"
                     fill={color}
@@ -184,7 +185,14 @@ export default class CustomTinyChart extends PureComponent {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <rect x="0" y="0" width="100%" height="100%" />
-                  </svg>
+                  </svg> */}
+
+                  <Legend
+                    verticalAlign="top"
+                    align="left"
+                    height="100"
+                    content={<CustomTinyLegend color={color} type={type} />}
+                  ></Legend>
                   <Tooltip
                     position={{
                       x: 45,
@@ -198,7 +206,6 @@ export default class CustomTinyChart extends PureComponent {
                       />
                     }
                   />
-
                   <Area
                     activeDot={<CustomActiveDot fill={color} />}
                     type="monotone"
