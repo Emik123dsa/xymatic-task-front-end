@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { hot } from 'react-hot-loader/root';
 import _ from './CustomTinyLegend.scss';
 import { classnames } from '~/app/shared/coercedClassnames';
 
@@ -8,6 +9,7 @@ const CUSTOM_TINY_LEGEND_FACTORY = () => ({
   type: 'Default',
 });
 
+@hot
 export class CustomTinyLegend extends Component {
   static propTypes = {
     color: PropTypes.string,
@@ -28,12 +30,15 @@ export class CustomTinyLegend extends Component {
             >
               <div className={_['custom-tiny-legend_label']}>
                 <span className={_['custom-tiny-legend_title']}>{type}</span>
-                <div
-                  className={classnames(
-                    _['custom-tiny-legend_icon'],
-                    _[`custom-tiny-legend_icon-${type}`],
-                  )}
-                ></div>
+                <div className={_['custom-tiny-legend_icon']}>
+                  <div
+                    className={classnames(
+                      _[`custom-tiny-legend_icon-${type}`],
+                      _['custom-tiny-legend_icon-shape'],
+                    )}
+                  ></div>
+                  <div className={_['custom-tiny-legend_overlay']}></div>
+                </div>
               </div>
             </div>
             <div className={_['custom-tiny-legend_date']}></div>

@@ -219,7 +219,9 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className={schema['row-b']}>
-                <div className={schema['col-b-12']}>Actions</div>
+                <div className={schema['col-b-12']}>
+                  <AsyncLayout name="Actions" />
+                </div>
               </div>
             </div>
             <div

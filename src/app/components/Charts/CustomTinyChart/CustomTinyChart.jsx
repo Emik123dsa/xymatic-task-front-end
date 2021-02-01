@@ -177,16 +177,6 @@ export default class CustomTinyChart extends PureComponent {
                       <stop offset="95%" stopColor={color} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  {/* <svg
-                    width="45"
-                    height="100"
-                    fill={color}
-                    viewBox="0 0 45 100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect x="0" y="0" width="100%" height="100%" />
-                  </svg> */}
-
                   <Legend
                     verticalAlign="top"
                     align="left"

@@ -5,5 +5,5 @@ const initialActionsReducer = fromJS({
   users: [],
   notifcations: [],
 });
-Notification
+
 export const actionsReducer = (state = initialActionsReducer, action) => state;
