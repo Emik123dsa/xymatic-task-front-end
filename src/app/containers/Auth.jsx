@@ -5,8 +5,8 @@ import schema from '@styles/main.scss';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 
-import { coercedStyles } from '@/shared/coercedStyles';
 import { setErrorMessage, resetErrorMessage } from '@/actions';
+import { coercedStyles } from '~/app/shared/coerced.styles';
 
 import {
   getUserAuthenticated,

@@ -8,7 +8,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { split } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { isNull } from 'lodash';
-import { coercedToken, coercedWSToken } from '~/app/shared/coercedToken';
+import { coercedToken, coercedWSToken } from '~/app/shared/coerced.token';
 import { Config } from './config';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {

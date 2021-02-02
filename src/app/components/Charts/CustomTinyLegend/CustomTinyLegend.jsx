@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { hot } from 'react-hot-loader/root';
 import _ from './CustomTinyLegend.scss';
-import { classnames } from '~/app/shared/coercedClassnames';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const CUSTOM_TINY_LEGEND_FACTORY = () => ({
   color: '#fff',

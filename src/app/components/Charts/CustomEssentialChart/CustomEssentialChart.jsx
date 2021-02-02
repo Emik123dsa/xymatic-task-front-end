@@ -16,7 +16,7 @@ import loadable from '@loadable/component';
 
 import { connect as Connect } from 'react-redux';
 import { chartConfig } from '~/chartConfig';
-import { coercedCtx, coercedMoment } from '@/shared/coercedMoment';
+import { coercedCtx, coercedMoment } from '~/app/shared/coerced.moment';
 import schema from '@styles/_schema.scss';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
 import _ from './CustomEssentialChart.scss';
@@ -25,8 +25,8 @@ import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTip } from '../CustomToolTip/CustomToolTip';
 import { getChartCurrentDate, isWSChart, Period } from '~/app/selectors';
 import { css } from 'aphrodite';
-import { styles } from '~/app/shared/coercedStyles';
-import { classnames } from '~/app/shared/coercedClassnames';
+import { styles } from '~/app/shared/coerced.styles';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const Moment = loadable.lib(() => import('moment'));
 

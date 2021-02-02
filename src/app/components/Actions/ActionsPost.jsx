@@ -4,30 +4,20 @@ import { useQuery } from 'react-apollo';
 import { fetchAllPosts } from '@/services/actions.service';
 import { NetworkStatus } from 'apollo-client';
 import range from 'lodash/range';
-import { classnames } from '@/shared/coercedClassnames';
 import { PostSort } from '@/selectors/actions.selector';
 import schema from '@styles/_schema.scss';
 import loadable from '@loadable/component';
+import { css } from 'aphrodite';
+import { classnames } from '~/app/shared/coerced.classnames';
 import ActionLoading from './ActionLoading';
 import _ from './Actions.scss';
 import { Dots } from '../Icons/Dots';
+import ActionsTemplate from './ActionsTemplate';
+import { styles } from '~/app/shared/coerced.styles';
 
 const ActionPost = loadable(() => import('./ActionPost'));
 
-const ActionsTemplate = (props) => (
-  <div className={_.actions}>
-    <div className={classnames(_['actions-wrapper'], schema['pt-2'])}>
-      {React.Children.map(props.children, (mutableChild) => {
-        if (!mutableChild) return null;
-        return React.cloneElement(mutableChild);
-      })}
-    </div>
-  </div>
-);
-
-ActionsTemplate.propTypes = { children: PropTypes.array };
-
-const Actions = () => {
+const ActionsPost = () => {
   const [variables, setVariables] = useState({
     page: 0,
     size: 10,
@@ -53,8 +43,8 @@ const Actions = () => {
   if (error) return <ActionLoading series={loadingSeries}> </ActionLoading>;
 
   return (
-    <ActionsTemplate>
-      <div className={schema['row-b']}>
+    <ActionsTemplate direction="left">
+      <div className={classnames(schema.row, schema['mx-1'])}>
         <div
           className={classnames(
             schema['d-flex'],
@@ -62,15 +52,18 @@ const Actions = () => {
             schema['col-b-12'],
           )}
         >
-          <h4> Top Adored Posts </h4>
+          <h4 className={_['actions-title']}> Top Adored Posts </h4>
           <Dots />
         </div>
       </div>
-      <div className={schema['row-b']}>
-        <ActionPost posts={data} />
+      <div className={_['actions-stripe']}></div>
+      <div className={classnames(schema.row, schema['mx-1'], schema['pt-1'])}>
+        <div className={schema['col-b-12']}>
+          <ActionPost posts={data} />
+        </div>
       </div>
     </ActionsTemplate>
   );
 };
 
-export default Actions;
+export default ActionsPost;

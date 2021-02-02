@@ -6,14 +6,14 @@ export const fetchAllPosts = gql`
       id
       title
       createdAt
+      author {
+        name
+      }
       verbose {
-        id
         attitude
-        author {
-          name
-        }
       }
       count
+      __typename
     }
   }
 `;

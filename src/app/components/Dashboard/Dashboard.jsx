@@ -2,7 +2,6 @@
 import React, { Component, Fragment } from 'react';
 import { chartConfig } from '~/chartConfig';
 import PropTypes from 'prop-types';
-import loadable from '@loadable/component';
 import { connect as Connect } from 'react-redux';
 import {
   getChartImpression,
@@ -23,38 +22,16 @@ import {
   resetChartsEntities,
 } from '@/actions';
 
-import SkeletonLoading from '../SkeletonLoading/SkeletonLoading';
 import _ from './Dashboard.scss';
-import { classnames } from '~/app/shared/coercedClassnames';
-import isNil from 'lodash/isNil';
+import { classnames } from '@/shared/coerced.classnames';
 import { hot } from 'react-hot-loader/root';
-import { styles } from '~/app/shared/coercedStyles';
-import { css } from 'aphrodite';
-
-const AsyncLayout = loadable((props) =>
-  import(`@/components/${props?.name}/${props?.name}`),
-);
-
-const AsyncTinyChart = loadable(
-  () => import('@/components/Charts/CustomTinyChart/CustomTinyChart'),
-  {
-    fallback: <SkeletonLoading height={chartConfig.tinyHeight} />,
-  },
-);
-
-const AsyncEssentialChart = loadable(
-  () => import('@/components/Charts/CustomEssentialChart/CustomEssentialChart'),
-  {
-    fallback: <SkeletonLoading height={chartConfig.essentialHeight} />,
-  },
-);
-
-const AsyncPieChart = loadable(
-  () => import('@/components/Charts/CustomPieChart/CustomPieChart'),
-  {
-    fallback: <SkeletonLoading height={chartConfig.essentialHeight} />,
-  },
-);
+import {
+  AsyncAction,
+  AsyncEssentialChart,
+  AsyncLayout,
+  AsyncPieChart,
+  AsyncTinyChart,
+} from '@/shared/coerced.actions';
 
 @hot
 @Connect(
@@ -131,15 +108,19 @@ class Dashboard extends Component {
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
               <AsyncLayout name="Header" />
-
-              <div className={classnames(schema['row-b'], schema['hidden-x'])}>
+              <div
+                className={classnames(
+                  schema['row-b'],
+                  schema['hidden-x'],
+                  schema['py-1'],
+                )}
+              >
                 <div
                   style={{ height: '100px' }}
                   className={classnames(
                     schema['col-b-6'],
                     schema['col-b-md-6'],
                     schema['col-b-xs-12'],
-                    schema['mb-2'],
                   )}
                 >
                   <AsyncTinyChart
@@ -155,7 +136,6 @@ class Dashboard extends Component {
                     schema['col-b-6'],
                     schema['col-b-md-6'],
                     schema['col-b-xs-12'],
-                    schema['mb-2'],
                   )}
                 >
                   <AsyncTinyChart
@@ -166,14 +146,19 @@ class Dashboard extends Component {
                   />
                 </div>
               </div>
-              <div className={classnames(schema['row-b'], schema['hidden-x'])}>
+              <div
+                className={classnames(
+                  schema['row-b'],
+                  schema['hidden-x'],
+                  schema['py-1'],
+                )}
+              >
                 <div
                   style={{ height: '400px' }}
                   className={classnames(
                     schema['col-b-8'],
                     schema['col-b-md-12'],
                     schema['col-b-xs-12'],
-                    schema['mb-2'],
                   )}
                 >
                   <AsyncEssentialChart
@@ -218,9 +203,15 @@ class Dashboard extends Component {
                   />
                 </div>
               </div>
-              <div className={schema['row-b']}>
+              <div
+                className={classnames(
+                  schema['row-b'],
+                  schema['py-1'],
+                  schema['hidden-x'],
+                )}
+              >
                 <div className={schema['col-b-12']}>
-                  <AsyncLayout name="Actions" />
+                  <AsyncAction name="ActionsPost" />
                 </div>
               </div>
             </div>

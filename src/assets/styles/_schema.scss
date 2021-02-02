@@ -130,6 +130,9 @@
   .pr-#{$i} {
     padding-right: $i * 1rem !important;
   }
+  .py-#{$i} {
+    padding: $i * 1rem 0 !important;
+  }
   .pl-#{$i} {
     padding-left: $i * 1rem !important;
   }

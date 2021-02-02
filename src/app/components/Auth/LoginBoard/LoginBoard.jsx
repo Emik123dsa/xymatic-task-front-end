@@ -16,9 +16,9 @@ import { distinctUntilChanged, mergeMap, tap } from 'rxjs/operators';
 import isEqual from 'lodash/isEqual';
 import schema from '@styles/main.scss';
 import _ from './LoginBoard.scss';
-import { coercedInput } from '~/app/shared/coercedInput';
+import { coercedInput } from '~/app/shared/coerced.input';
 import { setLoadAuth, setErrorMessage, resetErrorMessage } from '~/app/actions';
-import { coercedToast } from '~/app/shared/coercedToast';
+import { coercedToast } from '~/app/shared/coerced.toast';
 import { FAILURE_AUTHORIZED } from '~/app/shared/helpers/messages';
 
 @Connect(null, {

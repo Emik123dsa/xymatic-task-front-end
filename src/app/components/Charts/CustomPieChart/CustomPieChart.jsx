@@ -13,13 +13,13 @@ import { BarChart } from '@/components/Icons/BarChart';
 import toNumber from 'lodash/toNumber';
 import schema from '@styles/_schema.scss';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
-import { coercedThousandNumbers } from '@/shared/coercedNumber';
+import { coercedThousandNumbers } from '@/shared/coerced.number';
 import { css } from 'aphrodite';
 import { Dots } from '@/components/Icons/Dots';
 import _ from './CustomPieChart.scss';
 import { chartConfig } from '~/chartConfig';
-import { styles } from '~/app/shared/coercedStyles';
-import { classnames } from '~/app/shared/coercedClassnames';
+import { styles } from '~/app/shared/coerced.styles';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const CUSTOM_PIE_CHART_FACTORY = () => ({
   colors: [],

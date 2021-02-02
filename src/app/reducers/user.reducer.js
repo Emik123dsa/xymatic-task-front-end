@@ -6,7 +6,7 @@ import {
   SUCCESSFULLY_SIGNED_UP,
 } from '@/shared/helpers/messages';
 
-import { coercedToast } from '@/shared/coercedToast';
+import { coercedToast } from '~/app/shared/coerced.toast';
 import { Config } from '~/config';
 
 export const initialUserReducer = fromJS({

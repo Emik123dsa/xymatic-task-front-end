@@ -12,7 +12,7 @@ import {
   getUserAuthenticated,
 } from '@/selectors';
 import { resetErrorMessage } from '../actions';
-import { coercedStyles } from '../shared/coercedStyles';
+import { coercedStyles } from '../shared/coerced.styles';
 
 const AsyncAuthComponent = loadable((props) =>
   import(`~/app/components/Auth/${props.tag}/${props.tag}`),

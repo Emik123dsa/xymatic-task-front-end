@@ -28,11 +28,11 @@ import { CustomActiveDot } from '../CustomActiveDot/CustomActiveDot';
 import { CustomToolTipTiny } from '../CustomToolTip/CustomToolTipTiny';
 import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
 import _ from './CustomTinyChart.scss';
-import { coercedMoment } from '~/app/shared/coercedMoment';
+import { coercedMoment } from '~/app/shared/coerced.moment';
 import { getChartCurrentDate, Period } from '~/app/selectors';
 import { chartConfig } from '~/chartConfig';
-import { classnames } from '~/app/shared/coercedClassnames';
-import { styles } from '~/app/shared/coercedStyles';
+import { classnames } from '~/app/shared/coerced.classnames';
+import { styles } from '~/app/shared/coerced.styles';
 import { CustomTinyLegend } from '../CustomTinyLegend/CustomTinyLegend';
 
 const CUSTOM_TINY_CHART_FACTORY = () => ({

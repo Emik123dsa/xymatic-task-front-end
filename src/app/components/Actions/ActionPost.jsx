@@ -1,60 +1,81 @@
-import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-
-const actionsSortPosts = (posts) => {
-  if (!Array.isArray(posts) && !posts.length) return null;
-
-  const attitudies = (items) =>
-    items?.filter(({ attitude }) => attitude.startsWith('LIKE'))?.length;
-
-  return posts.sort((acc, item) => {
-    if (!Object.prototype.hasOwnProperty.call(item, 'verbose')) return null;
-
-    if (
-      moment(acc?.createdAt).isBefore(item?.createdAt) &&
-      attitudies(acc?.verbose) < attitudies(item?.verbose)
-    ) {
-      return 1;
-    }
-    if (
-      moment(acc?.createdAt).isAfter(item?.createdAt) &&
-      attitudies(acc?.verbose) > attitudies(item?.verbose)
-    ) {
-      return -1;
-    }
-    return 0;
-  });
-};
+import React, { Fragment, useMemo } from 'react';
+import { DisLikeIcon } from '@/components/Icons/Dislike';
+import { LikeIcon } from '@/components/Icons/Like';
+import schema from '@styles/_schema.scss';
+import { coercedImpressions, coercedSort } from '~/app/shared/coerced.sort';
+import _ from './Actions.scss';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const ActionPost = (posts) => {
   const { findAllPosts } = posts?.posts;
 
   if (!Array.isArray(findAllPosts)) return null;
 
-  const sortedPosts = useMemo(() => actionsSortPosts(findAllPosts), [
-    findAllPosts,
-  ]);
+  const sortedPosts = useMemo(() => coercedSort(findAllPosts), [findAllPosts]);
 
   return (
-    <div>
-      <table>
-        {/* <thead> </thead> */}
-        <tbody>
+    <Fragment>
+      <table className={_['actions-table']}>
+        <thead className={_['actions-table_header']}>
+          <tr className={_['actions-label']}>
+            <td>Post name</td>
+            <td>Likes / Dislikes</td>
+            <td>Author</td>
+            <td>Created date</td>
+          </tr>
+        </thead>
+        <tbody className={_['actions-table_body']}>
           {sortedPosts &&
             sortedPosts.map((item, index) => (
               <tr key={`${index}-${item?.id}`}>
-                <td>{item.createdAt}</td>
+                <td className={_['actions-table_title']}>
+                  <span>
+                    {index + 1}
+                    &#46;
+                  </span>
+                  &nbsp;{item?.title}
+                </td>
+                <td
+                  className={classnames(
+                    schema['d-flex'],
+                    schema['align-center'],
+                  )}
+                >
+                  <div
+                    className={classnames(
+                      schema['d-flex'],
+                      schema['align-center'],
+                    )}
+                    style={{
+                      marginLeft: '0.4rem',
+                    }}
+                  >
+                    <LikeIcon />
+                    <span className={_['actions-table_value']}>
+                      {coercedImpressions(item, 'LIKE')}
+                    </span>
+                  </div>
+                  <div
+                    className={classnames(
+                      schema['d-flex'],
+                      schema['align-center'],
+                      schema['ml-1'],
+                    )}
+                  >
+                    <DisLikeIcon />
+                    <span className={_['actions-table_value']}>
+                      {coercedImpressions(item, 'DISLIKE')}
+                    </span>
+                  </div>
+                </td>
+                <td>{item?.author?.name}</td>
+                <td>{item?.createdAt}</td>
               </tr>
             ))}
         </tbody>
       </table>
-    </div>
+    </Fragment>
   );
-};
-
-ActionPost.propTypes = {
-  posts: PropTypes.object,
 };
 
 export default React.memo(ActionPost);

@@ -1,0 +1,9 @@
+.icon {
+  &-dislike {
+    width: 0.8rem;
+    height: 0.8rem;
+    svg path {
+      fill: $dislike;
+    }
+  }
+}

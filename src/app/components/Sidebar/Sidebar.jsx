@@ -6,11 +6,11 @@ import { distinctUntilChanged, Subscription, tap } from 'rxjs/operators';
 import { BehaviorSubject, fromEvent, ReplaySubject } from 'rxjs';
 import { css } from 'aphrodite';
 import loadable from '@loadable/component';
-import { styles } from '@/shared/coercedStyles';
 import { hot } from 'react-hot-loader/root';
+import { styles } from '~/app/shared/coerced.styles';
 import _ from './Sidebar.scss';
 import { getSidebarActions, getSidebarFeatures } from '~/app/selectors';
-import { classnames } from '~/app/shared/coercedClassnames';
+import { classnames } from '~/app/shared/coerced.classnames';
 import { setModalCurrentClientSchema } from '~/app/actions';
 
 @hot

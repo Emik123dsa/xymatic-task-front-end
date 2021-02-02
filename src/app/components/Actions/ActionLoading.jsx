@@ -2,10 +2,10 @@ import { css } from 'aphrodite';
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ContentLoader from 'react-content-loader';
-import { styles } from '@/shared/coercedStyles';
 import schema from '@styles/_schema.scss';
+import { styles } from '~/app/shared/coerced.styles';
 import _ from './ActionLoading.scss';
-import { classnames } from '~/app/shared/coercedClassnames';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const ActionLoading = ({ series }, ...props) => {
   if (!Array.isArray(series)) return null;

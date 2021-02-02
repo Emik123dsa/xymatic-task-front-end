@@ -11,8 +11,8 @@ import {
   getUserCredentials,
 } from '@/selectors';
 import { setLoadCurrentUser } from '@/actions';
-import { isTokenExists } from '@/shared/coercedToken';
 import { hot } from 'react-hot-loader/root';
+import { isTokenExists } from '~/app/shared/coerced.token';
 import { Config } from '~/config';
 
 const AsyncContainer = loadable(

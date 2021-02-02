@@ -9,7 +9,7 @@ class Header extends Component {
       <header className={_.header}>
         <div className={_['header-wrapper']}>
           <div
-            className={[schema['row-b'], schema['pb-3']]
+            className={[schema['row-b'], schema['pb-2']]
               .filter((e) => !!e)
               .join(' ')}
           >

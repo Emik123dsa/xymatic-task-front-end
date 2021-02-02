@@ -7,7 +7,7 @@ import loadable from '@loadable/component';
 import { getRouterLocation } from '@/selectors';
 import schema from '@styles/main.scss';
 import { css } from 'aphrodite';
-import { styles } from '@/shared/coercedStyles';
+import { styles } from '@/shared/coerced.styles';
 import pMinDelay from 'p-min-delay';
 import LazyLoading from '@/components/LazyLoading/LazyLoading';
 

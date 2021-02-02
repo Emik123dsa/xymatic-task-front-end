@@ -17,12 +17,12 @@ import { distinctUntilChanged, mergeMap, pluck, tap } from 'rxjs/operators';
 import { setErrorMessage, resetErrorMessage, setLoadNewUser } from '@/actions';
 import schema from '@styles/main.scss';
 import _ from './SignUpBoard.scss';
-import { coercedInput } from '~/app/shared/coercedInput';
+import { coercedInput } from '~/app/shared/coerced.input';
 import {
   FAILURE_AUTHORIZED,
   NOT_SAME_PASSWORD,
 } from '~/app/shared/helpers/messages';
-import { coercedToast } from '~/app/shared/coercedToast';
+import { coercedToast } from '~/app/shared/coerced.toast';
 
 @Connect(null, {
   setLoadNewUser,
