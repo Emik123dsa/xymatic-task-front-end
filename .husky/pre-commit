@@ -1,1 +1,1 @@
-lint-staged --relative
+yarn run lint:staged
