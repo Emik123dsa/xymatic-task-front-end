@@ -17,7 +17,7 @@ import { coercedThousandNumbers } from '@/shared/coerced.number';
 import { css } from 'aphrodite';
 import { Dots } from '@/components/Icons/Dots';
 import _ from './CustomPieChart.scss';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 import { styles } from '~/app/shared/coerced.styles';
 import { classnames } from '~/app/shared/coerced.classnames';
 

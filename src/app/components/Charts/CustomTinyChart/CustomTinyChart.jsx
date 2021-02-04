@@ -30,7 +30,7 @@ import SkeletonLoading from '../../SkeletonLoading/SkeletonLoading';
 import _ from './CustomTinyChart.scss';
 import { coercedMoment } from '~/app/shared/coerced.moment';
 import { getChartCurrentDate, Period } from '~/app/selectors';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 import { classnames } from '~/app/shared/coerced.classnames';
 import { styles } from '~/app/shared/coerced.styles';
 import { CustomTinyLegend } from '../CustomTinyLegend/CustomTinyLegend';

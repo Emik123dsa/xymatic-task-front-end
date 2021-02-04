@@ -2,7 +2,7 @@ import { fromJS, Map } from 'immutable';
 import { getState } from 'redux-named-reducers';
 import { Period } from '@/selectors';
 import { isNil } from 'lodash';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 import { resizeReducer } from './resize.reducer';
 
 const initialChartEntity = fromJS({

@@ -15,7 +15,7 @@ import {
 import loadable from '@loadable/component';
 
 import { connect as Connect } from 'react-redux';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 import { coercedCtx, coercedMoment } from '~/app/shared/coerced.moment';
 import schema from '@styles/_schema.scss';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';

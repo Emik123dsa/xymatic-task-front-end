@@ -18,7 +18,7 @@ import { dynamicRoutes } from '@/routes';
 import { configureStore, history } from '@/store';
 import { rootSaga } from '@/sagas';
 import { ApolloProvider } from 'react-apollo';
-import { client } from './apolloConfig';
+import { client } from './apollo.config';
 
 const initialState = !process.env.NODE_SERVER ? window.__INITIAL_STATE__ : {};
 

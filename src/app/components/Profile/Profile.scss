@@ -1,14 +1,11 @@
 .profile {
-  height: inherit;
-  padding-top: 5rem;
+  height: 100vh;
 
   &-wrapper {
     height: inherit;
     border-top: 1em solid $bg-border;
     border-right: 1em solid $bg-border;
     border-bottom: 1em solid $bg-border;
-    border-top-right-radius: 24px;
-    border-bottom-right-radius: 24px;
     background: linear-gradient(to top, $profile-bottom, $profile-top);
 
     &_edit {

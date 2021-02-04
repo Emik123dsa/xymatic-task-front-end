@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { renderRoutes } from 'react-router-config';
+import { matchRoutes, renderRoutes } from 'react-router-config';
 import { connect as Connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -10,6 +10,7 @@ import { css } from 'aphrodite';
 import { styles } from '@/shared/coerced.styles';
 import pMinDelay from 'p-min-delay';
 import LazyLoading from '@/components/LazyLoading/LazyLoading';
+import { Route, Switch, withRouter } from 'react-router';
 
 const AsyncComponent = loadable(
   (props) =>
@@ -33,6 +34,7 @@ const AsyncChartModal = loadable(
   },
 );
 
+@withRouter
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
@@ -63,36 +65,37 @@ class Dashboard extends Component {
   }
 
   render() {
+    const { route } = this.props;
+
     return (
       <Fragment>
+        {this._renderSiteMeta()}
         <AsyncAuthModal name="LogOutModal" />
         <AsyncAuthModal name="SettingsModal" />
         <AsyncChartModal name="ManualModal" />
         <div className={schema.dashboard}>
-          <div className={schema.container}>
-            {this._renderSiteMeta()}
-            <div className={schema['dashboard-wrapper']}>
+          <div className={schema['dashboard-wrapper']}>
+            <div
+              className={`${schema.row} ${schema['justify-content-center']}`}
+            >
               <div
-                className={`${schema.row} ${schema['justify-content-center']}`}
+                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
               >
-                <div
-                  className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']} `}
-                >
-                  <AsyncComponent name="Sidebar" />
-                </div>
-                <div
-                  className={`${schema['col-7']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
-                >
-                  <main className={schema['dashboard_main-wrapper']}>
-                    <AsyncComponent name="Dashboard" />
-                  </main>
-                </div>
-                <div
-                  className={`${schema['col-3']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
-                >
-                  <div className={schema['dashboard_profile-wrapper']}>
-                    <AsyncComponent name="Profile" />
-                  </div>
+                <AsyncComponent name="Sidebar" />
+              </div>
+              <div
+                className={`${schema['col-8']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
+              >
+                <main className={schema['dashboard_main-wrapper']}>
+                  <Switch>{renderRoutes(route.routes)}</Switch>
+                  {/* <AsyncComponent name="Dashboard" /> */}
+                </main>
+              </div>
+              <div
+                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
+              >
+                <div className={schema['dashboard_profile-wrapper']}>
+                  <AsyncComponent name="Profile" />
                 </div>
               </div>
             </div>

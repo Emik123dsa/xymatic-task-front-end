@@ -37,6 +37,8 @@
 }
 
 .hidden {
+  overflow: hidden !important;
+
   &-x {
     overflow-x: hidden !important;
   }

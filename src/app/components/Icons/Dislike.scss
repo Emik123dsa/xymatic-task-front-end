@@ -2,8 +2,19 @@
   &-dislike {
     width: 0.8rem;
     height: 0.8rem;
+
     svg path {
-      fill: $dislike;
+      @include transition-25;
+
+      fill: $dark;
+    }
+
+    &:hover {
+      svg path {
+        @include transition-25;
+
+        fill: $dislike;
+      }
     }
   }
 }

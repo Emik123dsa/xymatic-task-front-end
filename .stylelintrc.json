@@ -1,7 +1,8 @@
 {
-    "extends": "stylelint-config-standard",
-    "rules": {
-        "number-leading-zero": null,
-        "no-missing-end-of-source-newline": null
-    }
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "number-leading-zero": null,
+    "no-missing-end-of-source-newline": null,
+    "at-rule-no-unknown": null
+  }
 }

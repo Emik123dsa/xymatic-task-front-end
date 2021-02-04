@@ -2,7 +2,7 @@ import React from 'react';
 
 import loadable from '@loadable/component';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 
 export const AsyncAction = loadable(
   (props) => import(`@/components/Actions/${props?.name}`),

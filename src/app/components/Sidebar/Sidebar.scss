@@ -20,8 +20,8 @@
 .sidebar {
   position: sticky;
   top: 0;
-  height: calc(100vh - 10rem);
-  padding-top: 5rem;
+  height: 100vh;
+  // padding-top: 5rem;
 
   &_wrapper {
     position: relative;
@@ -30,8 +30,6 @@
     border-top: 1em solid $bg-border;
     border-bottom: 1em solid $bg-border;
     border-left: 1em solid $bg-border;
-    border-top-left-radius: 24px;
-    border-bottom-left-radius: 24px;
     background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
 
     &-aside {

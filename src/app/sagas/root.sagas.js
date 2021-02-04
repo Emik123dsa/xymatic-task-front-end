@@ -1,6 +1,6 @@
 /* eslint-disable object-curly-newline */
 import { all, fork, setContext } from 'redux-saga/effects';
-import { client } from '~/apolloConfig';
+import { client } from '~/apollo.config';
 import {
   loadChartImpressions,
   loadChartPlays,

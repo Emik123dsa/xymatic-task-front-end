@@ -1,6 +1,6 @@
 /* eslint-disable import/order */
 import React, { Component, Fragment } from 'react';
-import { chartConfig } from '~/chartConfig';
+import { chartConfig } from '~/chart.config';
 import PropTypes from 'prop-types';
 import { connect as Connect } from 'react-redux';
 import {
@@ -103,7 +103,6 @@ class Dashboard extends Component {
     return (
       <section className={_['dashboard-section_charts']}>
         <div className={schema['dashboard-wrapper']}>
-          <span className={_['dashboard-section_restrictor-top']}></span>
           <div className={_['dashboard-section_charts-observer']}>
             <div className={_['dashboard-section_restrictor-top-stripe']}></div>
             <div className={_['dashboard-section_charts-wrapper']}>
@@ -116,7 +115,7 @@ class Dashboard extends Component {
                 )}
               >
                 <div
-                  style={{ height: '100px' }}
+                  style={{ height: chartConfig.tinyHeight }}
                   className={classnames(
                     schema['col-b-6'],
                     schema['col-b-md-6'],
@@ -125,13 +124,14 @@ class Dashboard extends Component {
                 >
                   <AsyncTinyChart
                     direction="left"
+                    height={chartConfig.tinyHeight}
                     type="plays"
                     data={plays}
                     color="#3f4af1"
                   />
                 </div>
                 <div
-                  style={{ height: '100px' }}
+                  style={{ height: chartConfig.tinyHeight }}
                   className={classnames(
                     schema['col-b-6'],
                     schema['col-b-md-6'],
@@ -140,6 +140,7 @@ class Dashboard extends Component {
                 >
                   <AsyncTinyChart
                     direction="right"
+                    height={chartConfig.tinyHeight}
                     type="impressions"
                     data={impressions}
                     color="#ef263d"
@@ -154,7 +155,7 @@ class Dashboard extends Component {
                 )}
               >
                 <div
-                  style={{ height: '400px' }}
+                  style={{ height: chartConfig.essentialHeight }}
                   className={classnames(
                     schema['col-b-8'],
                     schema['col-b-md-12'],
@@ -182,7 +183,7 @@ class Dashboard extends Component {
                 </div>
 
                 <div
-                  style={{ height: '400px' }}
+                  style={{ height: chartConfig.essentialHeight }}
                   className={classnames(
                     schema['col-b-4'],
                     schema['col-b-md-12'],
@@ -204,10 +205,11 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div
+                style={{ height: chartConfig.actionsHeight }}
                 className={classnames(
                   schema['row-b'],
                   schema['py-1'],
-                  schema['hidden-x'],
+                  schema.hidden,
                 )}
               >
                 <div className={schema['col-b-12']}>
@@ -219,7 +221,6 @@ class Dashboard extends Component {
               className={_['dashboard-section_restrictor-bottom-stripe']}
             ></div>
           </div>
-          <span className={_['dashboard-section_restrictor-bottom']}></span>
         </div>
       </section>
     );

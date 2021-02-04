@@ -25,3 +25,7 @@ $bg-black: #000;
   justify-content: flex-end;
   flex: 0 1 auto;
 }
+
+@mixin transition-25 {
+  transition: 0.25s ease-in-out;
+}

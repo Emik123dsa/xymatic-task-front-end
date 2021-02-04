@@ -11,6 +11,8 @@ import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
 import Toastify from '@/components/Toastify/Toastify';
 import { hot } from 'react-hot-loader/root';
+import { Route2 } from '@/routes/route';
+import { Switch } from 'react-router';
 
 const DEFAULT_MOBILE_WIDTH = 992;
 
@@ -29,7 +31,7 @@ const DEFAULT_MOBILE_WIDTH = 992;
 class Root extends Component {
   static propTypes = {
     location: PropTypes.shape().isRequired,
-    route: PropTypes.shape().isRequired,
+    route: PropTypes.object.isRequired,
     setIsMobile: PropTypes.func,
   };
 
@@ -82,11 +84,15 @@ class Root extends Component {
 
   render() {
     const { route } = this.props;
+
     return (
       <Fragment>
         {this._renderSiteMeta()}
-        <div className={schema['bg-dark']}> </div>
-        <div className="main">{renderRoutes(route.childRoutes)}</div>
+        <div className={schema['bg-dark']}></div>
+        <div className="main">
+          <Switch>{renderRoutes(route.routes)}</Switch>
+          {/* <Route2 routes={route.routes} /> */}
+        </div>
         <Toastify />
       </Fragment>
     );

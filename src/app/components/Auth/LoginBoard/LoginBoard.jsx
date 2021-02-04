@@ -20,6 +20,7 @@ import { coercedInput } from '~/app/shared/coerced.input';
 import { setLoadAuth, setErrorMessage, resetErrorMessage } from '~/app/actions';
 import { coercedToast } from '~/app/shared/coerced.toast';
 import { FAILURE_AUTHORIZED } from '~/app/shared/helpers/messages';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 @Connect(null, {
   setLoadAuth,
@@ -29,7 +30,7 @@ import { FAILURE_AUTHORIZED } from '~/app/shared/helpers/messages';
 class LoginBoard extends Component {
   formSubject = new Subscription();
 
-  formCredentialsSubject = new ReplaySubject();
+  formCredentialsSubject = new ReplaySubject(1);
 
   formCredentials = this.formCredentialsSubject
     .asObservable()
@@ -150,28 +151,25 @@ class LoginBoard extends Component {
               name="auth-wrapper_form"
             >
               <div
-                className={[
+                className={classnames(
                   schema['form-item'],
                   schema['row-b'],
                   schema['justify-content-center'],
                   schema['mb-1'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 <label
                   htmlFor="email"
-                  className={[schema['form-item_label'], schema['col-b-8']]
-                    .filter((e) => !!e)
-                    .join(' ')}
+                  className={classnames(
+                    schema['form-item_label'],
+                    schema['col-b-8'],
+                  )}
                 >
                   <input
                     id="email"
                     type="email"
                     name="email"
-                    onInput={(e) => {
-                      this.formCredentialsSubject.next(e);
-                    }}
+                    onInput={(e) => this.formCredentialsSubject.next(e)}
                     autoComplete="off"
                   />
                   <div className={this._activeInputClass(this.state.email)}>
@@ -180,20 +178,19 @@ class LoginBoard extends Component {
                 </label>
               </div>
               <div
-                className={[
+                className={classnames(
                   schema['form-item'],
                   schema['row-b'],
                   schema['justify-content-center'],
                   schema['pb-2'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 <label
                   htmlFor="password"
-                  className={[schema['form-item_label'], schema['col-b-8']]
-                    .filter((e) => !!e)
-                    .join(' ')}
+                  className={classnames(
+                    schema['form-item_label'],
+                    schema['col-b-8'],
+                  )}
                 >
                   <input
                     id="password"
@@ -210,33 +207,32 @@ class LoginBoard extends Component {
                 </label>
               </div>
               <div
-                className={[
+                className={classnames(
                   schema['form-item'],
                   schema['row-b'],
                   schema['pb-2'],
                   schema['justify-content-center'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 <span className={schema['form-item-forgot_password']}>
                   Forgot password?
                 </span>
               </div>
               <div
-                className={[
+                className={classnames(
                   schema['form-item'],
                   schema['row-b'],
                   schema['justify-content-center'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 <button
                   type="submit"
-                  className={[schema.btn, schema['btn-send'], schema['col-b-7']]
-                    .filter((e) => !!e)
-                    .join(' ')}
+                  className={classnames(
+                    schema.btn,
+                    schema['btn-send'],
+                    schema['col-b-7'],
+                  )}
+                  ariaPressed={false}
                 >
                   <span className={schema['btn-icon-user']}></span>
                   Sign In

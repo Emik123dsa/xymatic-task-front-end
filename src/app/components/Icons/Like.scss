@@ -4,7 +4,17 @@
     height: 0.8rem;
 
     svg path {
-      fill: $like;
+      @include transition-25;
+
+      fill: $dark;
+    }
+
+    &:hover {
+      svg path {
+        @include transition-25;
+
+        fill: $like;
+      }
     }
   }
 }

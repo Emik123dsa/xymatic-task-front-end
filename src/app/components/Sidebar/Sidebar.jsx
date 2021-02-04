@@ -83,7 +83,11 @@ class Sidebar extends Component {
       >
         <NavLink
           activeClassName={_['sidebar_navbar-active']}
-          to={`/${item.toLowerCase()}`}
+          to={
+            !item.toLowerCase().startsWith('dashboard')
+              ? `/dashboard/${item.toLowerCase()}`
+              : `/${item.toLowerCase()}`
+          }
         >
           {item}
           <span className={_['sidebar_navbar-link-bg']}></span>

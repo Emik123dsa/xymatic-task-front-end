@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import schema from '@styles/main.scss';
 import _ from './AdditionalBoard.scss';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const ADDITIONAL_BOARD_FACTORY = () => ({
   credentials: {
@@ -37,63 +38,54 @@ class AdditionalBoard extends Component {
         <div className={_['additional-board-wrapper']}>
           <div className={_['additional-board-wrapper_credentials']}>
             <div
-              className={[
+              className={classnames(
                 schema.row,
                 schema['justify-content-center'],
                 schema['mb-3'],
-              ]
-                .filter((e) => !!e)
-                .join(' ')}
+              )}
             >
               <h1
-                className={[
+                className={classnames(
                   schema['col-12'],
                   schema['col-md-12'],
                   _['additional-board-wrapper_title'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 {credentials.title}
               </h1>
             </div>
             <div
-              className={[
+              className={classnames(
                 schema.row,
                 schema['justify-content-center'],
                 schema['mb-4'],
-              ]
-                .filter((e) => !!e)
-                .join(' ')}
+              )}
             >
               <div
-                className={[
+                className={classnames(
                   schema['col-9'],
                   schema['col-md-12'],
                   _['additional-board-wrapper_description'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 {credentials.description}
               </div>
             </div>
             <div
-              className={[schema.row, schema['justify-content-center']]
-                .filter((e) => !!e)
-                .join(' ')}
+              className={classnames(
+                schema.row,
+                schema['justify-content-center'],
+              )}
             >
               <Link
                 to={{
                   pathname: credentials.buttonTo,
                 }}
-                className={[
+                className={classnames(
                   schema.btn,
                   schema['btn-sign-up'],
                   schema['col-b-7'],
-                ]
-                  .filter((e) => !!e)
-                  .join(' ')}
+                )}
               >
                 {credentials.buttonTitle}
               </Link>
