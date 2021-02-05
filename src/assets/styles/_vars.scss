@@ -29,3 +29,29 @@ $bg-black: #000;
 @mixin transition-25 {
   transition: 0.25s ease-in-out;
 }
+
+@mixin media($size) {
+  @if $size == 'lg' {
+    @media screen and (max-width: $bp-lg) {
+      @content;
+    }
+  }
+
+  @if $size == 'md' {
+    @media screen and (max-width: $bp-md) {
+      @content;
+    }
+  }
+
+  @if $size == 'sm' {
+    @media screen and (max-width: $bp-sm) {
+      @content;
+    }
+  }
+
+  @if $size == 'xs' {
+    @media screen and (max-width: $bp-xs) {
+      @content;
+    }
+  }
+}

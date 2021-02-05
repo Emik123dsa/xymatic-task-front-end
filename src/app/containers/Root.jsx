@@ -11,8 +11,9 @@ import schema from '@styles/_schema.scss';
 import { setIsMobile } from '@/actions';
 import Toastify from '@/components/Toastify/Toastify';
 import { hot } from 'react-hot-loader/root';
-import { Route2 } from '@/routes/route';
 import { Switch } from 'react-router';
+import { Route2 } from '~/app/routes/route2';
+import { classnames } from '../shared/coerced.classnames';
 
 const DEFAULT_MOBILE_WIDTH = 992;
 
@@ -67,7 +68,7 @@ class Root extends Component {
   }
 
   _renderSiteMeta() {
-    const canonical = this.props.location.toJS().pathname.toLowerCase();
+    const canonical = this.props.location.get('pathname').toLowerCase();
 
     return (
       <Helmet
@@ -82,17 +83,29 @@ class Root extends Component {
     );
   }
 
+  get _currentEnvironmentBg() {
+    const { location } = this.props;
+
+    return classnames(
+      schema['bg-dark'],
+      schema[
+        `bg-dark-${
+          location.get('pathname')?.startsWith('/dashboard')
+            ? 'dashboard'
+            : 'miscellaneous'
+        }`
+      ],
+    );
+  }
+
   render() {
-    const { route } = this.props;
+    const { route, location } = this.props;
 
     return (
       <Fragment>
         {this._renderSiteMeta()}
-        <div className={schema['bg-dark']}></div>
-        <div className="main">
-          <Switch>{renderRoutes(route.routes)}</Switch>
-          {/* <Route2 routes={route.routes} /> */}
-        </div>
+        <div className={this._currentEnvironmentBg}></div>
+        <div className="main">{renderRoutes(route.routes)}</div>
         <Toastify />
       </Fragment>
     );

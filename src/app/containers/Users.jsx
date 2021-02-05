@@ -7,7 +7,7 @@ class Users extends Component {
   render() {
     return (
       <div>
-        <h1>Error</h1>
+        <h1>Erro123132132r</h1>
       </div>
     );
   }

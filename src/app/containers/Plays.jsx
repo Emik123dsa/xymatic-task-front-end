@@ -7,7 +7,7 @@ class Plays extends Component {
   render() {
     return (
       <div>
-        <h1>Error</h1>
+        <h1>Plays</h1>
       </div>
     );
   }

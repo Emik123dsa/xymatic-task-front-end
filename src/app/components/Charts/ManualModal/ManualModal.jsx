@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import Modal from 'react-modal';
 import { CSSTransition } from 'react-transition-group';
 import _ from '@styles/main.scss';
-import { OverridedModal, getModalClientSchema } from '~/app/selectors';
+import { OverridedModal, getModalClientSchema } from '@/selectors';
 
 @Connect(
   (state) => ({

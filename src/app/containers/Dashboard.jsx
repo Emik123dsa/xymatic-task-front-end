@@ -10,29 +10,14 @@ import { css } from 'aphrodite';
 import { styles } from '@/shared/coerced.styles';
 import pMinDelay from 'p-min-delay';
 import LazyLoading from '@/components/LazyLoading/LazyLoading';
-import { Route, Switch, withRouter } from 'react-router';
-
-const AsyncComponent = loadable(
-  (props) =>
-    pMinDelay(import(`@/components/${props.name}/${props.name}`), 1000),
-  {
-    fallback: <LazyLoading />,
-  },
-);
-
-const AsyncAuthModal = loadable(
-  (props) => import(`@/components/Auth/${props?.name}/${props?.name}`),
-  {
-    fallback: <LazyLoading />,
-  },
-);
-
-const AsyncChartModal = loadable(
-  (props) => import(`@/components/Charts/${props?.name}/${props?.name}`),
-  {
-    fallback: <LazyLoading />,
-  },
-);
+import { Switch, withRouter } from 'react-router';
+import { Route2 } from '@/routes/route2';
+import {
+  AsyncAuthModal,
+  AsyncChartModal,
+  AsyncComponent,
+} from '@/shared/coerced.actions';
+import { classnames } from '../shared/coerced.classnames';
 
 @withRouter
 @Connect(
@@ -73,7 +58,7 @@ class Dashboard extends Component {
         <AsyncAuthModal name="LogOutModal" />
         <AsyncAuthModal name="SettingsModal" />
         <AsyncChartModal name="ManualModal" />
-        <div className={schema.dashboard}>
+        <div className={classnames(schema.dashboard, schema['pb-2'])}>
           <div className={schema['dashboard-wrapper']}>
             <div
               className={`${schema.row} ${schema['justify-content-center']}`}
@@ -87,8 +72,11 @@ class Dashboard extends Component {
                 className={`${schema['col-8']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
               >
                 <main className={schema['dashboard_main-wrapper']}>
-                  <Switch>{renderRoutes(route.routes)}</Switch>
-                  {/* <AsyncComponent name="Dashboard" /> */}
+                  <Switch>
+                    {route.routes.map((_route, index) => (
+                      <Route2 key={index} {..._route} />
+                    ))}
+                  </Switch>
                 </main>
               </div>
               <div

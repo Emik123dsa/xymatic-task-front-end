@@ -39,23 +39,33 @@ export default class LogoutModal extends Component {
       : false;
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeout: 1000,
+    };
+  }
+
   render() {
+    const { timeout } = this.state;
     return (
       <Fragment>
         <CSSTransition
           in={this._getLogOutModalState}
-          timeout={300}
+          timeout={timeout}
           classNames="dropdown"
           unmountOnExit
         >
           <Modal
+            closeTimeoutMS={timeout}
             style={OverridedModal.modalStyleFacade}
             isOpen={this._getLogOutModalState}
-            onRequestClose={($event) => {
-              this.props.setModalCurrentClientSchema(LogoutModal.name);
-            }}
+            onRequestClose={($event) =>
+              this._getLogOutModalState &&
+              this.props.setModalCurrentClientSchema(LogoutModal.name)
+            }
           >
-            <div> Hello from Schema</div>
+            <div>Hello from Schema</div>
           </Modal>
         </CSSTransition>
       </Fragment>

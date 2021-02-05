@@ -20,16 +20,14 @@
 .sidebar {
   position: sticky;
   top: 0;
-  height: 100vh;
-  // padding-top: 5rem;
+  height: calc(100vh - 5rem);
 
   &_wrapper {
     position: relative;
     overflow: hidden;
-    height: inherit;
-    border-top: 1em solid $bg-border;
-    border-bottom: 1em solid $bg-border;
-    border-left: 1em solid $bg-border;
+    height: 100vh;
+    padding-top: 1rem;
+    padding-left: 1rem;
     background: linear-gradient(to bottom, $sidebar-top, $sidebar-bottom);
 
     &-aside {
@@ -186,6 +184,7 @@
           display: inline-block;
           width: 100% !important;
           height: 100%;
+          outline: none !important;
           padding: 18px 3.8rem;
           transition: 0.25s ease all;
           color: $dark;

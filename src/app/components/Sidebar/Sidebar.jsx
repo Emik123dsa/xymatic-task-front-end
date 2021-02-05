@@ -58,6 +58,7 @@ class Sidebar extends Component {
           animationDelay: `${index * 0.075}s`,
         }}
         className={css(styles.slideInLeft)}
+        role="presentation"
         key={item.toString()}
       >
         <button onClick={() => this._actionSubject.next(item)} type="button">

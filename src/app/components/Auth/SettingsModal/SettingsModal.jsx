@@ -40,22 +40,32 @@ export default class SettingsModal extends Component {
       : false;
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeout: 1000,
+    };
+  }
+
   render() {
+    const { timeout } = this.state;
     return (
       <CSSTransition
         in={this._getSettingsModalState}
-        timeout={300}
+        timeout={timeout}
         classNames="dropdown"
         unmountOnExit
       >
         <Modal
+          closeTimeoutMS={timeout}
           style={OverridedModal.modalStyleFacade}
           isOpen={this._getSettingsModalState}
           onRequestClose={() =>
+            this._getSettingsModalState &&
             this.props.setModalCurrentClientSchema(SettingsModal.name)
           }
         >
-          <div> Hello from Schema</div>
+          <div>123</div>
         </Modal>
       </CSSTransition>
     );

@@ -171,8 +171,17 @@
 
 .bg {
   &-dark {
+    &-dashboard {
+      background:
+        linear-gradient(to top, $dashboard-bottom, $dashboard-top)
+        no-repeat;
+    }
+
+    &-miscellaneous {
+      background: $bg-dark;
+    }
+
     z-index: -1;
-    background: $bg-dark;
     position: fixed;
     width: 100%;
     height: 100%;

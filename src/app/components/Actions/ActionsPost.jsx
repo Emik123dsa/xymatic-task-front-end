@@ -7,13 +7,11 @@ import range from 'lodash/range';
 import { PostSort } from '@/selectors/actions.selector';
 import schema from '@styles/_schema.scss';
 import loadable from '@loadable/component';
-import { css } from 'aphrodite';
-import { classnames } from '~/app/shared/coerced.classnames';
 import ActionLoading from './ActionLoading';
 import _ from './Actions.scss';
 import { Dots } from '../Icons/Dots';
 import ActionsTemplate from './ActionsTemplate';
-import { styles } from '~/app/shared/coerced.styles';
+import { classnames } from '~/app/shared/coerced.classnames';
 
 const ActionPost = loadable(() => import('./ActionPost'));
 

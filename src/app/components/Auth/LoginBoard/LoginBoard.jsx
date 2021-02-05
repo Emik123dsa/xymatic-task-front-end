@@ -232,7 +232,7 @@ class LoginBoard extends Component {
                     schema['btn-send'],
                     schema['col-b-7'],
                   )}
-                  ariaPressed={false}
+                  aria-pressed={false}
                 >
                   <span className={schema['btn-icon-user']}></span>
                   Sign In

@@ -9,29 +9,6 @@
 
 .dashboard {
   &-section {
-    &_restrictor {
-      &-top {
-        &-stripe {
-          position: sticky;
-          z-index: 2;
-          top: 0;
-          height: calc(1rem - 3px);
-          background: $bg-border;
-        }
-      }
-
-      &-bottom {
-        &-stripe {
-          position: sticky;
-          z-index: 2;
-          bottom: 0;
-          width: inherit;
-          height: calc(1rem - 2px);
-          background: $bg-border;
-        }
-      }
-    }
-
     &_charts {
       position: relative;
       width: inherit;

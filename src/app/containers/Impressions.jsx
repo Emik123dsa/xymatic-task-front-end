@@ -7,7 +7,7 @@ class Impressions extends Component {
   render() {
     return (
       <div>
-        <h1>Error</h1>
+        <h1>Impressions</h1>
       </div>
     );
   }

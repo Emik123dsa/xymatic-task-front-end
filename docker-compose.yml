@@ -11,9 +11,9 @@ services:
       - '.:/var/www/build'
       - '/var/www/build/node_modules'
     ports:
-      - '8080:8080'
+      - '3000:8080'
     expose:
-      - '8080'
+      - '3000'
     network_mode: xymatic-bridge
 
 networks:

@@ -31,34 +31,104 @@ export const dynamicRoutes = [
         component: ProtectedAsyncComponent,
         routes: [
           {
-            key: 'Impressions',
-            path: '/dashboard',
+            key: 'Main Dashboard',
+            path: '/dashboard/',
             exact: true,
-            component: loadable(() => import('@/containers/Impressions'), {
+            strict: false,
+            component: loadable(() => import('@/containers/MainDashboard'), {
               fallback: <LazyLoading />,
             }),
           },
+          /// //////////////////////////////////////////////////
+          // Users Schema Routes
+          /// ////////////////////////////////////////////////
           {
-            key: 'Plays',
-            path: '/dashboard/plays/:id',
+            key: 'Users',
+            path: '/dashboard/users',
             exact: true,
-            component: loadable(() => import('@/containers/Plays'), {
-              fallback: <LazyLoading />,
-            }),
-          },
-          {
-            key: 'Posts',
-            path: '/dashboard/posts/:id',
-            exact: false,
-            component: loadable(() => import('@/containers/Posts'), {
+            strict: false,
+            component: loadable(() => import('@/containers/Users'), {
               fallback: <LazyLoading />,
             }),
           },
           {
             key: 'Users',
-            path: '/dashboard/users/:id',
+            path: '/dashboard/users/:schema_id',
             exact: false,
+            strict: false,
             component: loadable(() => import('@/containers/Users'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          /// //////////////////////////////////////////////////
+          // Impressions Schema Routes
+          /// ////////////////////////////////////////////////
+          {
+            key: 'Impressions',
+            path: '/dashboard/impressions',
+            exact: false,
+            strict: false,
+            component: loadable(() => import('@/containers/Impressions'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          {
+            key: 'Impressions',
+            path: '/dashboard/impressions/:schema_id',
+            exact: false,
+            strict: false,
+            component: loadable(() => import('@/containers/Impressions'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          /// //////////////////////////////////////////////////
+          // Plays Schema Routes
+          /// ////////////////////////////////////////////////
+          {
+            key: 'Plays',
+            path: '/dashboard/plays',
+            exact: true,
+            strict: false,
+            component: loadable(() => import('@/containers/Plays'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          {
+            key: 'Plays',
+            path: '/dashboard/plays/:schema_id',
+            exact: true,
+            strict: false,
+            component: loadable(() => import('@/containers/Plays'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          /// //////////////////////////////////////////////////
+          // Posts Schema Routes
+          /// ////////////////////////////////////////////////
+          {
+            key: 'Posts',
+            path: '/dashboard/posts',
+            exact: true,
+            strict: false,
+            component: loadable(() => import('@/containers/Posts'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          {
+            key: 'Posts',
+            path: '/dashboard/posts/:schema_id',
+            exact: true,
+            strict: false,
+            component: loadable(() => import('@/containers/Posts'), {
+              fallback: <LazyLoading />,
+            }),
+          },
+          {
+            key: 'Analytics',
+            path: '/dashboard/analytics',
+            exact: true,
+            strict: false,
+            component: loadable(() => import('@/containers/Analytics'), {
               fallback: <LazyLoading />,
             }),
           },

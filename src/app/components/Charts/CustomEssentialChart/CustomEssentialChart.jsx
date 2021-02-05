@@ -169,9 +169,7 @@ export class CustomEssentialChart extends PureComponent {
       return this._renderDataLoading();
     }
 
-    if (this._isWsChartLoading) {
-      return this._renderDataLoading();
-    }
+    if (this._isWsChartLoading) return this._renderDataLoading();
 
     return (
       <Fragment>

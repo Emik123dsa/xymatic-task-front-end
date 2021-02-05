@@ -103,123 +103,111 @@ class Dashboard extends Component {
     return (
       <section className={_['dashboard-section_charts']}>
         <div className={schema['dashboard-wrapper']}>
-          <div className={_['dashboard-section_charts-observer']}>
-            <div className={_['dashboard-section_restrictor-top-stripe']}></div>
-            <div className={_['dashboard-section_charts-wrapper']}>
-              <AsyncLayout name="Header" />
+          <div className={_['dashboard-section_charts-wrapper']}>
+            <AsyncLayout name="Header" />
+            <div
+              className={classnames(
+                schema['row-b'],
+                schema['hidden-x'],
+                schema['py-1'],
+              )}
+            >
               <div
+                style={{ height: chartConfig.tinyHeight }}
                 className={classnames(
-                  schema['row-b'],
-                  schema['hidden-x'],
-                  schema['py-1'],
+                  schema['col-b-6'],
+                  schema['col-b-md-6'],
+                  schema['col-b-xs-12'],
                 )}
               >
-                <div
-                  style={{ height: chartConfig.tinyHeight }}
-                  className={classnames(
-                    schema['col-b-6'],
-                    schema['col-b-md-6'],
-                    schema['col-b-xs-12'],
-                  )}
-                >
-                  <AsyncTinyChart
-                    direction="left"
-                    height={chartConfig.tinyHeight}
-                    type="plays"
-                    data={plays}
-                    color="#3f4af1"
-                  />
-                </div>
-                <div
-                  style={{ height: chartConfig.tinyHeight }}
-                  className={classnames(
-                    schema['col-b-6'],
-                    schema['col-b-md-6'],
-                    schema['col-b-xs-12'],
-                  )}
-                >
-                  <AsyncTinyChart
-                    direction="right"
-                    height={chartConfig.tinyHeight}
-                    type="impressions"
-                    data={impressions}
-                    color="#ef263d"
-                  />
-                </div>
+                <AsyncTinyChart
+                  direction="left"
+                  height={chartConfig.tinyHeight}
+                  type="plays"
+                  data={plays}
+                  color="#3f4af1"
+                />
               </div>
               <div
+                style={{ height: chartConfig.tinyHeight }}
                 className={classnames(
-                  schema['row-b'],
-                  schema['hidden-x'],
-                  schema['py-1'],
+                  schema['col-b-6'],
+                  schema['col-b-md-6'],
+                  schema['col-b-xs-12'],
                 )}
               >
-                <div
-                  style={{ height: chartConfig.essentialHeight }}
-                  className={classnames(
-                    schema['col-b-8'],
-                    schema['col-b-md-12'],
-                    schema['col-b-xs-12'],
-                  )}
-                >
-                  <AsyncEssentialChart
-                    type="activity"
-                    title="Activity"
-                    direction="left"
-                    height={chartConfig.essentialHeight}
-                    content={[
-                      {
-                        type: 'Posts',
-                        data: posts,
-                        color: '#3f4af1',
-                      },
-                      {
-                        type: 'Users',
-                        data: users,
-                        color: '#ef263d',
-                      },
-                    ]}
-                  />
-                </div>
-
-                <div
-                  style={{ height: chartConfig.essentialHeight }}
-                  className={classnames(
-                    schema['col-b-4'],
-                    schema['col-b-md-12'],
-                    schema['col-b-xs-12'],
-                  )}
-                >
-                  <AsyncPieChart
-                    type="multiple"
-                    direction="right"
-                    colors={[
-                      '#602dd3',
-                      '#3f4af1',
-                      '#ef263d',
-                      '#eee',
-                      '#f39c12',
-                    ]}
-                    data={rows}
-                  />
-                </div>
-              </div>
-              <div
-                style={{ height: chartConfig.actionsHeight }}
-                className={classnames(
-                  schema['row-b'],
-                  schema['py-1'],
-                  schema.hidden,
-                )}
-              >
-                <div className={schema['col-b-12']}>
-                  <AsyncAction name="ActionsPost" />
-                </div>
+                <AsyncTinyChart
+                  direction="right"
+                  height={chartConfig.tinyHeight}
+                  type="impressions"
+                  data={impressions}
+                  color="#ef263d"
+                />
               </div>
             </div>
             <div
-              className={_['dashboard-section_restrictor-bottom-stripe']}
-            ></div>
+              className={classnames(
+                schema['row-b'],
+                schema['hidden-x'],
+                schema['py-1'],
+              )}
+            >
+              <div
+                style={{ height: chartConfig.essentialHeight }}
+                className={classnames(
+                  schema['col-b-8'],
+                  schema['col-b-md-12'],
+                  schema['col-b-xs-12'],
+                )}
+              >
+                <AsyncEssentialChart
+                  type="activity"
+                  title="Activity"
+                  direction="left"
+                  height={chartConfig.essentialHeight}
+                  content={[
+                    {
+                      type: 'Posts',
+                      data: posts,
+                      color: '#3f4af1',
+                    },
+                    {
+                      type: 'Users',
+                      data: users,
+                      color: '#ef263d',
+                    },
+                  ]}
+                />
+              </div>
+
+              <div
+                style={{ height: chartConfig.essentialHeight }}
+                className={classnames(
+                  schema['col-b-4'],
+                  schema['col-b-md-12'],
+                  schema['col-b-xs-12'],
+                )}
+              >
+                <AsyncPieChart
+                  type="multiple"
+                  direction="right"
+                  colors={['#602dd3', '#3f4af1', '#ef263d', '#eee', '#f39c12']}
+                  data={rows}
+                />
+              </div>
+            </div>
+            <div
+              style={{ height: chartConfig.actionsHeight }}
+              className={classnames(
+                schema['row-b'],
+                schema['py-1'],
+                schema.hidden,
+              )}
+            >
+              <div className={schema['col-b-12']}>
+                <AsyncAction name="ActionsPost" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
