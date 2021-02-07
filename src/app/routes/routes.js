@@ -53,8 +53,8 @@ export const dynamicRoutes = [
           },
           {
             key: 'Users',
-            path: '/dashboard/users/:schema_id',
-            exact: false,
+            path: '/dashboard/users/:schemaID',
+            exact: true,
             strict: false,
             component: loadable(() => import('@/containers/Users'), {
               fallback: <LazyLoading />,
@@ -65,19 +65,19 @@ export const dynamicRoutes = [
           /// ////////////////////////////////////////////////
           {
             key: 'Impressions',
-            path: '/dashboard/impressions',
-            exact: false,
+            path: '/dashboard/impressions/',
+            exact: true,
             strict: false,
-            component: loadable(() => import('@/containers/Impressions'), {
+            component: loadable(() => import('~/app/containers/Impressions'), {
               fallback: <LazyLoading />,
             }),
           },
           {
             key: 'Impressions',
-            path: '/dashboard/impressions/:schema_id',
-            exact: false,
+            path: '/dashboard/impressions/:schemaID',
+            exact: true,
             strict: false,
-            component: loadable(() => import('@/containers/Impressions'), {
+            component: loadable(() => import('~/app/containers/Impressions'), {
               fallback: <LazyLoading />,
             }),
           },
@@ -95,7 +95,7 @@ export const dynamicRoutes = [
           },
           {
             key: 'Plays',
-            path: '/dashboard/plays/:schema_id',
+            path: '/dashboard/plays/:schemaID',
             exact: true,
             strict: false,
             component: loadable(() => import('@/containers/Plays'), {
@@ -116,7 +116,7 @@ export const dynamicRoutes = [
           },
           {
             key: 'Posts',
-            path: '/dashboard/posts/:schema_id',
+            path: '/dashboard/posts/:schemaID',
             exact: true,
             strict: false,
             component: loadable(() => import('@/containers/Posts'), {
@@ -132,15 +132,16 @@ export const dynamicRoutes = [
               fallback: <LazyLoading />,
             }),
           },
-          // {
-          //   key: 'Error',
-          //   path: '/dashboard/**',
-          //   strict: false,
-          //   exact: false,
-          //   component: loadable(() => import('@/containers/Error'), {
-          //     fallback: <LazyLoading />,
-          //   }),
-          // },
+          {
+            key: 'Error',
+            path: '**',
+            strict: false,
+            exact: false,
+            redirect: '/dashboard',
+            component: loadable(() => import('@/containers/Error'), {
+              fallback: <LazyLoading />,
+            }),
+          },
         ],
       },
       {

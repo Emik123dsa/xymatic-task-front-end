@@ -16,6 +16,7 @@ import {
 } from './modal.sagas';
 import { watchCurrentUser, watchNewUser, watchUserAuth } from './user.sagas';
 import { watchErrors } from './error.sagas';
+import { loadPaginatedPostsEntity } from './pagination.sagas';
 
 export function* rootSaga() {
   yield setContext({ client: client() });
@@ -38,6 +39,10 @@ export function* rootSaga() {
      *  Rows Table Enumeration Principle
      */
     fork(loadChartRowsAmountEntity),
+    /**
+     *  Pagination factories
+     */
+    fork(loadPaginatedPostsEntity),
     /**
      * We merely demand
      * to unsubcribe  from all

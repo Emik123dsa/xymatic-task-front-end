@@ -13,24 +13,17 @@ import {
   Period,
 } from '@/selectors';
 import schema from '@styles/_schema.scss';
-import {
-  loadChartsImpressionsEntity,
-  loadChartsPlaysEntity,
-  loadChartsPostsEntity,
-  loadChartsUsersEntity,
-  loadChartRowsAmountEntity,
-  resetChartsEntities,
-} from '@/actions';
 
 import _ from './Dashboard.scss';
 import { classnames } from '@/shared/coerced.classnames';
 import { hot } from 'react-hot-loader/root';
+
 import {
-  AsyncAction,
+  AsyncTemplate,
   AsyncEssentialChart,
-  AsyncLayout,
   AsyncPieChart,
   AsyncTinyChart,
+  AsyncLayout,
 } from '@/shared/coerced.actions';
 
 @hot
@@ -43,14 +36,7 @@ import {
     impressions: getChartImpression(state),
     rows: getChartRowsAmount(state),
   }),
-  {
-    loadChartsUsersEntity,
-    loadChartsPostsEntity,
-    loadChartsPlaysEntity,
-    loadChartsImpressionsEntity,
-    loadChartRowsAmountEntity,
-    resetChartsEntities,
-  },
+  null,
 )
 class Dashboard extends Component {
   static propTypes = {
@@ -61,50 +47,15 @@ class Dashboard extends Component {
     plays: PropTypes.object,
     impressions: PropTypes.object,
     rows: PropTypes.object,
-
-    loadChartsUsersEntity: PropTypes.func,
-    loadChartsPostsEntity: PropTypes.func,
-    loadChartsPlaysEntity: PropTypes.func,
-    loadChartsImpressionsEntity: PropTypes.func,
-
-    loadChartRowsAmountEntity: PropTypes.func,
-
-    resetChartsEntities: PropTypes.func,
   };
 
-  /**
-   ** Subscribe to the
-   ** WebSocket via Redux Saga,
-   ** all of the changes are going into
-   ** over Redux Store and mutating here as well
-   */
-
-  componentDidMount() {
-    try {
-      const pseudoKeys = Reflect.ownKeys(this.props);
-      if (!Array.isArray(pseudoKeys)) throw new RangeError(pseudoKeys);
-      pseudoKeys.forEach((key) => {
-        const callback = this.props[key];
-        if (callback instanceof Function && !key.startsWith('reset'))
-          callback(Period.AllTime);
-      });
-    } catch (e) {
-      console.error('[GraphQL]: Init Error');
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.resetChartsEntities('ALL');
-  }
-
   render() {
-    const { charts, users, impressions, posts, plays, rows } = this.props;
+    const { users, impressions, posts, plays, rows } = this.props;
 
     return (
       <section className={_['dashboard-section_charts']}>
         <div className={schema['dashboard-wrapper']}>
           <div className={_['dashboard-section_charts-wrapper']}>
-            <AsyncLayout name="Header" />
             <div
               className={classnames(
                 schema['row-b'],
@@ -113,7 +64,7 @@ class Dashboard extends Component {
               )}
             >
               <div
-                style={{ height: chartConfig.tinyHeight }}
+                style={{ minHeight: chartConfig.tinyHeight }}
                 className={classnames(
                   schema['col-b-6'],
                   schema['col-b-md-6'],
@@ -129,7 +80,7 @@ class Dashboard extends Component {
                 />
               </div>
               <div
-                style={{ height: chartConfig.tinyHeight }}
+                style={{ minHeight: chartConfig.tinyHeight }}
                 className={classnames(
                   schema['col-b-6'],
                   schema['col-b-md-6'],
@@ -153,7 +104,7 @@ class Dashboard extends Component {
               )}
             >
               <div
-                style={{ height: chartConfig.essentialHeight }}
+                style={{ minHeight: chartConfig.essentialHeight }}
                 className={classnames(
                   schema['col-b-8'],
                   schema['col-b-md-12'],
@@ -181,7 +132,7 @@ class Dashboard extends Component {
               </div>
 
               <div
-                style={{ height: chartConfig.essentialHeight }}
+                style={{ minHeight: chartConfig.essentialHeight }}
                 className={classnames(
                   schema['col-b-4'],
                   schema['col-b-md-12'],
@@ -197,7 +148,7 @@ class Dashboard extends Component {
               </div>
             </div>
             <div
-              style={{ height: chartConfig.actionsHeight }}
+              style={{ minHeight: chartConfig.actionsHeight }}
               className={classnames(
                 schema['row-b'],
                 schema['py-1'],
@@ -205,7 +156,7 @@ class Dashboard extends Component {
               )}
             >
               <div className={schema['col-b-12']}>
-                <AsyncAction name="ActionsPost" />
+                <AsyncTemplate name="TemplatePost" page={0} />
               </div>
             </div>
           </div>

@@ -14,7 +14,6 @@
   &-wrapper {
     position: relative;
     display: block;
-    overflow: hidden;
     width: 100%;
     height: inherit;
     cursor: pointer;
@@ -46,6 +45,7 @@
 
     &_body {
       position: relative;
+
       tr td {
         padding: 1rem 0;
       }

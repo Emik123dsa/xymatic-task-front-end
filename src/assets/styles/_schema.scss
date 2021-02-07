@@ -105,6 +105,9 @@
 }
 
 @for $i from 1 through 5 {
+  .-mt-#{$i} {
+    margin: 0 -$i * 1rem !important;
+  }
   .mx-#{$i} {
     margin: 0 $i * 1rem !important;
   }

@@ -3,6 +3,7 @@
   "rules": {
     "number-leading-zero": null,
     "no-missing-end-of-source-newline": null,
-    "at-rule-no-unknown": null
+    "at-rule-no-unknown": null,
+    "no-empty-source": null
   }
 }

@@ -10,16 +10,10 @@ export const coercedSort = (data) => {
     .sort((acc, item) => {
       if (!Object.prototype.hasOwnProperty.call(item, 'verbose')) return null;
 
-      if (
-        moment(acc?.createdAt).isBefore(item?.createdAt) &&
-        attitudies(acc?.verbose) < attitudies(item?.verbose)
-      ) {
+      if (attitudies(acc?.verbose) < attitudies(item?.verbose)) {
         return -1;
       }
-      if (
-        moment(acc?.createdAt).isAfter(item?.createdAt) &&
-        attitudies(acc?.verbose) > attitudies(item?.verbose)
-      ) {
+      if (attitudies(acc?.verbose) > attitudies(item?.verbose)) {
         return 1;
       }
       return 0;

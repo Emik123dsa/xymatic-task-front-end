@@ -16,26 +16,35 @@ import {
   AsyncAuthModal,
   AsyncChartModal,
   AsyncComponent,
+  AsyncLayout,
 } from '@/shared/coerced.actions';
-import { classnames } from '../shared/coerced.classnames';
+import { loadChartRowsAmountEntity } from '@/actions';
+import { classnames } from '@/shared/coerced.classnames';
 
 @withRouter
 @Connect(
   (state) => ({
     location: getRouterLocation(state),
   }),
-  null,
+  {
+    loadChartRowsAmountEntity,
+  },
 )
 class Dashboard extends Component {
   static propTypes = {
     location: PropTypes.shape().isRequired,
     route: PropTypes.shape().isRequired,
+    loadChartRowsAmountEntity: PropTypes.func,
   };
 
   _title = 'Xymatic | Dashboard';
 
+  componentDidMount() {
+    this.props.loadChartRowsAmountEntity();
+  }
+
   _renderSiteMeta() {
-    const canonical = this.props.location.toJS().pathname.toLowerCase();
+    const canonical = this.props.location.get('pathname').toLowerCase();
     return (
       <Helmet
         link={[
@@ -58,19 +67,35 @@ class Dashboard extends Component {
         <AsyncAuthModal name="LogOutModal" />
         <AsyncAuthModal name="SettingsModal" />
         <AsyncChartModal name="ManualModal" />
-        <div className={classnames(schema.dashboard, schema['pb-2'])}>
+        <div className={schema.dashboard}>
           <div className={schema['dashboard-wrapper']}>
             <div
-              className={`${schema.row} ${schema['justify-content-center']}`}
+              className={classnames(
+                schema.row,
+                schema['justify-content-center'],
+              )}
             >
               <div
-                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
+                className={classnames(
+                  schema['col-2'],
+                  schema['col-md-6'],
+                  schema['col-xs-12'],
+                )}
               >
                 <AsyncComponent name="Sidebar" />
               </div>
               <div
-                className={`${schema['col-8']} ${schema['col-md-12']} ${schema['col-xs-12']} `}
+                className={classnames(
+                  schema['col-8'],
+                  schema['col-md-12'],
+                  schema['col-xs-12'],
+                )}
               >
+                <div className={classnames(schema['row-b'], schema['px-2'])}>
+                  <div className={schema['col-b-12']}>
+                    <AsyncLayout name="Header" />
+                  </div>
+                </div>
                 <main className={schema['dashboard_main-wrapper']}>
                   <Switch>
                     {route.routes.map((_route, index) => (
@@ -80,7 +105,11 @@ class Dashboard extends Component {
                 </main>
               </div>
               <div
-                className={`${schema['col-2']} ${schema['col-md-6']} ${schema['col-xs-12']}`}
+                className={classnames(
+                  schema['col-2'],
+                  schema['col-md-6'],
+                  schema['col-xs-12'],
+                )}
               >
                 <div className={schema['dashboard_profile-wrapper']}>
                   <AsyncComponent name="Profile" />

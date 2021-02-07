@@ -6,7 +6,7 @@ import { classnames } from '@/shared/coerced.classnames';
 import { styles } from '@/shared/coerced.styles';
 import _ from './Actions.scss';
 
-const ActionsTemplate = (props) => {
+const ActionTemplate = (props) => {
   const animatedDirection = () =>
     classnames(
       _['actions-wrapper'],
@@ -31,9 +31,10 @@ const ActionsTemplate = (props) => {
   );
 };
 
-ActionsTemplate.propTypes = {
+ActionTemplate.propTypes = {
   children: PropTypes.array,
   direction: PropTypes.string,
+  redirect: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(null)]),
 };
 
-export default ActionsTemplate;
+export default ActionTemplate;

@@ -3,7 +3,7 @@ import { DisLikeIcon } from '@/components/Icons/Dislike';
 import { LikeIcon } from '@/components/Icons/Like';
 import schema from '@styles/_schema.scss';
 import { coercedImpressions, coercedSort } from '~/app/shared/coerced.sort';
-import _ from './Actions.scss';
+import _ from '../Actions.scss';
 import { classnames } from '~/app/shared/coerced.classnames';
 
 const ActionPost = (posts) => {
@@ -12,6 +12,8 @@ const ActionPost = (posts) => {
   if (!Array.isArray(findAllPosts)) return null;
 
   const sortedPosts = useMemo(() => coercedSort(findAllPosts), [findAllPosts]);
+
+  console.log(sortedPosts);
 
   return (
     <Fragment>

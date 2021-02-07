@@ -2,11 +2,18 @@ import React from 'react';
 
 import loadable from '@loadable/component';
 import SkeletonLoading from '@/components/SkeletonLoading/SkeletonLoading';
+import LazyLoading from '@/components/LazyLoading/LazyLoading';
 import { chartConfig } from '~/chart.config';
-import LazyLoading from '../components/LazyLoading/LazyLoading';
 
-export const AsyncAction = loadable(
-  (props) => import(`@/components/Actions/${props?.name}`),
+export const AsyncPagination = loadable(
+  (props) => import('@/components/Actions/Pagination/Pagination'),
+  {
+    fallback: <SkeletonLoading height={chartConfig.tinyHeight} />,
+  },
+);
+
+export const AsyncTemplate = loadable(
+  (props) => import(`@/components/Actions/Template/${props?.name}`),
   {
     fallback: <SkeletonLoading height={chartConfig.actionsHeight} />,
   },

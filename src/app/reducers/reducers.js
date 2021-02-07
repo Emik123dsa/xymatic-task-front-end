@@ -7,10 +7,12 @@ import {
   setToImmutableStateFunc,
   setToMutableStateFunc,
 } from 'redux-connect';
+
 import { userReducer, sidebarReducer, resizeReducer } from '.';
 import { errorReducer } from './error.reducer';
 import { chartsEntityReducer } from './charts.reducer';
 import { modalReducer } from './modal.reducer';
+import { paginationReducer } from './pagination.reducer';
 
 setToImmutableStateFunc((mutableState) => fromJS(mutableState));
 setToMutableStateFunc((immutableState) => immutableState.toJS());
@@ -22,6 +24,7 @@ export const createRootReducer = (history) =>
     sidebar: sidebarReducer,
     resize: resizeReducer,
     chartsEntity: chartsEntityReducer,
+    paginationEntity: paginationReducer,
     modal: modalReducer,
     error: errorReducer,
     reduxAsyncConnect,

@@ -41,7 +41,8 @@ export function* fetchEvent({ query, variables = null, entity }) {
   try {
     let payload = {
       query,
-      fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'network-only',
     };
 
     if (!isNull(variables)) payload = merge(payload, { variables }, {});

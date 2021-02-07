@@ -34,14 +34,7 @@ import {
   RESET_CHARTS_ENTITIES,
 } from '@/actions';
 
-import {
-  getChartImpression,
-  getChartRowsAmount,
-  getChartsEntity,
-  getChartUsers,
-  getEventChannel,
-  isWSChart,
-} from '@/selectors';
+import { getChartRowsAmount, getEventChannel, isWSChart } from '@/selectors';
 
 import {
   fetchChartsImpressionsEntity,
