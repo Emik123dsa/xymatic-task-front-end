@@ -8,7 +8,7 @@
     "postinstall": "husky install .husky",
     "clean": "rimraf ./build",
     "lint:staged": "lint-staged --relative",
-    "fix": "eslint --fix --config=./.eslintrc.json **/*/*.jsx",
+    "fix": "eslint --fix --config=./.eslintrc.json src/app/**/*.jsx",
     "dev": "yarn run clean && cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 webpack serve --config webpack.config.js",
     "build": "yarn run clean && cross-env NODE_ENV=production NODE_HMR=false NODE_PORT=4200 webpack --mode=production --config webpack.config.js",
     "hmr": "cross-env NODE_ENV=development NODE_HMR=true NODE_PORT=3000 NODE_HOST=127.0.0.1 node ./server.js",
@@ -196,7 +196,7 @@
     ],
     "*.(js|jsx)": [
       "prettier --write --config .prettierrc.json",
-      "eslint --fix --config=./.eslintrc.json **/*/*.jsx"
+      "eslint --fix --config=./.eslintrc.json src/app/**/*.jsx"
     ]
   }
 }
